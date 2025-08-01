@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>城市定向 - 童非凡(2025)</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="img/icon_stembyme/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/icon_stembyme/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/icon_stembyme/favicon-16x16.png">
+    <link rel="manifest" href="img/icon_stembyme/site.webmanifest">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="vendors/linericon/style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
+    <!-- main css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <style>
+        .gaegu-regular {
+            font-family: "Gaegu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* Mobile-first city hunt styles */
+        .city-hunt-container {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .hunt-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .hunt-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .hunt-title {
+            color: #9d7de6;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .hunt-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .location-card {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 5px solid #9d7de6;
+            transition: transform 0.3s ease;
+        }
+
+        .location-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .location-title {
+            font-weight: bold;
+            color: #333;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .location-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+
+        .location-status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-current {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .progress-section {
+            margin: 30px 0;
+        }
+
+        .progress-bar {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #9d7de6, #667eea);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-hunt {
+            flex: 1;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: none;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-hunt {
+            background: linear-gradient(135deg, #9d7de6, #667eea);
+            color: white;
+        }
+
+        .btn-secondary-hunt {
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            color: #333;
+        }
+
+        .btn-hunt:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .timer-section {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .timer-display {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #9d7de6;
+            margin-bottom: 10px;
+        }
+
+        .timer-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .clue-section {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .clue-title {
+            font-weight: bold;
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .clue-text {
+            color: #333;
+            font-style: italic;
+        }
+
+        .map-container {
+            height: 300px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            text-align: center;
+            line-height: 40px;
+            color: #333;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .hunt-title {
+                font-size: 2rem;
+            }
+
+            .city-hunt-container {
+                padding: 15px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!--================ Start Header Area =================-->
+    <header class="header_area">
+        <div class="main_menu">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <a class="navbar-brand logo_h" href="index.html"><img src="img/stembyme_logo.png" width="80px"
+                            alt=""></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav menu_nav justify-content-end">
+                            <li class="nav-item"><a class="nav-link" href="index.html#about">關於活動</a></li>
+                            <li class="nav-item"><a class="nav-link" href="map.html">城市定向地圖</a></li>
+                            <li class="nav-item"><a class="nav-link" href="city-hunt.html">城市定向</a></li>
+                            <li class="nav-item"><a class="nav-link"
+                                    href="https://thunkable.site/w/skI0ZIg2xZSTQZPHf9eli" target="_blank">城市定向App</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="index.html#services">STEM-by-ME 編程大世界</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="index.html#portfolio">活動花絮</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!--================ End Header Area =================-->
+
+    <!--================ Start City Hunt Area =================-->
+    <section class="city-hunt-container">
+        <div class="container">
+            <div class="hunt-header">
+                <h1 class="hunt-title gaegu-regular">🏃‍♂️ 城市定向挑戰</h1>
+                <p class="hunt-subtitle">探索城市，解鎖謎題，贏取獎勵！</p>
+            </div>
+
+            <!-- Timer Section -->
+            <div class="timer-section">
+                <div class="timer-display" id="timer">00:00:00</div>
+                <div class="timer-label">挑戰時間</div>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 25%"></div>
+                </div>
+                <div class="progress-text">進度: <span id="progressText">1/4</span> 個地點</div>
+            </div>
+
+            <!-- Current Clue Section -->
+            <div class="clue-section">
+                <div class="clue-title">🎯 當前謎題</div>
+                <div class="clue-text" id="currentClue">
+                    尋找這個城市中最古老的建築物，它有著紅色的磚牆和尖尖的屋頂。在建築物的正門前拍一張照片！
+                </div>
+            </div>
+
+            <!-- Locations List -->
+            <div class="hunt-card">
+                <h3 class="mb-4">📍 挑戰地點</h3>
+
+                <div class="location-card">
+                    <div class="location-title">
+                        <span class="achievement-badge">1</span>
+                        歷史博物館
+                    </div>
+                    <div class="location-description">
+                        探索城市的文化遺產，尋找隱藏的歷史線索
+                    </div>
+                    <span class="location-status status-completed">已完成 ✓</span>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-title">
+                        <span class="achievement-badge">2</span>
+                        科技公園
+                    </div>
+                    <div class="location-description">
+                        在現代科技與自然環境的結合中尋找答案
+                    </div>
+                    <span class="location-status status-current">進行中 🔄</span>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-title">
+                        <span class="achievement-badge">3</span>
+                        藝術中心
+                    </div>
+                    <div class="location-description">
+                        在創意與藝術的殿堂中解開謎題
+                    </div>
+                    <span class="location-status status-pending">待開始 ⏳</span>
+                </div>
+
+                <div class="location-card">
+                    <div class="location-title">
+                        <span class="achievement-badge">4</span>
+                        終點站
+                    </div>
+                    <div class="location-description">
+                        完成所有挑戰，領取你的獎勵！
+                    </div>
+                    <span class="location-status status-pending">待開始 ⏳</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button class="btn btn-hunt btn-primary-hunt" onclick="startHunt()">
+                    🚀 開始挑戰
+                </button>
+                <button class="btn btn-hunt btn-secondary-hunt" onclick="showMap()">
+                    🗺️ 查看地圖
+                </button>
+                <button class="btn btn-hunt btn-secondary-hunt" onclick="showLeaderboard()">
+                    🏆 排行榜
+                </button>
+            </div>
+
+            <!-- Map Container -->
+            <div class="map-container" id="mapContainer" style="display: none;">
+                <div id="map" style="width: 100%; height: 100%;"></div>
+            </div>
+        </div>
+    </section>
+    <!--================ End City Hunt Area =================-->
+
+    <!--================ Start Footer Area =================-->
+    <footer class="footer_area">
+        <div class="footer_widget_area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <aside class="f_widget ab_widget">
+                            <div class="ab_widget">
+                                <h4>關於童非凡</h4>
+                                <p>STEM-by-ME! 城市定向活動，讓孩子們在探索中學習，在遊戲中成長。</p>
+                            </div>
+                        </aside>
+                    </div>
+                    <div class="col-lg-4">
+                        <aside class="f_widget news_widget">
+                            <div class="f_title">
+                                <h3>最新活動</h3>
+                            </div>
+                            <p>2025年8月30日 - 城市定向挑戰賽</p>
+                        </aside>
+                    </div>
+                    <div class="col-lg-4">
+                        <aside class="f_widget social_widget">
+                            <div class="f_title">
+                                <h3>聯絡我們</h3>
+                            </div>
+                            <p>Email: info@stembyme.com</p>
+                            <p>電話: +852 1234 5678</p>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer_copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="copyright_text">
+                            <p>Copyright &copy; 2025 STEM-by-ME! All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--================ End Footer Area =================-->
+
+    <!-- Optional JavaScript -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="js/jquery.ajaxchimp.min.js"></script>
+    <script src="js/jquery.form.js"></script>
+    <script src="js/jquery.validate.min.js"></script>
+    <script src="js/mail-script.js"></script>
+    <script src="js/theme.js"></script>
+
+    <!-- City Hunt JavaScript -->
+    <script>
+        let startTime = new Date();
+        let timerInterval;
+        let currentLocation = 1;
+        let totalLocations = 4;
+
+        // Timer functionality
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - startTime;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('timer').textContent =
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function startHunt() {
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+            alert('🚀 城市定向挑戰開始！準備好探索了嗎？');
+        }
+
+        function showMap() {
+            const mapContainer = document.getElementById('mapContainer');
+            if (mapContainer.style.display === 'none') {
+                mapContainer.style.display = 'block';
+                // Initialize map here if needed
+            } else {
+                mapContainer.style.display = 'none';
+            }
+        }
+
+        function showLeaderboard() {
+            alert('🏆 排行榜功能即將推出！敬請期待。');
+        }
+
+        function updateProgress() {
+            const progress = (currentLocation / totalLocations) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressText').textContent = `${currentLocation}/${totalLocations}`;
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function () {
+            updateProgress();
+            updateTimer();
+        });
+    </script>
+</body>
+
+</html>
