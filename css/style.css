@@ -32,6 +32,9 @@ body {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
   color: #777777;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 h1,
@@ -98,6 +101,10 @@ button:focus {
 
 /*---------------------------------------------------- */
 /*----------------------------------------------------*/
+.main-content {
+  flex: 1;
+}
+
 .section_gap {
   padding: 20px 0;
 }
@@ -4436,18 +4443,28 @@ h6 {
     margin-top: 0px;
   }
 
+  /* Fix navbar color consistency in collapsed state */
+  .header_area .navbar .nav .nav-item .nav-link {
+    color: #000000 !important;
+  }
+
+  .header_area .navbar .nav .nav-item:hover .nav-link,
+  .header_area .navbar .nav .nav-item.active .nav-link {
+    color: #f7901e !important;
+  }
+
   .header_area.navbar_fixed .main_menu .navbar .nav .nav-item .nav-link {
     line-height: 40px;
-    color: #fff;
+    color: #000000 !important;
   }
 
   .header_area.white_menu.navbar_fixed .main_menu .navbar .nav .nav-item .nav-link {
     line-height: 40px;
-    color: #fff;
+    color: #000000 !important;
   }
 
   .header_area.white_menu .navbar .nav .nav-item .nav-link {
-    color: #222;
+    color: #000000 !important;
   }
 
   /* End Main Menu Area css
@@ -4466,8 +4483,6 @@ h6 {
   ============================================================================================ */
   .footer_area {
     padding-top: 80px !important;
-    padding-bottom: 80px !important;
-    background-image: none !important;
     background-color: #fcf8ff;
   }
 
@@ -4786,6 +4801,7 @@ h6 {
 .footer_area {
   padding: 120px 0;
   position: relative;
+  margin-top: auto !important;
 }
 
 .footer_area:before {
