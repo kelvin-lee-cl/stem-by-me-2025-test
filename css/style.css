@@ -3439,6 +3439,21 @@ h6 {
   width: 250px;
 }
 
+/* Center the two feature boxes in laptop view */
+@media (min-width: 992px) {
+  .feature_inner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .feature_inner .col-lg-4 {
+    flex: 0 0 auto;
+    max-width: 400px;
+    margin: 0 20px;
+  }
+}
+
 /* End Features Area css
 ============================================================================================ */
 /* Start Brand Area css
@@ -3604,18 +3619,67 @@ h6 {
 /* Start Portfolio Area css
 ============================================================================================ */
 .portfolio_area {
-  padding-bottom: 120px;
+  padding: 80px 0 120px 0;
+  background: #f8f9fa;
+}
+
+.portfolio_area .main_title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.portfolio_area .container {
+  max-width: 1400px;
+}
+
+.portfolio_area .main_title h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #1849a8;
 }
 
 @media (max-width: 991px) {
   .portfolio_area {
-    padding-bottom: 50px;
+    padding: 60px 0 50px 0;
+  }
+
+  .portfolio_area .main_title {
+    margin-bottom: 40px;
+  }
+
+  .portfolio_area .main_title h2 {
+    font-size: 32px;
+  }
+
+  .portfolio_area .container {
+    max-width: 100%;
+    padding: 0 20px;
+  }
+
+  .portfolio_area .row.portfolio-grid {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+
+  .portfolio_area .row.portfolio-grid>[class*="col-"] {
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-bottom: 30px;
   }
 }
 
 .portfolio_area .filters ul {
   padding-left: 0;
   margin-bottom: 50px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.portfolio_area .filters {
+  margin-bottom: 60px;
 }
 
 @media (max-width: 991px) {
@@ -3636,6 +3700,15 @@ h6 {
   -moz-transition: all 0.4s ease 0s;
   -o-transition: all 0.4s ease 0s;
   transition: all 0.4s ease 0s;
+  padding: 10px 20px;
+  border-radius: 25px;
+  background: transparent;
+}
+
+.portfolio_area .filters ul li:hover,
+.portfolio_area .filters ul li.active {
+  color: #1849a8;
+  background: rgba(24, 73, 168, 0.1);
 }
 
 .portfolio_area .filters ul li:hover,
@@ -3646,11 +3719,122 @@ h6 {
 @media (max-width: 767px) {
   .portfolio_area .filters ul li {
     margin-right: 20px;
+    font-size: 18px;
+    padding: 8px 16px;
+  }
+
+  .portfolio_area .filters ul {
+    gap: 15px;
   }
 }
 
 .portfolio_box {
   margin-bottom: 80px;
+}
+
+/* Ensure portfolio images maintain aspect ratio and fit properly */
+.portfolio_box .single_portfolio {
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.portfolio_box .single_portfolio img {
+  transition: transform 0.3s ease;
+}
+
+.portfolio_box .single_portfolio:hover img {
+  transform: scale(1.05);
+}
+
+/* Portfolio grid layout optimization */
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  align-items: start;
+}
+
+.portfolio-grid .portfolio_box {
+  margin-bottom: 0;
+}
+
+/* Enhanced spacing for Bootstrap grid system */
+.portfolio_area .row.portfolio-grid {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.portfolio_area .row.portfolio-grid>[class*="col-"] {
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 40px;
+}
+
+/* Large screen spacing optimization */
+@media (min-width: 1200px) {
+  .portfolio_area .row.portfolio-grid {
+    margin-left: -25px;
+    margin-right: -25px;
+  }
+
+  .portfolio_area .row.portfolio-grid>[class*="col-"] {
+    padding-left: 25px;
+    padding-right: 25px;
+    margin-bottom: 50px;
+  }
+}
+
+/* Ensure proper spacing between portfolio boxes */
+.portfolio_area .portfolio_box {
+  margin-bottom: 0;
+  height: 100%;
+}
+
+/* Additional spacing for better visual separation */
+.portfolio_area .filters-content {
+  margin-top: 40px;
+}
+
+.portfolio_area .portfolio_box+.portfolio_box {
+  margin-top: 0;
+}
+
+/* Ensure proper row spacing in Bootstrap grid */
+.portfolio_area .row.portfolio-grid {
+  align-items: stretch;
+}
+
+.portfolio_area .row.portfolio-grid>[class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Enhanced portfolio box styling */
+.portfolio_box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio_box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.portfolio_box .single_portfolio {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio_box .single_portfolio img {
+  flex: 1;
+  object-fit: cover;
 }
 
 @media (max-width: 767px) {
@@ -3681,6 +3865,119 @@ h6 {
 
 .single_portfolio {
   position: relative;
+}
+
+.single_portfolio img {
+  width: 1920px !important;
+  height: 1080px !important;
+  object-fit: cover;
+  aspect-ratio: 16/9;
+}
+
+/* Override Bootstrap img-fluid and w-100 for portfolio images with highest specificity */
+.portfolio_area .single_portfolio img.img-fluid.w-100 {
+  width: 1920px !important;
+  height: 1080px !important;
+  object-fit: cover;
+  aspect-ratio: 16/9;
+}
+
+.portfolio_area .single_portfolio img.img-fluid {
+  width: 1920px !important;
+  height: 1080px !important;
+  object-fit: cover;
+  aspect-ratio: 16/9;
+}
+
+@media (max-width: 1920px) {
+
+  .single_portfolio img,
+  .portfolio_area .single_portfolio img.img-fluid,
+  .portfolio_area .single_portfolio img.img-fluid.w-100 {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 1920px;
+    max-height: 1080px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .single_portfolio img,
+  .portfolio_area .single_portfolio img.img-fluid,
+  .portfolio_area .single_portfolio img.img-fluid.w-100 {
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100%;
+    max-height: none;
+  }
+
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .portfolio_area .filters ul {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .portfolio_area .row.portfolio-grid {
+    margin-left: -10px;
+    margin-right: -10px;
+  }
+
+  .portfolio_area .row.portfolio-grid>[class*="col-"] {
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 25px;
+  }
+
+  .portfolio_area .filters-content {
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio_area .single_portfolio img {
+    border-radius: 4px;
+  }
+
+  .portfolio-grid {
+    gap: 15px;
+  }
+
+  .portfolio_area .main_title h2 {
+    font-size: 28px;
+  }
+
+  .portfolio_area .filters ul li {
+    font-size: 16px;
+    padding: 8px 16px;
+  }
+
+  .portfolio_area .container {
+    padding: 0 15px;
+  }
+
+  .portfolio_area {
+    padding: 40px 0 60px 0;
+  }
+
+  .portfolio_area .row.portfolio-grid {
+    margin-left: -8px;
+    margin-right: -8px;
+  }
+
+  .portfolio_area .row.portfolio-grid>[class*="col-"] {
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-bottom: 20px;
+  }
+
+  .portfolio_area .filters-content {
+    margin-top: 25px;
+  }
 }
 
 .single_portfolio .overlay {

@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="zh-TW">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>童非凡(2025)</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="img/icon_stembyme/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/icon_stembyme/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/icon_stembyme/favicon-16x16.png">
+    <link rel="manifest" href="img/icon_stembyme/site.webmanifest">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="vendors/linericon/style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
+    <!-- main css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+    <style>
+        .gaegu-regular {
+            font-family: "Gaegu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        .maze-title {
+            color: #9d7de6;
+            font-size: 60px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .maze-links {
+            text-align: center;
+            margin-top: 80px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+            justify-items: center;
+        }
+
+        .maze-link {
+            display: inline-block;
+            margin: 20px;
+            padding: 0;
+            background: none;
+            color: white;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(157, 125, 230, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: auto;
+            height: auto;
+        }
+
+        .maze-link:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(157, 125, 230, 0.5);
+            color: white;
+            text-decoration: none;
+        }
+
+        .game-cover {
+            width: auto;
+            height: auto;
+            max-width: 300px;
+            max-height: 300px;
+            object-fit: contain;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .maze-link:hover .game-cover {
+            transform: scale(1.05);
+        }
+
+        /* Touch-friendly improvements for mobile */
+        @media (hover: none) and (pointer: coarse) {
+            .maze-link:hover {
+                transform: none;
+                box-shadow: 0 4px 15px rgba(157, 125, 230, 0.3);
+            }
+
+            .maze-link:hover .game-cover {
+                transform: none;
+            }
+
+            .maze-link:active {
+                transform: scale(0.95);
+                transition: transform 0.1s ease;
+            }
+        }
+
+        .maze-container {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .maze-title {
+                font-size: 36px;
+                margin-bottom: 30px;
+            }
+
+            .maze-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+                max-width: 450px;
+                margin-top: 40px;
+            }
+
+            .maze-link {
+                width: auto;
+                height: auto;
+                margin: 5px;
+            }
+
+            .game-cover {
+                max-width: 180px;
+                max-height: 180px;
+            }
+
+            .maze-container {
+                min-height: 50vh;
+                padding: 20px 0;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .maze-title {
+                font-size: 32px;
+                margin-bottom: 25px;
+            }
+
+            .maze-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                max-width: 350px;
+                margin-top: 30px;
+            }
+
+            .maze-link {
+                margin: 3px;
+            }
+
+            .game-cover {
+                max-width: 140px;
+                max-height: 140px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .maze-title {
+                font-size: 28px;
+                margin-bottom: 20px;
+            }
+
+            .maze-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                max-width: 280px;
+                margin-top: 25px;
+            }
+
+            .maze-link {
+                margin: 2px;
+            }
+
+            .game-cover {
+                max-width: 110px;
+                max-height: 110px;
+            }
+
+            .maze-container {
+                min-height: 40vh;
+                padding: 15px 0;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .maze-title {
+                font-size: 26px;
+                margin-bottom: 18px;
+            }
+
+            .maze-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                max-width: 240px;
+                margin-top: 20px;
+            }
+
+            .maze-link {
+                margin: 1px;
+            }
+
+            .game-cover {
+                max-width: 100px;
+                max-height: 100px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .maze-title {
+                font-size: 24px;
+                margin-bottom: 15px;
+            }
+
+            .maze-links {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+                max-width: 200px;
+                margin-top: 15px;
+            }
+
+            .maze-link {
+                margin: 0;
+            }
+
+            .game-cover {
+                max-width: 85px;
+                max-height: 85px;
+            }
+        }
+
+        /* Custom Lightbox Styles */
+        .custom-lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            z-index: 10000;
+        }
+
+        .lightbox-content img {
+            width: 100%;
+            height: auto;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 30px;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            .lightbox-content {
+                max-width: 95%;
+                max-height: 95%;
+            }
+
+            .lightbox-content img {
+                max-height: 85vh;
+            }
+
+            .lightbox-close {
+                top: -35px;
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .lightbox-content {
+                max-width: 98%;
+                max-height: 98%;
+            }
+
+            .lightbox-content img {
+                max-height: 80vh;
+            }
+
+            .lightbox-close {
+                top: -30px;
+                font-size: 24px;
+            }
+        }
+
+        .lightbox-close:hover {
+            color: #9d7de6;
+        }
+
+        body.lightbox-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!--================ Start Header Area =================-->
+    <header class="header_area">
+        <div class="main_menu">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <a class="navbar-brand logo_h" href="index.html"><img src="img/stembyme_logo.png" width="80px"
+                            alt=""></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav menu_nav justify-content-end">
+                            <li class="nav-item"><a class="nav-link" href="index.html#about">關於活動</a></li>
+                            <li class="nav-item"><a class="nav-link" href="map.html">城市定向地圖</a></li>
+                            <li class="nav-item"><a class="nav-link" href="maze-game.html">開發者挑戰遊戲</a></li>
+                            <li class="nav-item"><a class="nav-link" href="index.html#services">STEM-by-ME 編程大世界</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="index.html#portfolio">活動花絮</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!--================ End Header Area =================-->
+
+    <!--================ Start Maze Game Area =================-->
+    <section class="maze-game-area">
+        <div class="container">
+            <div class="maze-container">
+                <h1 class="maze-title gaegu-regular">開發者挑戰遊戲</h1>
+                <div class="maze-links">
+                    <a href="img/game-covers/1.png" class="maze-link lightbox-image">
+                        <img src="img/game-covers/1.png" alt="Game 1" class="game-cover">
+                    </a>
+                    <a href="img/game-covers/2.png" class="maze-link lightbox-image">
+                        <img src="img/game-covers/2.png" alt="Game 2" class="game-cover">
+                    </a>
+                    <a href="img/game-covers/3.png" class="maze-link lightbox-image">
+                        <img src="img/game-covers/3.png" alt="Game 3" class="game-cover">
+                    </a>
+                    <a href="img/game-covers/4.png" class="maze-link lightbox-image">
+                        <img src="img/game-covers/4.png" alt="Game 4" class="game-cover">
+                    </a>
+                    <a href="img/game-covers/5.png" class="maze-link lightbox-image">
+                        <img src="img/game-covers/5.png" alt="Game 5" class="game-cover">
+                    </a>
+                    <a href="img/game-covers/6.png" class="maze-link lightbox-image">
+                        <img src="img/game-covers/6.png" alt="Game 6" class="game-cover">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--================ End Maze Game Area =================-->
+
+    <!--================ Start Footer Area =================-->
+    <footer class="footer_area">
+        <div class="footer_widget_area">
+            <div class="container">
+                <div class="row">
+
+                    <div class="col-lg-4">
+                        <aside class="f_widget ab_widget">
+                            <div class="ab_widget">
+                                <h6>活動日期</h6>
+                                <p>2025年8月30日<br>
+                                    親子合作於港島區完成不同挑戰，透過合作互相欣賞。</p>
+                            </div>
+                        </aside>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer_copyright">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="copyright_text">
+                            <p>Copyright &copy; 2025 STEM-by-ME. All rights reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--================ End Footer Area =================-->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/stellar.js"></script>
+    <script src="vendors/lightbox/simpleLightbox.min.js"></script>
+    <script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="vendors/isotope/isotope-min.js"></script>
+    <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="js/jquery.ajaxchimp.min.js"></script>
+    <script src="js/mail-script.js"></script>
+    <script src="js/theme.js"></script>
+
+    <!-- Initialize Lightbox for Game Covers -->
+    <script>
+        $(document).ready(function () {
+            // Simple lightbox implementation
+            $('.lightbox-image').on('click', function (e) {
+                e.preventDefault();
+                var imgSrc = $(this).attr('href');
+                var imgAlt = $(this).find('img').attr('alt');
+
+                // Create lightbox overlay
+                var lightbox = $('<div class="custom-lightbox">' +
+                    '<div class="lightbox-overlay"></div>' +
+                    '<div class="lightbox-content">' +
+                    '<img src="' + imgSrc + '" alt="' + imgAlt + '">' +
+                    '<button class="lightbox-close">&times;</button>' +
+                    '</div>' +
+                    '</div>');
+
+                $('body').append(lightbox);
+                $('body').addClass('lightbox-open');
+
+                // Close on overlay click
+                lightbox.find('.lightbox-overlay, .lightbox-close').on('click', function () {
+                    lightbox.remove();
+                    $('body').removeClass('lightbox-open');
+                });
+
+                // Close on escape key
+                $(document).on('keyup.lightbox', function (e) {
+                    if (e.keyCode === 27) {
+                        lightbox.remove();
+                        $('body').removeClass('lightbox-open');
+                        $(document).off('keyup.lightbox');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
