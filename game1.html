@@ -97,14 +97,30 @@
             background: #000;
             border-radius: 15px;
             padding: 20px;
-            margin: 30px 0;
+            margin: 0;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
             overflow: hidden;
+            width: 600px;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform-origin: center center;
+        }
+
+        /* 創建一個包裝器來處理旋轉後的置中 */
+        .gdevelop-game-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 600px;
+            margin: 30px auto;
+            width: 600px;
         }
 
         .gdevelop-game-frame {
-            width: 100%;
+            width: 600px;
             height: 600px;
             border: none;
             border-radius: 10px;
@@ -234,10 +250,444 @@
                 height: 300px;
             }
         }
+
+        /* Score System Styles */
+        .score-system {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 將分數系統移到背景 */
+        .score-system-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .score-system {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+        }
+
+        .score-display {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .current-score,
+        .total-score {
+            text-align: center;
+        }
+
+        .score-label {
+            display: block;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            display: block;
+            font-size: 2rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-history {
+            border-top: 2px solid #e9ecef;
+            padding-top: 20px;
+        }
+
+        .score-history h4 {
+            color: #495057;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .score-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            margin-bottom: 5px;
+            background: white;
+            border-radius: 6px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .score-item.win {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+        }
+
+        .score-item.lose {
+            border-left-color: #dc3545;
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        }
+
+        .score-details {
+            flex: 1;
+        }
+
+        .score-amount {
+            font-weight: bold;
+            color: #495057;
+        }
+
+        .score-time {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .score-status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .score-status.win {
+            background: #28a745;
+            color: white;
+        }
+
+        .score-status.lose {
+            background: #dc3545;
+            color: white;
+        }
+
+        .score-status.playing {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        /* Animation for score updates */
+        .score-value.updated {
+            animation: scoreUpdate 0.5s ease-in-out;
+        }
+
+        @keyframes scoreUpdate {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+                color: #28a745;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Responsive score system */
+        @media (max-width: 768px) {
+            .score-display {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .score-value {
+                font-size: 1.5rem;
+            }
+
+            .score-list {
+                max-height: 150px;
+            }
+        }
+
+        /* 響應式設計 - 平板端 */
+        @media (max-width: 1024px) {
+            .game-title {
+                font-size: 2.5rem;
+            }
+
+            .game-content {
+                padding: 30px;
+                max-width: 90%;
+            }
+
+            .gdevelop-game-wrapper {
+                width: 500px;
+                min-height: 500px;
+            }
+
+            .gdevelop-game-container {
+                width: 500px;
+                height: 500px;
+            }
+
+            .gdevelop-game-frame {
+                width: 500px;
+                height: 500px;
+            }
+
+            .game-controls {
+                gap: 10px;
+            }
+
+            .control-btn {
+                padding: 8px 16px;
+                font-size: 0.8rem;
+            }
+
+            /* 平板端分數系統 */
+            .score-system {
+                width: 280px;
+                top: 15px;
+                right: 15px;
+                padding: 15px;
+            }
+        }
+
+        /* 響應式設計 - 手機端 */
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 10px;
+            }
+
+            .game-header {
+                margin-bottom: 20px;
+            }
+
+            .game-title {
+                font-size: 2rem;
+            }
+
+            .game-subtitle {
+                font-size: 1rem;
+            }
+
+            .game-content {
+                padding: 20px;
+                max-width: 95%;
+            }
+
+            .game-description {
+                font-size: 1rem;
+            }
+
+            .gdevelop-game-wrapper {
+                width: 100%;
+                min-height: 400px;
+                margin: 20px 0;
+            }
+
+            .gdevelop-game-container {
+                width: 100%;
+                height: 400px;
+                padding: 10px;
+            }
+
+            .gdevelop-game-frame {
+                width: 100%;
+                height: 400px;
+            }
+
+            .game-controls {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .control-btn {
+                width: 100%;
+                max-width: 250px;
+                padding: 12px 20px;
+                font-size: 0.9rem;
+            }
+
+            /* 手機端分數系統 */
+            .score-system {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                width: auto;
+                max-height: 200px;
+                z-index: 1000;
+            }
+
+            .score-display {
+                flex-direction: row;
+                gap: 10px;
+                padding: 10px;
+            }
+
+            .score-value {
+                font-size: 1.2rem;
+            }
+
+            .score-history {
+                display: none;
+                /* 在手機端隱藏歷史記錄以節省空間 */
+            }
+
+            .game-instructions {
+                padding: 15px;
+                margin: 15px 0;
+            }
+
+            .game-instructions h4 {
+                font-size: 1.1rem;
+            }
+
+            .game-instructions li {
+                font-size: 0.9rem;
+            }
+
+            .score-info {
+                padding: 12px;
+                margin: 15px 0;
+            }
+
+            .score-info h5 {
+                font-size: 1rem;
+            }
+
+            .score-info ul {
+                padding-left: 15px;
+            }
+
+            .score-info li {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 響應式設計 - 小手機端 */
+        @media (max-width: 480px) {
+            .game-title {
+                font-size: 1.8rem;
+            }
+
+            .game-subtitle {
+                font-size: 0.9rem;
+            }
+
+            .game-content {
+                padding: 15px;
+                max-width: 98%;
+            }
+
+            .gdevelop-game-container {
+                height: 350px;
+                padding: 8px;
+            }
+
+            .gdevelop-game-frame {
+                height: 350px;
+            }
+
+            .control-btn {
+                padding: 10px 16px;
+                font-size: 0.8rem;
+            }
+
+            .score-value {
+                font-size: 1.3rem;
+            }
+
+            .score-list {
+                max-height: 120px;
+            }
+
+            .game-instructions li {
+                font-size: 0.8rem;
+            }
+
+            .score-info li {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* 橫向手機端適配 */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .game-header {
+                margin-bottom: 15px;
+            }
+
+            .game-title {
+                font-size: 1.5rem;
+            }
+
+            .game-subtitle {
+                font-size: 0.8rem;
+            }
+
+            .gdevelop-game-wrapper {
+                min-height: 300px;
+            }
+
+            .gdevelop-game-container {
+                height: 300px;
+            }
+
+            .gdevelop-game-frame {
+                height: 300px;
+            }
+
+            .game-controls {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .control-btn {
+                width: auto;
+                max-width: none;
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+        }
     </style>
 </head>
 
 <body>
+    <!-- 背景分數系統 -->
+    <div class="score-system-background"></div>
+
+    <!-- 固定分數面板 -->
     <div class="game-container">
         <div class="game-header">
             <h1 class="game-title">遊戲 1</h1>
@@ -253,27 +703,29 @@
             <div class="game-instructions">
                 <h4>🎮 遊戲說明</h4>
                 <ul>
-                    <li><strong>控制方式：</strong> 使用滑鼠點擊或鍵盤方向鍵控制</li>
+                    <li><strong>控制方式：</strong> 使用搖桿控制</li>
                     <li><strong>目標：</strong> 完成遊戲挑戰，獲得最高分數</li>
                     <li><strong>提示：</strong> 注意遊戲中的提示和指示</li>
                 </ul>
             </div>
 
             <!-- GDevelop Game Container -->
-            <div class="gdevelop-game-container">
-                <!-- Option 1: Embed GDevelop HTML5 Export -->
-                <iframe class="gdevelop-game-frame" src="games/game1/index.html" title="GDevelop Game 1"
-                    allowfullscreen>
-                </iframe>
+            <div class="gdevelop-game-wrapper">
+                <div class="gdevelop-game-container">
+                    <!-- Option 1: Embed GDevelop HTML5 Export -->
+                    <iframe class="gdevelop-game-frame" src="games/game1/index.html"
+                        title="GDevelop Game 1" allowfullscreen>
+                    </iframe>
 
-                <!-- Option 2: Loading Placeholder (if game is not ready) -->
-                <!-- 
-                <div class="loading-placeholder">
-                    <div class="loading-spinner"></div>
-                    <h3>🎮 遊戲載入中</h3>
-                    <p>正在載入遊戲資源，請稍候...</p>
+                    <!-- Option 2: Loading Placeholder (if game is not ready) -->
+                    <!-- 
+                    <div class="loading-placeholder">
+                        <div class="loading-spinner"></div>
+                        <h3>🎮 遊戲載入中</h3>
+                        <p>正在載入遊戲資源，請稍候...</p>
+                    </div>
+                    -->
                 </div>
-                -->
             </div>
 
             <!-- Game Controls -->
@@ -284,9 +736,22 @@
                 <button class="control-btn" onclick="reloadGame()">
                     <i class="fa fa-refresh"></i> 重新開始
                 </button>
-                <button class="control-btn" onclick="pauseGame()">
-                    <i class="fa fa-pause"></i> 暫停遊戲
+                <button class="control-btn" onclick="testScoreSystem()"
+                    style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    <i class="fa fa-trophy"></i> 測試分數系統
                 </button>
+            </div>
+
+            <!-- Score System Info -->
+            <div class="score-info"
+                style="background: #e3f2fd; border: 1px solid #2196f3; border-radius: 10px; padding: 15px; margin: 20px 0; text-align: left;">
+                <h5 style="color: #1976d2; margin-bottom: 10px;">
+                    <i class="fa fa-info-circle"></i> 分數說明
+                </h5>
+                <ul style="margin: 0; padding-left: 20px; color: #424242;">
+                    <li>遊戲勝利時會自動獲得 300 分</li>
+                    <li>遊戲失敗時會自動獲得 0 分</li>
+                </ul>
             </div>
 
             <a href="maze-game.html" class="back-button">返回遊戲選擇</a>
@@ -299,6 +764,225 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script>
+        // Score System Variables
+        let currentScore = 0;
+        let totalScore = 0;
+        let scoreHistory = [];
+        let gameStatus = 'playing'; // 'playing', 'win', 'lose'
+
+        // DOM Elements
+        const currentScoreElement = document.getElementById('currentScore');
+        const totalScoreElement = document.getElementById('totalScore');
+        const scoreListElement = document.getElementById('scoreList');
+
+        // Load scores from localStorage
+        function loadScores() {
+            const savedTotalScore = localStorage.getItem('game1_totalScore');
+            const savedScoreHistory = localStorage.getItem('game1_scoreHistory');
+
+            if (savedTotalScore) {
+                totalScore = parseInt(savedTotalScore);
+                totalScoreElement.textContent = totalScore;
+            }
+
+            if (savedScoreHistory) {
+                scoreHistory = JSON.parse(savedScoreHistory);
+                updateScoreHistory();
+            }
+        }
+
+        // Save scores to localStorage
+        function saveScores() {
+            localStorage.setItem('game1_totalScore', totalScore.toString());
+            localStorage.setItem('game1_scoreHistory', JSON.stringify(scoreHistory));
+        }
+
+        // Update score display with animation
+        function updateScoreDisplay(element, newScore) {
+            element.classList.add('updated');
+            element.textContent = newScore;
+            setTimeout(() => {
+                element.classList.remove('updated');
+            }, 500);
+        }
+
+        // Add score to history
+        function addScoreToHistory(score, status, gameTime = null) {
+            const scoreItem = {
+                score: score,
+                status: status,
+                timestamp: new Date().toLocaleString('zh-TW'),
+                gameTime: gameTime
+            };
+
+            scoreHistory.unshift(scoreItem);
+
+            // Keep only last 10 scores
+            if (scoreHistory.length > 10) {
+                scoreHistory = scoreHistory.slice(0, 10);
+            }
+
+            updateScoreHistory();
+            saveScores();
+        }
+
+        // Update score history display
+        function updateScoreHistory() {
+            scoreListElement.innerHTML = '';
+
+            scoreHistory.forEach(item => {
+                const scoreItem = document.createElement('div');
+                scoreItem.className = `score-item ${item.status}`;
+
+                scoreItem.innerHTML = `
+                    <div class="score-details">
+                        <div class="score-amount">${item.score} 分</div>
+                        <div class="score-time">${item.timestamp}</div>
+                    </div>
+                    <div class="score-status ${item.status}">${getStatusText(item.status)}</div>
+                `;
+
+                scoreListElement.appendChild(scoreItem);
+            });
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            switch (status) {
+                case 'win': return '勝利';
+                case 'lose': return '失敗';
+                case 'playing': return '進行中';
+                default: return '未知';
+            }
+        }
+
+        // Handle game messages from iframe
+        function handleGameMessage(event) {
+            const data = event.data;
+
+            switch (data.type) {
+                case 'score_update':
+                    currentScore = data.score;
+                    updateScoreDisplay(currentScoreElement, currentScore);
+                    break;
+
+                case 'game_win':
+                    handleGameWin(data.score, data.gameTime);
+                    break;
+
+                case 'game_lose':
+                    handleGameLose(data.score, data.gameTime);
+                    break;
+
+                case 'game_start':
+                    handleGameStart();
+                    break;
+
+                case 'game_pause':
+                    handleGamePause();
+                    break;
+            }
+        }
+
+        // Handle game win
+        function handleGameWin(score, gameTime) {
+            gameStatus = 'win';
+            currentScore = score;
+
+            // Add bonus points for winning
+            const winBonus = Math.floor(score * 0.5); // 50% bonus
+            const totalEarned = score + winBonus;
+
+            totalScore += totalEarned;
+
+            // Update displays
+            updateScoreDisplay(currentScoreElement, currentScore);
+            updateScoreDisplay(totalScoreElement, totalScore);
+
+            // Add to history
+            addScoreToHistory(totalEarned, 'win', gameTime);
+
+            // Show win notification
+            showNotification(`🎉 恭喜獲勝！獲得 ${totalEarned} 分（包含 ${winBonus} 分獎勵）`, 'success');
+
+            // Save scores
+            saveScores();
+        }
+
+        // Handle game lose
+        function handleGameLose(score, gameTime) {
+            gameStatus = 'lose';
+            currentScore = score;
+
+            totalScore += score;
+
+            // Update displays
+            updateScoreDisplay(currentScoreElement, currentScore);
+            updateScoreDisplay(totalScoreElement, totalScore);
+
+            // Add to history
+            addScoreToHistory(score, 'lose', gameTime);
+
+            // Show lose notification
+            showNotification(`😔 遊戲結束，獲得 ${score} 分`, 'info');
+
+            // Save scores
+            saveScores();
+        }
+
+        // Handle game start
+        function handleGameStart() {
+            gameStatus = 'playing';
+            currentScore = 0;
+            updateScoreDisplay(currentScoreElement, currentScore);
+        }
+
+        // Handle game pause
+        function handleGamePause() {
+            // Add current score to history as "playing"
+            if (currentScore > 0) {
+                addScoreToHistory(currentScore, 'playing');
+            }
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                </div>
+            `;
+
+            // Add styles
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                max-width: 300px;
+            `;
+
+            // Add to page
+            document.body.appendChild(notification);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
+        }
+
         // Game control functions
         function fullscreenGame() {
             const gameFrame = document.querySelector('.gdevelop-game-frame');
@@ -318,20 +1002,59 @@
             setTimeout(() => {
                 gameFrame.src = currentSrc;
             }, 100);
+
+            // Reset current score
+            currentScore = 0;
+            updateScoreDisplay(currentScoreElement, currentScore);
         }
 
         function pauseGame() {
-            // This would need to communicate with the GDevelop game
-            // For now, we'll just show a message
-            alert('暫停功能需要與GDevelop遊戲進行整合');
+            const gameFrame = document.querySelector('.gdevelop-game-frame');
+
+            // Send pause message to game
+            gameFrame.contentWindow.postMessage({
+                type: 'pause_game',
+                data: { currentScore: currentScore }
+            }, '*');
+
+            // Add current score to history
+            if (currentScore > 0) {
+                addScoreToHistory(currentScore, 'playing');
+            }
+        }
+
+        // Test score system function
+        function testScoreSystem() {
+            // Simulate a game win with random score
+            const testScore = Math.floor(Math.random() * 100) + 50; // Random score between 50-150
+            handleGameWin(testScore, Math.random() * 60 + 30); // Random time between 30-90 seconds
+
+            showNotification('🧪 測試分數系統已觸發！', 'info');
         }
 
         // Handle game loading
         window.addEventListener('load', function () {
             const gameFrame = document.querySelector('.gdevelop-game-frame');
 
+            // Load saved scores
+            loadScores();
+
+            // Listen for messages from game
+            window.addEventListener('message', handleGameMessage);
+
             gameFrame.addEventListener('load', function () {
                 console.log('GDevelop game loaded successfully');
+
+                // Send initial setup message to game
+                setTimeout(() => {
+                    gameFrame.contentWindow.postMessage({
+                        type: 'setup_score_system',
+                        data: {
+                            currentScore: currentScore,
+                            totalScore: totalScore
+                        }
+                    }, '*');
+                }, 1000);
             });
 
             gameFrame.addEventListener('error', function () {
@@ -344,7 +1067,57 @@
                 }
             });
         });
+
+        // Add notification styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            
+            .notification-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            
+            .notification-close {
+                background: none;
+                border: none;
+                color: white;
+                font-size: 18px;
+                cursor: pointer;
+                margin-left: 10px;
+                padding: 0;
+                width: 20px;
+                height: 20px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .notification-close:hover {
+                opacity: 0.7;
+            }
+        `;
+        document.head.appendChild(style);
     </script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/stellar.js"></script>
+    <script src="js/jquery.magnific-popup.min.js"></script>
+    <script src="vendors/nice-select/js/jquery.nice-select.js"></script>
+    <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="vendors/isotope/isotope-min.js"></script>
+    <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="js/jquery.ajaxchimp.min.js"></script>
+    <script src="js/mail-script.js"></script>
+    <!--gmaps Js-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjCGmQ0Uq4exrzdcL6rvxywDDOvfAu6eE"></script>
+    <script src="js/gmaps.min.js"></script>
+    <script src="js/theme.js"></script>
 </body>
 
 </html>

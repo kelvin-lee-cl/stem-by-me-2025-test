@@ -1,0 +1,12 @@
+{
+  "name": "health fortress defense - Copy - Copy marcus",
+  "short_name": "health fortress defense - Copy - Copy marcus",
+  "id": "com.example.gamename",
+  "description": "",
+  "orientation": "landscape",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "black",
+  "categories": ["games", "entertainment"],
+  "icons": []
+}

@@ -1,0 +1,12 @@
+{
+  "name": "MAZE Hoi lap_TungTungTungSahier - Copy",
+  "short_name": "MAZE Hoi lap_TungTungTungSahier - Copy",
+  "id": "com.example.gamename",
+  "description": "",
+  "orientation": "landscape",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "black",
+  "categories": ["games", "entertainment"],
+  "icons": []
+}

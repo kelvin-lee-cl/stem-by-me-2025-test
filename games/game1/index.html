@@ -1,272 +1,232 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GDevelop Game 1</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #000;
+    <meta charset="UTF-8"/>
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+		}
+        #canvasArea {
+            margin-left: auto;
+            margin-right: auto;
+            overflow: hidden;
         }
 
-        #game-container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
+        
+	</style>
+    <!-- Libs and GDJS core files : -->
+		<script src="libs/jshashtable.js" crossorigin="anonymous"></script>
+	<script src="logger.js" crossorigin="anonymous"></script>
+	<script src="gd.js" crossorigin="anonymous"></script>
+	<script src="libs/rbush.js" crossorigin="anonymous"></script>
+	<script src="AsyncTasksManager.js" crossorigin="anonymous"></script>
+	<script src="inputmanager.js" crossorigin="anonymous"></script>
+	<script src="jsonmanager.js" crossorigin="anonymous"></script>
+	<script src="Model3DManager.js" crossorigin="anonymous"></script>
+	<script src="ResourceLoader.js" crossorigin="anonymous"></script>
+	<script src="ResourceCache.js" crossorigin="anonymous"></script>
+	<script src="timemanager.js" crossorigin="anonymous"></script>
+	<script src="polygon.js" crossorigin="anonymous"></script>
+	<script src="runtimeobject.js" crossorigin="anonymous"></script>
+	<script src="profiler.js" crossorigin="anonymous"></script>
+	<script src="RuntimeInstanceContainer.js" crossorigin="anonymous"></script>
+	<script src="runtimescene.js" crossorigin="anonymous"></script>
+	<script src="scenestack.js" crossorigin="anonymous"></script>
+	<script src="force.js" crossorigin="anonymous"></script>
+	<script src="RuntimeLayer.js" crossorigin="anonymous"></script>
+	<script src="layer.js" crossorigin="anonymous"></script>
+	<script src="RuntimeCustomObjectLayer.js" crossorigin="anonymous"></script>
+	<script src="timer.js" crossorigin="anonymous"></script>
+	<script src="runtimewatermark.js" crossorigin="anonymous"></script>
+	<script src="runtimegame.js" crossorigin="anonymous"></script>
+	<script src="variable.js" crossorigin="anonymous"></script>
+	<script src="variablescontainer.js" crossorigin="anonymous"></script>
+	<script src="oncetriggers.js" crossorigin="anonymous"></script>
+	<script src="runtimebehavior.js" crossorigin="anonymous"></script>
+	<script src="SpriteAnimator.js" crossorigin="anonymous"></script>
+	<script src="spriteruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="affinetransformation.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObjectInstanceContainer.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObject.js" crossorigin="anonymous"></script>
+	<script src="CustomRuntimeObject2D.js" crossorigin="anonymous"></script>
+	<script src="events-tools/commontools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/variabletools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/runtimescenetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/inputtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/objecttools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/cameratools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/soundtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/storagetools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/stringtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/windowtools.js" crossorigin="anonymous"></script>
+	<script src="events-tools/networktools.js" crossorigin="anonymous"></script>
+	<script src="splash/gd-logo-light.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-filters-tools.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/runtimegame-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/runtimescene-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/layer-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-image-manager.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-bitmapfont-manager.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/spriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/CustomRuntimeObject2DPixiRenderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/DebuggerPixiRenderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/loadingscreen-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="pixi-renderers/pixi-effects-manager.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager/howler.min.js" crossorigin="anonymous"></script>
+	<script src="howler-sound-manager/howler-sound-manager.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager/fontfaceobserver.js" crossorigin="anonymous"></script>
+	<script src="fontfaceobserver-font-manager/fontfaceobserver-font-manager.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__panelspritebutton__buttonfsm.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__panelspritebutton__panelspritebutton.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__smoothcamera__smoothcamera.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__acceleratedspeed-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__angleto4way-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__angleto8way-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__deadzone-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__hastouchstartedonscreenside-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isanglein4waydirection-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isanglein8waydirection-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isbuttonpressed-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isbuttonreleased-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed4way-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed8way-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__joystickangle-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__joystickforce-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__multitouchjoystick.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__setbuttonstate-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__setdeadzone-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__setjoystickangle-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__setjoystickforce-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__spritemultitouchjoystick.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__stickangle-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__stickforce-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__stickforcex-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__stickforcey-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__topdownmultitouchmapper.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__stayonscreen__stayonscreen.js" crossorigin="anonymous"></script>
+	<script src="Extensions/3D/Scene3DTools.js" crossorigin="anonymous"></script>
+	<script src="Extensions/AnchorBehavior/anchorruntimebehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/DebuggerTools/debuggertools.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PanelSpriteObject/panelspriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PanelSpriteObject/panelspriteruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/pixi-graphics-extras/graphics-extras.min.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TextObject/textruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TextObject/textruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TopDownMovementBehavior/topdownmovementruntimebehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TweenBehavior/TweenManager.js" crossorigin="anonymous"></script>
+	<script src="Extensions/TweenBehavior/tweenruntimebehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/Video/videoruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/Video/videoruntimeobject.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/AnimatableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/EffectBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/FlippableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/OpacityBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/ResizableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/ScalableBehavior.js" crossorigin="anonymous"></script>
+	<script src="object-capabilities/TextContainerBehavior.js" crossorigin="anonymous"></script>
+	<script src="Extensions/3D/DirectionalLight.js" crossorigin="anonymous"></script>
+	<script src="Extensions/3D/HemisphereLight.js" crossorigin="anonymous"></script>
+	<script src="code0.js" crossorigin="anonymous"></script>
+	<script src="code1.js" crossorigin="anonymous"></script>
+	<script src="code2.js" crossorigin="anonymous"></script>
+	<script src="data.js" crossorigin="anonymous"></script>
 
-        #game-canvas {
-            border: 2px solid #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
 
-        .game-ui {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .score {
-            margin-bottom: 10px;
-        }
-
-        .controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            text-align: center;
-            font-size: 14px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-    </style>
 </head>
-
 <body>
-    <div id="game-container">
-        <canvas id="game-canvas" width="800" height="600"></canvas>
 
-        <div class="game-ui">
-            <div class="score">分數: <span id="score">0</span></div>
-            <div class="lives">生命: <span id="lives">3</span></div>
-        </div>
+    
+	<script>
 
-        <div class="controls">
-            <p>使用方向鍵或 WASD 移動</p>
-            <p>點擊滑鼠或按空白鍵射擊</p>
-        </div>
-    </div>
+    (function() {
+        //Initialization
+        var game = new gdjs.RuntimeGame(gdjs.projectData, {});
 
-    <script>
-        // Sample GDevelop-like game structure
-        const canvas = document.getElementById('game-canvas');
-        const ctx = canvas.getContext('2d');
-        const scoreElement = document.getElementById('score');
-        const livesElement = document.getElementById('lives');
+        //Create a renderer
+        game.getRenderer().createStandardCanvas(document.body);
 
-        let score = 0;
-        let lives = 3;
-        let gameRunning = true;
+        //Bind keyboards/mouse/touch events
+        game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
 
-        // Game objects
-        const player = {
-            x: canvas.width / 2,
-            y: canvas.height - 50,
-            width: 50,
-            height: 50,
-            speed: 5,
-            color: '#00ff00'
+        // Communication with parent page
+        function sendMessageToParent(type, data) {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: type,
+                    ...data
+                }, '*');
+            }
+        }
+
+        // Listen for messages from parent
+        window.addEventListener('message', function(event) {
+            const data = event.data;
+            
+            switch(data.type) {
+                case 'setup_score_system':
+                    console.log('Score system setup received:', data.data);
+                    break;
+                    
+                case 'pause_game':
+                    console.log('Pause game requested');
+                    break;
+            }
+        });
+
+        // Game state tracking
+        let gameStartTime = Date.now();
+        let gameTime = 0;
+
+        //Load all assets and start the game
+        game.loadAllAssets(function() {
+            game.startGameLoop();
+            
+            // Send game start message
+            gameStartTime = Date.now();
+            sendMessageToParent('game_start', {});
+            
+            console.log('GDevelop game started - ready for communication');
+        });
+
+        // Manual score update function (can be called from GDevelop events)
+        window.updateScore = function(score) {
+            sendMessageToParent('score_update', { score: score });
         };
 
-        const bullets = [];
-        const enemies = [];
-
-        // Input handling
-        const keys = {};
-        const mouse = { x: 0, y: 0, clicked: false };
-
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-        });
-
-        canvas.addEventListener('click', () => {
-            mouse.clicked = true;
-        });
-
-        document.addEventListener('keydown', (e) => {
-            keys[e.key] = true;
-        });
-
-        document.addEventListener('keyup', (e) => {
-            keys[e.key] = false;
-        });
-
-        // Game functions
-        function updatePlayer() {
-            if (keys['ArrowLeft'] || keys['a'] || keys['A']) {
-                player.x -= player.speed;
-            }
-            if (keys['ArrowRight'] || keys['d'] || keys['D']) {
-                player.x += player.speed;
-            }
-            if (keys['ArrowUp'] || keys['w'] || keys['W']) {
-                player.y -= player.speed;
-            }
-            if (keys['ArrowDown'] || keys['s'] || keys['S']) {
-                player.y += player.speed;
-            }
-
-            // Keep player in bounds
-            player.x = Math.max(0, Math.min(canvas.width - player.width, player.x));
-            player.y = Math.max(0, Math.min(canvas.height - player.height, player.y));
-        }
-
-        function shoot() {
-            if (keys[' '] || mouse.clicked) {
-                bullets.push({
-                    x: player.x + player.width / 2,
-                    y: player.y,
-                    width: 4,
-                    height: 10,
-                    speed: 7,
-                    color: '#ffff00'
-                });
-                mouse.clicked = false;
-            }
-        }
-
-        function updateBullets() {
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                bullets[i].y -= bullets[i].speed;
-                if (bullets[i].y < 0) {
-                    bullets.splice(i, 1);
-                }
-            }
-        }
-
-        function spawnEnemy() {
-            if (Math.random() < 0.02) {
-                enemies.push({
-                    x: Math.random() * (canvas.width - 30),
-                    y: -30,
-                    width: 30,
-                    height: 30,
-                    speed: 2,
-                    color: '#ff0000'
-                });
-            }
-        }
-
-        function updateEnemies() {
-            for (let i = enemies.length - 1; i >= 0; i--) {
-                enemies[i].y += enemies[i].speed;
-                if (enemies[i].y > canvas.height) {
-                    enemies.splice(i, 1);
-                    lives--;
-                    livesElement.textContent = lives;
-                    if (lives <= 0) {
-                        gameOver();
-                    }
-                }
-            }
-        }
-
-        function checkCollisions() {
-            for (let i = bullets.length - 1; i >= 0; i--) {
-                for (let j = enemies.length - 1; j >= 0; j--) {
-                    if (bullets[i] && enemies[j] &&
-                        bullets[i].x < enemies[j].x + enemies[j].width &&
-                        bullets[i].x + bullets[i].width > enemies[j].x &&
-                        bullets[i].y < enemies[j].y + enemies[j].height &&
-                        bullets[i].y + bullets[i].height > enemies[j].y) {
-
-                        bullets.splice(i, 1);
-                        enemies.splice(j, 1);
-                        score += 10;
-                        scoreElement.textContent = score;
-                        break;
-                    }
-                }
-            }
-        }
-
-        function gameOver() {
-            gameRunning = false;
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '48px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText('遊戲結束', canvas.width / 2, canvas.height / 2 - 50);
-
-            ctx.font = '24px Arial';
-            ctx.fillText(`最終分數: ${score}`, canvas.width / 2, canvas.height / 2);
-            ctx.fillText('按 F5 重新開始', canvas.width / 2, canvas.height / 2 + 50);
-        }
-
-        function draw() {
-            // Clear canvas
-            ctx.fillStyle = '#000000';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Draw player
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-
-            // Draw bullets
-            bullets.forEach(bullet => {
-                ctx.fillStyle = bullet.color;
-                ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+        // Manual game win function (can be called from GDevelop events)
+        window.gameWin = function(score) {
+            gameTime = (Date.now() - gameStartTime) / 1000;
+            sendMessageToParent('game_win', {
+                score: score,
+                gameTime: gameTime
             });
+        };
 
-            // Draw enemies
-            enemies.forEach(enemy => {
-                ctx.fillStyle = enemy.color;
-                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+        // Manual game lose function (can be called from GDevelop events)
+        window.gameLose = function(score) {
+            gameTime = (Date.now() - gameStartTime) / 1000;
+            sendMessageToParent('game_lose', {
+                score: score,
+                gameTime: gameTime
             });
-        }
+        };
 
-        function gameLoop() {
-            if (gameRunning) {
-                updatePlayer();
-                shoot();
-                updateBullets();
-                spawnEnemy();
-                updateEnemies();
-                checkCollisions();
-                draw();
-            }
-            requestAnimationFrame(gameLoop);
-        }
+    })();
 
-        // Start the game
-        gameLoop();
-
-        // Handle window resize
-        window.addEventListener('resize', () => {
-            const container = document.getElementById('game-container');
-            const rect = container.getBoundingClientRect();
-            canvas.style.width = rect.width + 'px';
-            canvas.style.height = rect.height + 'px';
-        });
-    </script>
+	</script>
 </body>
-
 </html>
