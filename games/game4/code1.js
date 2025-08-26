@@ -30,6 +30,8 @@ gdjs.Map_322Code.GDBloKObjects1= [];
 gdjs.Map_322Code.GDBloKObjects2= [];
 gdjs.Map_322Code.GDDamageObjects1= [];
 gdjs.Map_322Code.GDDamageObjects2= [];
+gdjs.Map_322Code.GDFlatLightJoystickObjects1= [];
+gdjs.Map_322Code.GDFlatLightJoystickObjects2= [];
 
 
 gdjs.Map_322Code.mapOfGDgdjs_9546Map_9595322Code_9546GDBlek_95959595WallObjects1Objects = Hashtable.newFrom({"Blek_Wall": gdjs.Map_322Code.GDBlek_9595WallObjects1});
@@ -376,6 +378,8 @@ gdjs.Map_322Code.GDBloKObjects1.length = 0;
 gdjs.Map_322Code.GDBloKObjects2.length = 0;
 gdjs.Map_322Code.GDDamageObjects1.length = 0;
 gdjs.Map_322Code.GDDamageObjects2.length = 0;
+gdjs.Map_322Code.GDFlatLightJoystickObjects1.length = 0;
+gdjs.Map_322Code.GDFlatLightJoystickObjects2.length = 0;
 
 gdjs.Map_322Code.eventsList0(runtimeScene);
 gdjs.Map_322Code.GDMap_95952Objects1.length = 0;
@@ -408,6 +412,8 @@ gdjs.Map_322Code.GDBloKObjects1.length = 0;
 gdjs.Map_322Code.GDBloKObjects2.length = 0;
 gdjs.Map_322Code.GDDamageObjects1.length = 0;
 gdjs.Map_322Code.GDDamageObjects2.length = 0;
+gdjs.Map_322Code.GDFlatLightJoystickObjects1.length = 0;
+gdjs.Map_322Code.GDFlatLightJoystickObjects2.length = 0;
 
 
 return;

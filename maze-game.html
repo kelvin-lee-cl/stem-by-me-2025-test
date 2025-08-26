@@ -484,7 +484,8 @@
 
                 <!-- 遊戲網格 -->
                 <div class="maze-links">
-                    <div class="game-card lightbox-image" data-href="img/game-covers/1.png" data-game="game1.html">
+                    <div class="game-card lightbox-image" data-href="img/game-covers/1.png"
+                        data-game="./game_authenticator/auth1.html">
                         <div class="game-card-inner">
                             <img src="img/game-covers/1.png" alt="Game 1" class="game-cover">
                             <div class="game-overlay">
@@ -496,7 +497,8 @@
                         </div>
                     </div>
 
-                    <div class="game-card lightbox-image" data-href="img/game-covers/2.png" data-game="game2.html">
+                    <div class="game-card lightbox-image" data-href="img/game-covers/2.png"
+                        data-game="./game_authenticator/auth2.html">
                         <div class="game-card-inner">
                             <img src="img/game-covers/2.png" alt="Game 2" class="game-cover">
                             <div class="game-overlay">
@@ -508,7 +510,8 @@
                         </div>
                     </div>
 
-                    <div class="game-card lightbox-image" data-href="img/game-covers/3.png" data-game="game3.html">
+                    <div class="game-card lightbox-image" data-href="img/game-covers/3.png"
+                        data-game="./game_authenticator/auth3.html">
                         <div class="game-card-inner">
                             <img src="img/game-covers/3.png" alt="Game 3" class="game-cover">
                             <div class="game-overlay">
@@ -520,7 +523,8 @@
                         </div>
                     </div>
 
-                    <div class="game-card lightbox-image" data-href="img/game-covers/4.png" data-game="game4.html">
+                    <div class="game-card lightbox-image" data-href="img/game-covers/4.png"
+                        data-game="./game_authenticator/auth4.html">
                         <div class="game-card-inner">
                             <img src="img/game-covers/4.png" alt="Game 4" class="game-cover">
                             <div class="game-overlay">
@@ -532,7 +536,8 @@
                         </div>
                     </div>
 
-                    <div class="game-card lightbox-image" data-href="img/game-covers/5.png" data-game="game5.html">
+                    <div class="game-card lightbox-image" data-href="img/game-covers/5.png"
+                        data-game="./game_authenticator/auth5.html">
                         <div class="game-card-inner">
                             <img src="img/game-covers/5.png" alt="Game 5" class="game-cover">
                             <div class="game-overlay">
@@ -544,7 +549,8 @@
                         </div>
                     </div>
 
-                    <div class="game-card lightbox-image" data-href="img/game-covers/6.png" data-game="game6.html">
+                    <div class="game-card lightbox-image" data-href="img/game-covers/6.png"
+                        data-game="./game_authenticator/auth6.html">
                         <div class="game-card-inner">
                             <img src="img/game-covers/6.png" alt="Game 6" class="game-cover">
                             <div class="game-overlay">
@@ -610,14 +616,22 @@
 
     <!-- Initialize Lightbox for Game Covers -->
     <script>
+        // Debug: Check if jQuery is loaded
+        console.log('jQuery version:', typeof $ !== 'undefined' ? $.fn.jquery : 'jQuery not loaded');
+
         $(document).ready(function () {
             // Enhanced lightbox implementation for new structure
+            console.log('Setting up game card click handlers...');
             $('.game-card').on('click', function (e) {
                 e.preventDefault();
+                console.log('Game card clicked!');
                 var imgSrc = $(this).data('href');
                 var imgAlt = $(this).find('img').attr('alt');
                 var gameName = $(this).find('.game-name').text();
                 var gameUrl = $(this).data('game'); // Get the game URL from data attribute
+
+                console.log('Game URL from data attribute:', gameUrl);
+                console.log('Game name:', gameName);
 
                 // Create enhanced lightbox overlay
                 var lightbox = $('<div class="custom-lightbox">' +
@@ -654,11 +668,15 @@
                 lightbox.find('.start-game-btn').on('click', function () {
                     var targetGameUrl = $(this).data('game-url'); // Get the specific game URL
 
+                    // Debug: Log the URL
+                    console.log('Attempting to navigate to:', targetGameUrl);
+
                     // Add loading animation
                     $(this).html('<span class="loading-spinner"></span> 載入中...');
                     $(this).prop('disabled', true);
 
                     setTimeout(function () {
+                        console.log('Redirecting to:', targetGameUrl);
                         window.location.href = targetGameUrl;
                     }, 1000);
                 });

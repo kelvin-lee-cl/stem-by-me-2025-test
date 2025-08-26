@@ -15,7 +15,8 @@ let isConditionTrue_0 = false;
 isConditionTrue_0 = false;
 isConditionTrue_0 = gdjs.evtTools.input.isMouseButtonPressed(runtimeScene, "Left");
 if (isConditionTrue_0) {
-{gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "Untitled scene", false);
+{runtimeScene.getGame().getVariables().getFromIndex(0).setNumber(1);
+}{gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "Untitled scene", false);
 }}
 
 }

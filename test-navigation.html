@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>導航測試 - Navigation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .test-button {
+            display: block;
+            margin: 10px 0;
+            padding: 15px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .test-button:hover {
+            background: #0056b3;
+        }
+
+        .debug-info {
+            background: #fff;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>導航測試頁面</h1>
+
+    <div class="debug-info">
+        <h3>當前頁面信息：</h3>
+        <p><strong>當前URL:</strong> <span id="current-url"></span></p>
+        <p><strong>當前路徑:</strong> <span id="current-path"></span></p>
+    </div>
+
+    <h2>測試直接導航到認證頁面：</h2>
+
+    <a href="./game_authenticator/auth1.html" class="test-button">測試導航到 auth1.html</a>
+    <a href="./game_authenticator/auth2.html" class="test-button">測試導航到 auth2.html</a>
+    <a href="./game_authenticator/auth3.html" class="test-button">測試導航到 auth3.html</a>
+    <a href="./game_authenticator/auth4.html" class="test-button">測試導航到 auth4.html</a>
+    <a href="./game_authenticator/auth5.html" class="test-button">測試導航到 auth5.html</a>
+    <a href="./game_authenticator/auth6.html" class="test-button">測試導航到 auth6.html</a>
+
+    <h2>測試遊戲頁面：</h2>
+
+    <a href="./game1.html" class="test-button">測試導航到 game1.html</a>
+    <a href="./game2.html" class="test-button">測試導航到 game2.html</a>
+    <a href="./game3.html" class="test-button">測試導航到 game3.html</a>
+    <a href="./game4.html" class="test-button">測試導航到 game4.html</a>
+    <a href="./game5.html" class="test-button">測試導航到 game5.html</a>
+    <a href="./game6.html" class="test-button">測試導航到 game6.html</a>
+
+    <h2>測試 maze-game 頁面：</h2>
+
+    <a href="./maze-game.html" class="test-button">測試導航到 maze-game.html</a>
+
+    <script>
+        // 顯示當前頁面信息
+        document.getElementById('current-url').textContent = window.location.href;
+        document.getElementById('current-path').textContent = window.location.pathname;
+
+        // 為所有測試按鈕添加點擊事件
+        document.querySelectorAll('.test-button').forEach(button => {
+            button.addEventListener('click', function (e) {
+                console.log('點擊了:', this.href);
+                console.log('目標URL:', this.getAttribute('href'));
+            });
+        });
+    </script>
+</body>
+
+</html>

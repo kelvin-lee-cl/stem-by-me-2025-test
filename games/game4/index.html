@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8"/>
-    <link rel="manifest" href="manifest.webmanifest">
+	<meta charset="UTF-8" />
+	<link rel="manifest" href="manifest.webmanifest">
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <meta name="theme-color" content="#000000" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta name="theme-color" content="#000000" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
 	<style>
 		body {
 			margin: 0;
 			padding: 0;
 			background-color: #000000;
-            overflow: hidden;
+			overflow: hidden;
 		}
-        #canvasArea {
-            margin-left: auto;
-            margin-right: auto;
-            overflow: hidden;
-        }
 
-        
+		#canvasArea {
+			margin-left: auto;
+			margin-right: auto;
+			overflow: hidden;
+		}
 	</style>
-    <!-- Libs and GDJS core files : -->
-		<script src="libs/jshashtable.js" crossorigin="anonymous"></script>
+	<!-- Libs and GDJS core files : -->
+	<script src="libs/jshashtable.js" crossorigin="anonymous"></script>
 	<script src="logger.js" crossorigin="anonymous"></script>
 	<script src="gd.js" crossorigin="anonymous"></script>
 	<script src="libs/rbush.js" crossorigin="anonymous"></script>
@@ -98,13 +98,18 @@
 	<script src="gdjs-evtsext__spritemultitouchjoystick__angleto4way-func.js" crossorigin="anonymous"></script>
 	<script src="gdjs-evtsext__spritemultitouchjoystick__angleto8way-func.js" crossorigin="anonymous"></script>
 	<script src="gdjs-evtsext__spritemultitouchjoystick__deadzone-func.js" crossorigin="anonymous"></script>
-	<script src="gdjs-evtsext__spritemultitouchjoystick__hastouchstartedonscreenside-func.js" crossorigin="anonymous"></script>
-	<script src="gdjs-evtsext__spritemultitouchjoystick__isanglein4waydirection-func.js" crossorigin="anonymous"></script>
-	<script src="gdjs-evtsext__spritemultitouchjoystick__isanglein8waydirection-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__hastouchstartedonscreenside-func.js"
+		crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isanglein4waydirection-func.js"
+		crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isanglein8waydirection-func.js"
+		crossorigin="anonymous"></script>
 	<script src="gdjs-evtsext__spritemultitouchjoystick__isbuttonpressed-func.js" crossorigin="anonymous"></script>
 	<script src="gdjs-evtsext__spritemultitouchjoystick__isbuttonreleased-func.js" crossorigin="anonymous"></script>
-	<script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed4way-func.js" crossorigin="anonymous"></script>
-	<script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed8way-func.js" crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed4way-func.js"
+		crossorigin="anonymous"></script>
+	<script src="gdjs-evtsext__spritemultitouchjoystick__isdirectionpushed8way-func.js"
+		crossorigin="anonymous"></script>
 	<script src="gdjs-evtsext__spritemultitouchjoystick__joystickangle-func.js" crossorigin="anonymous"></script>
 	<script src="gdjs-evtsext__spritemultitouchjoystick__joystickforce-func.js" crossorigin="anonymous"></script>
 	<script src="gdjs-evtsext__spritemultitouchjoystick__multitouchjoystick.js" crossorigin="anonymous"></script>
@@ -122,10 +127,13 @@
 	<script src="Extensions/3D/Scene3DTools.js" crossorigin="anonymous"></script>
 	<script src="Extensions/AnchorBehavior/anchorruntimebehavior.js" crossorigin="anonymous"></script>
 	<script src="Extensions/DebuggerTools/debuggertools.js" crossorigin="anonymous"></script>
-	<script src="Extensions/PanelSpriteObject/panelspriteruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PanelSpriteObject/panelspriteruntimeobject-pixi-renderer.js"
+		crossorigin="anonymous"></script>
 	<script src="Extensions/PanelSpriteObject/panelspriteruntimeobject.js" crossorigin="anonymous"></script>
-	<script src="Extensions/PrimitiveDrawing/pixi-graphics-extras/graphics-extras.min.js" crossorigin="anonymous"></script>
-	<script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/pixi-graphics-extras/graphics-extras.min.js"
+		crossorigin="anonymous"></script>
+	<script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject-pixi-renderer.js"
+		crossorigin="anonymous"></script>
 	<script src="Extensions/PrimitiveDrawing/shapepainterruntimeobject.js" crossorigin="anonymous"></script>
 	<script src="Extensions/TextObject/textruntimeobject-pixi-renderer.js" crossorigin="anonymous"></script>
 	<script src="Extensions/TextObject/textruntimeobject.js" crossorigin="anonymous"></script>
@@ -151,27 +159,97 @@
 
 
 </head>
+
 <body>
 
-    
+
 	<script>
 
-    (function() {
-        //Initialization
-        var game = new gdjs.RuntimeGame(gdjs.projectData, {});
+		(function () {
+			//Initialization
+			var game = new gdjs.RuntimeGame(gdjs.projectData, {});
 
-        //Create a renderer
-        game.getRenderer().createStandardCanvas(document.body);
+			//Create a renderer
+			game.getRenderer().createStandardCanvas(document.body);
 
-        //Bind keyboards/mouse/touch events
-        game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
+			//Bind keyboards/mouse/touch events
+			game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
 
-        //Load all assets and start the game
-        game.loadAllAssets(function() {
-            game.startGameLoop();
-        });
-    })();
+			// Communication with parent page
+			function sendMessageToParent(type, data) {
+				if (window.parent && window.parent !== window) {
+					window.parent.postMessage({
+						type: type,
+						...data
+					}, '*');
+				}
+			}
+
+			// Listen for messages from parent
+			window.addEventListener('message', function (event) {
+				const data = event.data;
+				console.log('Game received message:', data);
+
+				switch (data.type) {
+					case 'setup_score_system':
+						console.log('Score system setup received:', data.data);
+						break;
+
+					case 'pause_game':
+						console.log('Pause game requested');
+						break;
+				}
+			});
+
+			// Game state tracking
+			let gameStartTime = Date.now();
+			let gameTime = 0;
+
+			//Load all assets and start the game
+			game.loadAllAssets(function () {
+				game.startGameLoop();
+
+				// Send game start message
+				gameStartTime = Date.now();
+				sendMessageToParent('game_start', {});
+
+				console.log('GDevelop game started - ready for communication');
+			});
+
+			// Manual score update function (can be called from GDevelop events)
+			window.updateScore = function (score) {
+				sendMessageToParent('score_update', { score: score });
+			};
+
+			// Manual game win function (can be called from GDevelop events)
+			window.gameWin = function (score) {
+				console.log('window.gameWin called with score:', score);
+				gameTime = (Date.now() - gameStartTime) / 1000;
+				console.log('Calculated game time:', gameTime);
+				sendMessageToParent('game_win', {
+					score: score,
+					gameTime: gameTime
+				});
+				console.log('Game win message sent to parent');
+			};
+
+			// Manual game lose function (can be called from GDevelop events)
+			window.gameLose = function (score) {
+				gameTime = (Date.now() - gameStartTime) / 1000;
+				sendMessageToParent('game_lose', {
+					score: score,
+					gameTime: gameTime
+				});
+			};
+
+			// Add function to send current score to parent (for compatibility)
+			window.sendScoreToParent = function (score) {
+				window.updateScore(score);
+			};
+
+		})();
 
 	</script>
 </body>
+
 </html>

@@ -5,7 +5,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>遊戲 1 - 童非凡(2025)</title>
+    <title>遊戲 4 - 童非凡(2025)</title>
     <link rel="apple-touch-icon" sizes="180x180" href="img/icon_stembyme/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="img/icon_stembyme/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="img/icon_stembyme/favicon-16x16.png">
@@ -23,6 +23,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
 
     <style>
         .game-container {
@@ -253,6 +258,7 @@
 
         /* Score System Styles */
         .score-system {
+            display: none;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 15px;
             padding: 25px;
@@ -688,6 +694,26 @@
     <div class="score-system-background"></div>
 
     <!-- 固定分數面板 -->
+    <div class="score-system">
+        <div class="score-display">
+            <div class="score-value">
+                <span class="score-label">當前分數</span>
+                <span id="currentScore" class="score-amount">0</span>
+            </div>
+            <div class="score-value">
+                <span class="score-label">總分</span>
+                <span id="totalScore" class="score-amount">0</span>
+            </div>
+        </div>
+        <div class="score-history">
+            <h5>分數記錄</h5>
+            <div id="scoreList" class="score-list">
+                <!-- Score history items will be added here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 固定分數面板 -->
     <div class="game-container">
         <div class="game-header">
             <h1 class="game-title">遊戲 4</h1>
@@ -706,6 +732,8 @@
                     <li><strong>控制方式：</strong> 使用搖桿控制</li>
                     <li><strong>目標：</strong> 完成遊戲挑戰，獲得最高分數</li>
                     <li><strong>提示：</strong> 注意遊戲中的提示和指示</li>
+                    <li><strong>注意：</strong> 建議使用全螢幕模式要獲得最佳遊戲體驗</li>
+                    <li><strong>注意：</strong> 分數將會在遊戲勝利時自動計入系統，請放心遊玩</li>
                 </ul>
             </div>
 
@@ -713,8 +741,8 @@
             <div class="gdevelop-game-wrapper">
                 <div class="gdevelop-game-container">
                     <!-- Option 1: Embed GDevelop HTML5 Export -->
-                    <iframe class="gdevelop-game-frame" src="games/game4/index.html"
-                        title="GDevelop Game 1" allowfullscreen>
+                    <iframe class="gdevelop-game-frame" src="games/game4/index.html" title="GDevelop Game 4"
+                        allowfullscreen>
                     </iframe>
 
                     <!-- Option 2: Loading Placeholder (if game is not ready) -->
@@ -737,9 +765,10 @@
                     <i class="fa fa-refresh"></i> 重新開始
                 </button>
                 <button class="control-btn" onclick="testScoreSystem()"
-                    style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);">
+                    style="background: linear-gradient(135deg, #28a745 0%, #20c997 100%);display: none;">
                     <i class="fa fa-trophy"></i> 測試分數系統
                 </button>
+
             </div>
 
             <!-- Score System Info -->
@@ -764,23 +793,89 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5x_L2yAP9ndQJRBeC31Z6nNrh4okt9uo",
+            authDomain: "stem-by-me-app.firebaseapp.com",
+            projectId: "stem-by-me-app",
+            storageBucket: "stem-by-me-app.firebasestorage.app",
+            messagingSenderId: "216736327145",
+            appId: "1:216736327145:web:e01721f8e0c6a960a19778",
+            measurementId: "G-WWSS5PJVP1"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // Score System Variables
         let currentScore = 0;
         let totalScore = 0;
         let scoreHistory = [];
         let gameStatus = 'playing'; // 'playing', 'win', 'lose'
+        let playerName = 'Anonymous'; // Default player name
 
         // DOM Elements
         const currentScoreElement = document.getElementById('currentScore');
         const totalScoreElement = document.getElementById('totalScore');
         const scoreListElement = document.getElementById('scoreList');
 
+        // Check if elements exist
+        if (!currentScoreElement || !totalScoreElement || !scoreListElement) {
+            console.error('Score system elements not found. Please check HTML structure.');
+        }
+
+        // Get player name from localStorage or prompt user
+        function getPlayerName() {
+            const savedName = localStorage.getItem('playerName');
+            if (savedName) {
+                playerName = savedName;
+                return playerName;
+            }
+
+            const name = prompt('請輸入您的名字（用於記錄分數）：', 'Anonymous');
+            if (name && name.trim()) {
+                playerName = name.trim();
+                localStorage.setItem('playerName', playerName);
+            }
+            return playerName;
+        }
+
+        // Send score to Firebase
+        async function sendScoreToFirebase(score, status, gameTime = null) {
+            try {
+                const playerName = getPlayerName();
+                const scoreData = {
+                    playerName: playerName,
+                    score: score,
+                    status: status,
+                    gameTime: gameTime,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    gameId: 'game4',
+                    totalScore: totalScore
+                };
+
+                // Add to Firestore
+                const docRef = await db.collection('gameScores').add(scoreData);
+                console.log('Score sent to Firebase with ID:', docRef.id);
+
+                showNotification('📊 分數已成功保存到雲端！', 'success');
+                return docRef.id;
+            } catch (error) {
+                console.error('Error sending score to Firebase:', error);
+                showNotification('❌ 保存分數到雲端時發生錯誤', 'error');
+                return null;
+            }
+        }
+
+
+
         // Load scores from localStorage
         function loadScores() {
-            const savedTotalScore = localStorage.getItem('game1_totalScore');
-            const savedScoreHistory = localStorage.getItem('game1_scoreHistory');
+            const savedTotalScore = localStorage.getItem('game4_totalScore');
+            const savedScoreHistory = localStorage.getItem('game4_scoreHistory');
 
-            if (savedTotalScore) {
+            if (savedTotalScore && totalScoreElement) {
                 totalScore = parseInt(savedTotalScore);
                 totalScoreElement.textContent = totalScore;
             }
@@ -793,12 +888,16 @@
 
         // Save scores to localStorage
         function saveScores() {
-            localStorage.setItem('game1_totalScore', totalScore.toString());
-            localStorage.setItem('game1_scoreHistory', JSON.stringify(scoreHistory));
+            localStorage.setItem('game4_totalScore', totalScore.toString());
+            localStorage.setItem('game4_scoreHistory', JSON.stringify(scoreHistory));
         }
 
         // Update score display with animation
         function updateScoreDisplay(element, newScore) {
+            if (!element) {
+                console.error('Element not found for score display update');
+                return;
+            }
             element.classList.add('updated');
             element.textContent = newScore;
             setTimeout(() => {
@@ -828,6 +927,11 @@
 
         // Update score history display
         function updateScoreHistory() {
+            if (!scoreListElement) {
+                console.error('Score list element not found');
+                return;
+            }
+
             scoreListElement.innerHTML = '';
 
             scoreHistory.forEach(item => {
@@ -885,32 +989,32 @@
         }
 
         // Handle game win
-        function handleGameWin(score, gameTime) {
+        async function handleGameWin(score, gameTime) {
             gameStatus = 'win';
             currentScore = score;
 
-            // Add bonus points for winning
-            const winBonus = Math.floor(score * 0.5); // 50% bonus
-            const totalEarned = score + winBonus;
-
-            totalScore += totalEarned;
+            // No bonus, just the score
+            totalScore += score;
 
             // Update displays
             updateScoreDisplay(currentScoreElement, currentScore);
             updateScoreDisplay(totalScoreElement, totalScore);
 
             // Add to history
-            addScoreToHistory(totalEarned, 'win', gameTime);
+            addScoreToHistory(score, 'win', gameTime);
+
+            // Send score to Firebase
+            await sendScoreToFirebase(score, 'win', gameTime);
 
             // Show win notification
-            showNotification(`🎉 恭喜獲勝！獲得 ${totalEarned} 分（包含 ${winBonus} 分獎勵）`, 'success');
+            showNotification(`🎉 恭喜獲勝！獲得 ${score} 分`, 'success');
 
             // Save scores
             saveScores();
         }
 
         // Handle game lose
-        function handleGameLose(score, gameTime) {
+        async function handleGameLose(score, gameTime) {
             gameStatus = 'lose';
             currentScore = score;
 
@@ -922,6 +1026,9 @@
 
             // Add to history
             addScoreToHistory(score, 'lose', gameTime);
+
+            // Send score to Firebase
+            await sendScoreToFirebase(score, 'lose', gameTime);
 
             // Show lose notification
             showNotification(`😔 遊戲結束，獲得 ${score} 分`, 'info');
@@ -957,7 +1064,15 @@
                 </div>
             `;
 
-            // Add styles
+            // Check if we're in fullscreen mode
+            const isFullscreen = document.fullscreenElement ||
+                document.webkitFullscreenElement ||
+                document.mozFullScreenElement ||
+                document.msFullscreenElement;
+
+            // Add styles with higher z-index for fullscreen mode
+            const zIndex = isFullscreen ? 2147483647 : 10000; // Maximum z-index for fullscreen
+
             notification.style.cssText = `
                 position: fixed;
                 top: 20px;
@@ -967,13 +1082,21 @@
                 padding: 15px 20px;
                 border-radius: 8px;
                 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-                z-index: 10000;
+                z-index: ${zIndex};
                 animation: slideIn 0.3s ease-out;
                 max-width: 300px;
+                font-family: Arial, sans-serif;
+                font-size: 14px;
+                line-height: 1.4;
             `;
 
-            // Add to page
-            document.body.appendChild(notification);
+            // Add to page - use the appropriate parent element
+            const parentElement = isFullscreen ? document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement : document.body;
+            if (parentElement) {
+                parentElement.appendChild(notification);
+            } else {
+                document.body.appendChild(notification);
+            }
 
             // Auto remove after 5 seconds
             setTimeout(() => {
@@ -993,6 +1116,41 @@
             } else if (gameFrame.msRequestFullscreen) {
                 gameFrame.msRequestFullscreen();
             }
+        }
+
+        // Add fullscreen change event listeners
+        function setupFullscreenListeners() {
+            const fullscreenEvents = [
+                'fullscreenchange',
+                'webkitfullscreenchange',
+                'mozfullscreenchange',
+                'MSFullscreenChange'
+            ];
+
+            fullscreenEvents.forEach(event => {
+                document.addEventListener(event, function () {
+                    const isFullscreen = document.fullscreenElement ||
+                        document.webkitFullscreenElement ||
+                        document.mozFullScreenElement ||
+                        document.msFullscreenElement;
+
+                    console.log('Fullscreen state changed:', isFullscreen ? 'Entered fullscreen' : 'Exited fullscreen');
+
+                    // If we have any active notifications, update their z-index
+                    const notifications = document.querySelectorAll('.notification');
+                    notifications.forEach(notification => {
+                        const zIndex = isFullscreen ? 2147483647 : 10000;
+                        notification.style.zIndex = zIndex;
+
+                        // If in fullscreen, move notification to fullscreen element
+                        if (isFullscreen && notification.parentElement !== isFullscreen) {
+                            isFullscreen.appendChild(notification);
+                        } else if (!isFullscreen && notification.parentElement !== document.body) {
+                            document.body.appendChild(notification);
+                        }
+                    });
+                });
+            });
         }
 
         function reloadGame() {
@@ -1024,10 +1182,10 @@
         }
 
         // Test score system function
-        function testScoreSystem() {
+        async function testScoreSystem() {
             // Simulate a game win with random score
             const testScore = Math.floor(Math.random() * 100) + 50; // Random score between 50-150
-            handleGameWin(testScore, Math.random() * 60 + 30); // Random time between 30-90 seconds
+            await handleGameWin(testScore, Math.random() * 60 + 30); // Random time between 30-90 seconds
 
             showNotification('🧪 測試分數系統已觸發！', 'info');
         }
@@ -1041,6 +1199,11 @@
 
             // Listen for messages from game
             window.addEventListener('message', handleGameMessage);
+
+            // Setup fullscreen listeners
+            setupFullscreenListeners();
+
+
 
             gameFrame.addEventListener('load', function () {
                 console.log('GDevelop game loaded successfully');
@@ -1100,6 +1263,8 @@
             .notification-close:hover {
                 opacity: 0.7;
             }
+
+
         `;
         document.head.appendChild(style);
     </script>

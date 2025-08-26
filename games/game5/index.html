@@ -160,10 +160,78 @@
         //Bind keyboards/mouse/touch events
         game.getRenderer().bindStandardEvents(game.getInputManager(), window, document);
 
+        // Communication with parent page
+        function sendMessageToParent(type, data) {
+            if (window.parent && window.parent !== window) {
+                window.parent.postMessage({
+                    type: type,
+                    ...data
+                }, '*');
+            }
+        }
+
+        // Listen for messages from parent
+        window.addEventListener('message', function (event) {
+            const data = event.data;
+            console.log('Game received message:', data);
+
+            switch (data.type) {
+                case 'setup_score_system':
+                    console.log('Score system setup received:', data.data);
+                    break;
+
+                case 'pause_game':
+                    console.log('Pause game requested');
+                    break;
+            }
+        });
+
+        // Game state tracking
+        let gameStartTime = Date.now();
+        let gameTime = 0;
+
         //Load all assets and start the game
         game.loadAllAssets(function() {
             game.startGameLoop();
+
+            // Send game start message
+            gameStartTime = Date.now();
+            sendMessageToParent('game_start', {});
+
+            console.log('GDevelop game started - ready for communication');
         });
+
+        // Manual score update function (can be called from GDevelop events)
+        window.updateScore = function(score) {
+            sendMessageToParent('score_update', { score: score });
+        };
+
+        // Manual game win function (can be called from GDevelop events)
+        window.gameWin = function(score) {
+            console.log('window.gameWin called with score:', score);
+            gameTime = (Date.now() - gameStartTime) / 1000;
+            console.log('Calculated game time:', gameTime);
+            sendMessageToParent('game_win', {
+                score: score,
+                gameTime: gameTime
+            });
+            console.log('Game win message sent to parent');
+        };
+
+        // Manual game lose function (can be called from GDevelop events)
+        window.gameLose = function(score) {
+            gameTime = (Date.now() - gameStartTime) / 1000;
+            sendMessageToParent('game_lose', {
+                score: score,
+                gameTime: gameTime
+            });
+        };
+
+        // Add function to send current score to parent (for compatibility)
+        window.sendScoreToParent = function(score) {
+            window.updateScore(score);
+        };
+
     })();
 
 	</script>

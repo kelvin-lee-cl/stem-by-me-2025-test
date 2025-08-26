@@ -178,6 +178,10 @@ for (var i = 0, k = 0, l = gdjs.Untitled_32sceneCode.GDyeetObjects1.length;i<l;+
 }
 gdjs.Untitled_32sceneCode.GDyeetObjects1.length = k;
 if (isConditionTrue_0) {
+// Call game win function before scene change
+if (typeof window.gameWin === 'function') {
+    window.gameWin(300); // Send 300 points for winning
+}
 {gdjs.evtTools.runtimeScene.replaceScene(runtimeScene, "game over", false);
 }}
 
