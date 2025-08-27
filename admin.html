@@ -12,45 +12,127 @@
             box-sizing: border-box;
         }
 
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Orbitron', 'Courier New', monospace;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            margin: 0;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            background: rgba(10, 10, 10, 0.9);
+            border: 2px solid #00ffff;
+            border-radius: 0;
+            box-shadow:
+                0 0 20px rgba(0, 255, 255, 0.5),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
             overflow: hidden;
             width: 100%;
-            max-width: 1200px;
-            min-height: 600px;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            animation: scan 3s linear infinite;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: linear-gradient(135deg, #ff0080 0%, #8000ff 50%, #0080ff 100%);
+            color: #ffffff;
             padding: 30px;
             text-align: center;
+            position: relative;
+            border-bottom: 3px solid #00ffff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                transform: translateX(-100%);
+            }
+
+            50% {
+                transform: translateX(100%);
+            }
         }
 
         .header h1 {
             font-size: 2.5em;
             margin-bottom: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            position: relative;
+            z-index: 1;
         }
 
         .header p {
             font-size: 1.1em;
             opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .content {
-            padding: 30px;
+            padding: 40px;
+            max-width: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ffff;
         }
 
         /* Login Form Styles */
@@ -58,6 +140,10 @@
             max-width: 400px;
             margin: 0 auto;
             text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
         }
 
         .form-group {
@@ -69,47 +155,80 @@
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
-            color: #333;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
         }
 
         .form-group input {
             width: 100%;
             padding: 12px 15px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
+            border: 2px solid #00ffff;
+            border-radius: 0;
             font-size: 16px;
-            transition: border-color 0.3s ease;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ffff;
+            font-family: 'Orbitron', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #ff0080;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(0, 255, 255, 0.5);
         }
 
         .login-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
+            background: linear-gradient(135deg, #ff0080 0%, #8000ff 100%);
+            color: #ffffff;
+            border: 2px solid #00ffff;
             padding: 15px 30px;
-            border-radius: 8px;
+            border-radius: 0;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: all 0.3s ease;
             width: 100%;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
         }
 
-        .login-btn:hover {
-            transform: translateY(-2px);
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
+
+
 
         .error-message {
-            background: #ff6b6b;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0080;
+            padding: 15px;
+            border: 2px solid #ff0080;
+            border-radius: 0;
             margin-bottom: 20px;
             display: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.5);
+            font-weight: bold;
         }
 
         /* Admin Dashboard Styles */
@@ -121,126 +240,297 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 40px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid #00ffff;
+            position: relative;
+        }
+
+        .dashboard-header::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, #00ffff, #ff0080, #8000ff, #00ffff);
+            animation: borderGlow 3s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .dashboard-header h2 {
+            font-size: 2.2em;
+            color: #00ffff;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            font-weight: 900;
         }
 
         .logout-btn {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0080;
+            border: 2px solid #ff0080;
+            padding: 12px 24px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
         }
+
+
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
         .stat-card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 25px;
+            border-radius: 0;
             text-align: center;
-            border-left: 4px solid #667eea;
+            border: 2px solid #00ffff;
+            box-shadow:
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+
+
         .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 5px;
+            font-size: 2.5em;
+            font-weight: 900;
+            color: #00ffff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
+            position: relative;
+            z-index: 1;
         }
 
         .stat-label {
-            color: #666;
+            color: #ffffff;
             font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 1;
         }
 
         .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 0;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .filters::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #ff0080, #8000ff, #00ffff);
+            animation: borderGlow 3s linear infinite;
         }
 
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
 
         .filter-group label {
             font-weight: bold;
-            color: #333;
+            color: #00ffff;
             font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
         }
 
         .filter-group select,
         .filter-group input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+            padding: 12px 15px;
+            border: 2px solid #00ffff;
+            border-radius: 0;
             font-size: 14px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #00ffff;
+            font-family: 'Orbitron', monospace;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #ff0080;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
+            background: rgba(0, 0, 0, 0.9);
+        }
+
+        .filter-group select option {
+            background: #000;
+            color: #00ffff;
         }
 
         .refresh-btn {
-            background: #28a745;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            background: rgba(40, 167, 69, 0.2);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            padding: 12px 20px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            position: relative;
+            overflow: hidden;
         }
+
+        .refresh-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+
 
         .export-btn {
-            background: #17a2b8;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            background: rgba(23, 162, 184, 0.2);
+            color: #00ffff;
+            border: 2px solid #00ffff;
+            padding: 12px 20px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .export-btn:hover {
-            background: #138496;
+        .export-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
+
+
 
         .status-btn {
-            background: #6f42c1;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            background: rgba(111, 66, 193, 0.2);
+            color: #8000ff;
+            border: 2px solid #8000ff;
+            padding: 12px 20px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(128, 0, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .status-btn:hover {
-            background: #5a32a3;
+        .status-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(128, 0, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
+
+
 
         .info-btn {
-            background: #20c997;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            background: rgba(32, 201, 151, 0.2);
+            color: #20c997;
+            border: 2px solid #20c997;
+            padding: 12px 20px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: bold;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(32, 201, 151, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .info-btn:hover {
-            background: #1ba085;
+        .info-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(32, 201, 151, 0.2), transparent);
+            transition: left 0.5s;
         }
+
+
 
         /* Status Modal Styles */
         .status-modal {
@@ -251,19 +541,35 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
         }
 
         .status-modal-content {
-            background-color: white;
+            background: rgba(0, 0, 0, 0.95);
             margin: 5% auto;
             padding: 30px;
-            border-radius: 15px;
+            border-radius: 0;
             width: 90%;
             max-width: 800px;
             max-height: 80vh;
             overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            border: 2px solid #00ffff;
+            box-shadow:
+                0 0 30px rgba(0, 255, 255, 0.5),
+                inset 0 0 30px rgba(0, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .status-modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #ff0080, #8000ff, #00ffff);
+            animation: borderGlow 3s linear infinite;
         }
 
         .status-modal-header {
@@ -272,30 +578,35 @@
             align-items: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
+            border-bottom: 2px solid #00ffff;
         }
 
         .status-modal-header h3 {
-            color: #333;
+            color: #00ffff;
             font-size: 1.5em;
             margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
         }
 
         .status-modal-close {
-            background: #ff6b6b;
-            color: white;
-            border: none;
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0080;
+            border: 2px solid #ff0080;
             padding: 10px 15px;
-            border-radius: 8px;
+            border-radius: 0;
             cursor: pointer;
             font-weight: bold;
             font-size: 16px;
-            transition: background-color 0.3s ease;
+            font-family: 'Orbitron', monospace;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(255, 0, 128, 0.3);
         }
 
-        .status-modal-close:hover {
-            background: #e55555;
-        }
+
 
         /* Status Summary Card */
         .status-summary {
@@ -386,41 +697,51 @@
             border-bottom: 1px solid #f0f0f0;
         }
 
-        .status-table tr:hover {
-            background: #f8f9fa;
-        }
+
 
         .status-table tr:last-child td {
             border-bottom: none;
         }
 
         .status-badge {
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 6px 16px;
+            border-radius: 0;
             font-weight: bold;
             font-size: 0.8em;
             text-align: center;
             min-width: 80px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid;
+            box-shadow: 0 0 10px;
         }
 
         .status-badge-success {
-            background: #d4edda;
-            color: #155724;
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
         .status-badge-error {
-            background: #f8d7da;
-            color: #721c24;
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0080;
+            border-color: #ff0080;
+            box-shadow: 0 0 10px rgba(255, 0, 128, 0.3);
         }
 
         .status-badge-warning {
-            background: #fff3cd;
-            color: #856404;
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border-color: #ffc107;
+            box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
         }
 
         .status-badge-info {
-            background: #d1ecf1;
-            color: #0c5460;
+            background: rgba(0, 255, 255, 0.2);
+            color: #00ffff;
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
         }
 
         .status-details {
@@ -436,7 +757,7 @@
         }
 
         .legend-section h4 {
-            color: #333;
+            color: #ffffff;
             margin-bottom: 15px;
             font-size: 1.1em;
         }
@@ -492,76 +813,192 @@
         .scores-table {
             width: 100%;
             border-collapse: collapse;
-            background: white;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 0;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            border: 2px solid #00ffff;
         }
 
         .scores-table th {
-            background: #667eea;
-            color: white;
-            padding: 15px;
+            background: linear-gradient(135deg, #ff0080 0%, #8000ff 50%, #0080ff 100%);
+            color: #ffffff;
+            padding: 18px 20px;
             text-align: left;
             font-weight: bold;
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            border-bottom: 2px solid #00ffff;
         }
 
         .scores-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 16px 20px;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.3);
+            font-size: 1em;
+            color: #00ffff;
+            background: rgba(0, 0, 0, 0.7);
         }
 
-        .scores-table tr:hover {
-            background: #f8f9fa;
-        }
+
 
         .status-win {
-            background: #d4edda;
-            color: #155724;
-            padding: 4px 8px;
-            border-radius: 4px;
+            background: rgba(0, 255, 0, 0.2);
+            color: #00ff00;
+            padding: 6px 12px;
+            border-radius: 0;
             font-size: 0.8em;
             font-weight: bold;
+            border: 1px solid #00ff00;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
         .status-lose {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 4px 8px;
-            border-radius: 4px;
+            background: rgba(255, 0, 0, 0.2);
+            color: #ff0080;
+            padding: 6px 12px;
+            border-radius: 0;
             font-size: 0.8em;
             font-weight: bold;
+            border: 1px solid #ff0080;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(255, 0, 128, 0.3);
         }
 
         .loading {
             text-align: center;
-            padding: 40px;
-            color: #666;
+            padding: 60px;
+            color: #00ffff;
+            font-size: 1.1em;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 0;
+            border: 2px dashed #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            position: relative;
+        }
+
+        .loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 40px;
+            height: 40px;
+            margin: -20px 0 0 -20px;
+            border: 3px solid transparent;
+            border-top: 3px solid #00ffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .no-data {
             text-align: center;
-            padding: 40px;
-            color: #666;
+            padding: 60px;
+            color: #ff0080;
             font-style: italic;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 0;
+            border: 2px dashed #ff0080;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.3);
+        }
+
+        .dashboard-section {
+            margin-bottom: 50px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 0;
+            padding: 30px;
+            border: 2px solid #00ffff;
+            box-shadow:
+                0 0 20px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .dashboard-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #00ffff, #ff0080, #8000ff, #00ffff);
+            animation: borderGlow 3s linear infinite;
+        }
+
+        .dashboard-section h3 {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #00ffff;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #00ffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
         }
 
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
             .container {
-                margin: 10px;
-                min-height: auto;
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .content {
+                padding: 20px;
             }
 
             .header h1 {
-                font-size: 2em;
+                font-size: 1.8em;
+            }
+
+            .dashboard-header h2 {
+                font-size: 1.6em;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 20px;
             }
 
             .filters {
-                flex-direction: column;
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 20px;
+            }
+
+            .dashboard-section {
+                padding: 20px;
+                margin-bottom: 30px;
+            }
+
+            .dashboard-section h3 {
+                font-size: 1.3em;
             }
 
             .scores-table {
@@ -570,13 +1007,14 @@
 
             .scores-table th,
             .scores-table td {
-                padding: 8px 10px;
+                padding: 12px 15px;
             }
 
             .status-modal-content {
                 margin: 10px;
                 width: calc(100% - 20px);
                 max-width: none;
+                padding: 20px;
             }
 
             .status-summary-stats {
@@ -590,7 +1028,7 @@
 
             .status-table th,
             .status-table td {
-                padding: 8px 10px;
+                padding: 10px 12px;
             }
 
             .legend-grid {
@@ -600,6 +1038,11 @@
             .legend-item {
                 flex-direction: column;
                 text-align: center;
+            }
+
+            .loading,
+            .no-data {
+                padding: 40px 20px;
             }
         }
     </style>
@@ -687,7 +1130,7 @@
                     </div>
                     <div class="filter-group">
                         <label>&nbsp;</label>
-                        <button class="status-btn" onclick="checkSystemStatus()">🔍 系統狀態</button>
+                        <button class="status-btn" onclick="checkSystemStatus()">🔍 詳細狀態</button>
                     </div>
                     <div class="filter-group">
                         <label>&nbsp;</label>
@@ -701,8 +1144,19 @@
                 </div>
 
                 <!-- Scores Table -->
-                <div id="scoresContainer">
-                    <div class="loading">載入中...</div>
+                <div class="dashboard-section">
+                    <h3>📊 玩家分數記錄</h3>
+                    <div id="scoresContainer">
+                        <div class="loading">載入中...</div>
+                    </div>
+                </div>
+
+                <!-- System Status Section -->
+                <div class="dashboard-section">
+                    <h3>🔍 系統狀態監測</h3>
+                    <div id="systemStatusContainer">
+                        <div class="loading">載入系統狀態中...</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -962,6 +1416,10 @@
         function showDashboard() {
             document.getElementById('loginForm').style.display = 'none';
             document.getElementById('adminDashboard').style.display = 'block';
+            // Auto-load system status when dashboard is shown
+            setTimeout(() => {
+                checkSystemStatusInline();
+            }, 1000);
         }
 
         async function loadScores() {
@@ -998,6 +1456,8 @@
 
                 updateStatistics();
                 displayScores();
+                // Auto-update system status when scores are loaded
+                checkSystemStatusInline();
 
             } catch (error) {
                 console.error('Error loading scores:', error);
@@ -1084,13 +1544,10 @@
             container.innerHTML = tableHTML;
         }
 
-        // System Status Check function
-        async function checkSystemStatus() {
-            const modal = document.getElementById('statusModal');
-            const content = document.getElementById('statusContent');
-
-            modal.style.display = 'block';
-            content.innerHTML = '<div class="loading">🔍 正在進行全面系統檢查...</div>';
+        // Inline System Status Check function
+        async function checkSystemStatusInline() {
+            const container = document.getElementById('systemStatusContainer');
+            container.innerHTML = '<div class="loading">🔍 正在進行全面系統檢查...</div>';
 
             const statusChecks = [];
 
@@ -1504,37 +1961,9 @@
             const overallStatus = errorCount > 0 ? 'error' : warningCount > 0 ? 'warning' : 'success';
             const overallValue = errorCount > 0 ? '系統異常' : warningCount > 0 ? '系統警告' : '系統正常';
 
-            // Create summary card
+            // Create status table with same style as scores table
             let statusHTML = `
-                <div class="status-summary">
-                    <div class="status-summary-header">
-                        <div class="status-summary-title">整體系統狀態</div>
-                        <div class="status-badge status-badge-${overallStatus}">${overallValue}</div>
-                    </div>
-                    <div class="status-summary-stats">
-                        <div class="status-stat">
-                            <span class="status-stat-label">成功:</span>
-                            <span class="status-stat-value status-stat-success">${successCount}</span>
-                        </div>
-                        <div class="status-stat">
-                            <span class="status-stat-label">警告:</span>
-                            <span class="status-stat-value status-stat-warning">${warningCount}</span>
-                        </div>
-                        <div class="status-stat">
-                            <span class="status-stat-label">錯誤:</span>
-                            <span class="status-stat-value status-stat-error">${errorCount}</span>
-                        </div>
-                        <div class="status-stat">
-                            <span class="status-stat-label">資訊:</span>
-                            <span class="status-stat-value status-stat-info">${infoCount}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // Create status table
-            statusHTML += `
-                <table class="status-table">
+                <table class="scores-table">
                     <thead>
                         <tr>
                             <th>檢查項目</th>
@@ -1550,16 +1979,58 @@
                     <tr>
                         <td><strong>${check.label}</strong></td>
                         <td><span class="status-badge status-badge-${check.status}">${check.value}</span></td>
-                        <td>
-                            <div>${check.details}</div>
-                        </td>
+                        <td>${check.details}</td>
                     </tr>
                 `;
             });
 
             statusHTML += '</tbody></table>';
 
-            content.innerHTML = statusHTML;
+            // Add summary statistics at the top (similar to stats-grid)
+            const summaryHTML = `
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #28a745;">${successCount}</div>
+                        <div class="stat-label">成功項目</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #ffc107;">${warningCount}</div>
+                        <div class="stat-label">警告項目</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #dc3545;">${errorCount}</div>
+                        <div class="stat-label">錯誤項目</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" style="color: #17a2b8;">${infoCount}</div>
+                        <div class="stat-label">資訊項目</div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px; padding: 15px; background: #000000; border-radius: 10px; border-left: 4px solid #667eea;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="margin: 0; color: #00FFFF;">整體系統狀態</h3>
+                        <span class="status-badge status-badge-${overallStatus}" style="font-size: 1em; padding: 8px 16px;">${overallValue}</span>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = summaryHTML + statusHTML;
+        }
+
+        // Modal System Status Check function (for button click)
+        async function checkSystemStatus() {
+            const modal = document.getElementById('statusModal');
+            const content = document.getElementById('statusContent');
+
+            modal.style.display = 'block';
+            content.innerHTML = '<div class="loading">🔍 正在進行全面系統檢查...</div>';
+
+            // Use the same logic as inline function
+            await checkSystemStatusInline();
+
+            // Copy the content to modal
+            const inlineContent = document.getElementById('systemStatusContainer').innerHTML;
+            content.innerHTML = inlineContent;
         }
 
         function closeStatusModal() {
@@ -1596,9 +2067,10 @@
                 // Set up interval for real-time updates (every 30 seconds)
                 monitoringInterval = setInterval(() => {
                     loadScores().then(() => {
-                        // Only update statistics, don't auto-open status modal
+                        // Update statistics and system status
                         updateStatistics();
                         displayScores();
+                        checkSystemStatusInline();
                     });
                 }, 30000); // 30 seconds
 
