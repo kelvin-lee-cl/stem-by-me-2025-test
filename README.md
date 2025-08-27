@@ -7,13 +7,19 @@ STEM-by-ME 2025 是一個包含6個教育遊戲的互動網站，具有完整的
 ## 🎮 遊戲列表
 
 | 遊戲 | 認證頁面 | 密碼 | 跳轉目標 | 勝利分數 |
-|------|----------|------|----------|----------|
+|------|----------|------|----------|----------|lll
 | 遊戲1 | auth1.html | T7B4 | game1.html | 300分 |
 | 遊戲2 | auth2.html | R1H7 | game2.html | 300分 |
 | 遊戲3 | auth3.html | B5Y9 | game3.html | 300分 |
 | 遊戲4 | auth4.html | K6R2 | game4.html | 300分 |
 | 遊戲5 | auth5.html | E558 | game5.html | 300分 |
 | 遊戲6 | auth6.html | U4W9 | game6.html | 300分 |
+
+## 🔐 管理員系統
+
+| 功能 | 頁面 | 密碼 | 功能說明 |
+|------|------|------|----------|
+| 管理員控制台 | admin.html | ADMIN2025 | 查看所有玩家分數統計 |
 
 ## 🏗️ 系統架構
 
@@ -30,6 +36,7 @@ stem-by-me-2025/
 │   ├── auth1.html ~ auth6.html      # 認證頁面
 │   └── README.md                    # 認證系統說明
 ├── firebase-config.js               # Firebase配置
+├── admin.html                       # 管理員控制台
 └── README.md                        # 本文件
 ```
 
@@ -102,7 +109,28 @@ function checkAuthStatus() {
 }
 ```
 
-### 4. 遊戲選擇頁面
+### 4. 管理員系統
+
+#### 管理員控制台 (`admin.html`)
+- **密碼保護**: 使用密碼 `ADMIN2025` 登入
+- **分數統計**: 顯示總玩家數、總遊戲次數、勝利次數、平均分數
+- **篩選功能**: 按遊戲、狀態、玩家名稱篩選
+- **實時數據**: 從Firebase即時載入所有分數記錄
+- **響應式設計**: 支援各種設備尺寸
+
+```javascript
+// 管理員密碼驗證
+const ADMIN_PASSWORD = 'ADMIN2025';
+function login() {
+    if (password === ADMIN_PASSWORD) {
+        // 顯示管理員儀表板
+        showDashboard();
+        loadScores();
+    }
+}
+```
+
+### 5. 遊戲選擇頁面
 
 #### 導航系統 (`maze-game.html`)
 - **遊戲預覽**: 點擊遊戲卡片顯示預覽
@@ -125,12 +153,21 @@ function checkAuthStatus() {
 6. **查看分數** → 在遊戲頁面查看分數歷史
 7. **返回選擇頁面** → 可選擇其他遊戲
 
+### 管理員流程
+1. **訪問管理員頁面** (`admin.html`)
+2. **輸入管理員密碼** → 驗證成功後進入控制台
+3. **查看統計數據** → 總玩家數、遊戲次數、勝利次數、平均分數
+4. **篩選數據** → 按遊戲、狀態、玩家名稱篩選
+5. **重新整理** → 即時更新最新分數數據
+6. **登出** → 清除認證狀態
+
 ## 🔒 安全特性
 
 - **密碼保護**: 每個遊戲都有獨立的密碼
 - **無保持登入**: 每次訪問都需要重新認證
 - **無嘗試限制**: 簡化的認證流程
 - **無會話管理**: 提高安全性
+- **管理員密碼**: 獨立的管理員密碼保護
 
 ## 📊 分數系統
 
@@ -176,6 +213,12 @@ function checkAuthStatus() {
 const CORRECT_PASSWORD = 'NEW_PASSWORD';
 ```
 
+### 修改管理員密碼
+編輯 `admin.html` 中的 `ADMIN_PASSWORD` 常量：
+```javascript
+const ADMIN_PASSWORD = 'NEW_ADMIN_PASSWORD';
+```
+
 ### 添加新遊戲
 1. 創建新的遊戲文件夾 (`games/game7/`)
 2. 創建對應的認證頁面 (`game_authenticator/auth7.html`)
@@ -199,6 +242,8 @@ window.gameWin(300); // 修改勝利分數
 - ✅ 修復導航路徑問題
 - ✅ 添加全螢幕通知支援
 - ✅ 優化響應式設計
+- ✅ 創建管理員控制台
+- ✅ 實現分數統計和篩選功能
 
 ### 技術改進
 - 使用 `postMessage` API 實現iframe通信
