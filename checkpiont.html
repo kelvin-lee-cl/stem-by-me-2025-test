@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM by Me 尋寶遊戲 - 2024</title>
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+
+        /* ===== HEADER SECTION ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.3em;
+            font-weight: 300;
+        }
+
+        /* ===== LOGIN SECTION ===== */
+        .login-section {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .login-section h2 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 1.8em;
+        }
+
+        .user-signin-form {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .user-signin-form input {
+            padding: 18px 25px;
+            border: 2px solid #e1e8ed;
+            border-radius: 15px;
+            font-size: 18px;
+            width: 250px;
+            text-align: center;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .user-signin-form input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+        }
+
+        /* ===== CONTINUE BUTTON STYLES ===== */
+        #continue-btn {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #continue-btn:disabled {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #continue-btn:not(:disabled):hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        #continue-btn:not(:disabled):active {
+            transform: translateY(0);
+        }
+
+        #login-required-message {
+            transition: all 0.3s ease;
+            font-style: italic;
+        }
+
+        .btn {
+            padding: 18px 35px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none !important;
+        }
+
+        .btn.loading {
+            color: transparent;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 0.4s linear infinite;
+            opacity: 1;
+        }
+
+        .btn.loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 26px;
+            height: 26px;
+            margin: -13px 0 0 -13px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: pulse 0.8s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.2;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(1.3);
+                opacity: 0.2;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #229954, #1e8449);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.4);
+        }
+
+        #current-user-display {
+            display: none;
+            align-items: center;
+            gap: 25px;
+            justify-content: center;
+            padding: 25px;
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+            border-radius: 15px;
+            margin-top: 25px;
+        }
+
+        #current-user-display strong {
+            font-size: 1.3em;
+        }
+
+
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2.5em;
+            }
+
+            .header p {
+                font-size: 1.1em;
+            }
+
+            .login-section {
+                padding: 30px 20px;
+            }
+
+            .user-signin-form {
+                flex-direction: column;
+            }
+
+            .user-signin-form input {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .btn {
+                padding: 15px 25px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .login-section {
+                padding: 25px 15px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header,
+        .login-section {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .login-section {
+            animation-delay: 0.2s;
+            animation-fill-mode: both;
+        }
+
+        /* ===== BACK BUTTON STYLES ===== */
+        .back-to-login {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-to-login:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            color: #2c3e50;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* ===== ENHANCED ANIMATIONS ===== */
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            53%,
+            80%,
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            40%,
+            43% {
+                transform: translate3d(0, -8px, 0);
+            }
+
+            70% {
+                transform: translate3d(0, -4px, 0);
+            }
+
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        .back-to-login {
+            animation: slideInFromLeft 0.6s ease-out;
+        }
+
+        /* ===== ENHANCED BUTTON EFFECTS ===== */
+        .btn:active {
+            transform: translateY(0) !important;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .btn:focus {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
+        }
+
+        /* ===== ENHANCED INPUT STYLES ===== */
+        .user-signin-form input:invalid {
+            border-color: #e74c3c;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .user-signin-form input:valid {
+            border-color: #27ae60;
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* ===== ENHANCED RESPONSIVE DESIGN ===== */
+        @media (max-width: 480px) {
+            .back-to-login {
+                top: 20px;
+                left: 20px;
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                padding: 25px 15px;
+            }
+
+            .login-section {
+                padding: 20px 15px;
+            }
+
+            .user-signin-form {
+                gap: 15px;
+            }
+
+            .user-signin-form input {
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+
+            .btn {
+                padding: 15px 20px;
+                font-size: 16px;
+            }
+        }
+
+        /* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ===== DARK MODE SUPPORT ===== */
+        @media (prefers-color-scheme: dark) {
+
+            .header,
+            .login-section {
+                background: rgba(44, 62, 80, 0.95);
+                color: white;
+            }
+
+            .header h1,
+            .header h2 {
+                color: white;
+            }
+
+            .header p {
+                color: #bdc3c7;
+            }
+
+            .user-signin-form input {
+                background: rgba(52, 73, 94, 0.9);
+                color: white;
+                border-color: #34495e;
+            }
+
+            .user-signin-form input::placeholder {
+                color: #95a5a6;
+            }
+
+            .back-to-login {
+                background: rgba(44, 62, 80, 0.9);
+                color: white;
+                border-color: #34495e;
+            }
+
+            .back-to-login:hover {
+                background: rgba(52, 73, 94, 0.95);
+                color: white;
+            }
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+
+            .back-to-login,
+            .btn {
+                display: none !important;
+            }
+
+            .header,
+            .login-section {
+                box-shadow: none;
+                background: white;
+                color: black;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <a href="../game_select.html" class="back-to-login">← 返回遊戲選擇</a>
+    <div class="container">
+        <!-- ===== HEADER SECTION ===== -->
+        <div class="header">
+            <h1>🎮 STEM by Me 尋寶遊戲</h1>
+            <p>探索灣仔海濱，完成挑戰，收集分數！</p>
+        </div>
+
+        <!-- ===== LOGIN SECTION ===== -->
+        <div class="login-section">
+            <h2>🔐 玩家登入</h2>
+            <div class="user-signin-form">
+                <input type="text" id="user-id-input" placeholder="輸入玩家編號 (101-150 或 201-250)" maxlength="3">
+                <button class="btn btn-primary" id="signin-btn">登入</button>
+            </div>
+            <div id="current-user-display">
+                <span>當前玩家: <strong id="display-user-id"></strong></span>
+                <button class="btn btn-danger" id="signout-btn">登出</button>
+            </div>
+
+            <!-- Message display area -->
+            <div id="message-display"
+                style="display: none; margin-top: 20px; padding: 15px; border-radius: 10px; text-align: center; font-weight: 600;">
+            </div>
+
+            <!-- Continue button - only enabled when logged in -->
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn btn-success" id="continue-btn" onclick="window.location.href='../game_select.html'"
+                    style="font-size: 14px; padding: 10px 20px;" disabled>
+                    前往繼續完成任務
+                </button>
+                <div id="login-required-message"
+                    style="margin-top: 10px; color: #6c757d; font-size: 12px; display: none;">
+                    請先登入後才能繼續
+                </div>
+            </div>
+
+            <!-- Debug section -->
+            <div
+                style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; border: 1px solid #dee2e6;display: none;">
+                <h4 style="margin-bottom: 10px; color: #495057;">🔧 除錯工具</h4>
+                <button class="btn btn-info" onclick="testButtonFunctionality()" style="margin-right: 10px;">
+                    測試按鈕功能
+                </button>
+                <button class="btn btn-warning" onclick="checkLoginState()" style="margin-right: 10px;">
+                    檢查登入狀態
+                </button>
+                <button class="btn btn-secondary" onclick="clearAllData()">
+                    清除所有數據
+                </button>
+                <div id="debug-output"
+                    style="margin-top: 10px; font-family: monospace; font-size: 12px; color: #6c757d;"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script src="login.js"></script>
+    <script>
+        // Global showResult function for displaying messages
+        window.showResult = function (message, type) {
+            console.log(`[${type.toUpperCase()}] ${message}`);
+
+            const messageDisplay = document.getElementById('message-display');
+            if (messageDisplay) {
+                // Set message content
+                messageDisplay.textContent = message;
+
+                // Set styling based on type
+                messageDisplay.style.display = 'block';
+                messageDisplay.style.background = type === 'error' ?
+                    'linear-gradient(135deg, #f8d7da, #f5c6cb)' :
+                    type === 'success' ?
+                        'linear-gradient(135deg, #d4edda, #c3e6cb)' :
+                        'linear-gradient(135deg, #d1ecf1, #bee5eb)';
+                messageDisplay.style.color = type === 'error' ? '#721c24' :
+                    type === 'success' ? '#155724' : '#0c5460';
+                messageDisplay.style.border = type === 'error' ? '1px solid #f5c6cb' :
+                    type === 'success' ? '1px solid #c3e6cb' : '1px solid #bee5eb';
+
+                // Auto hide after 3 seconds
+                setTimeout(() => {
+                    messageDisplay.style.display = 'none';
+                }, 3000);
+            }
+        };
+
+        // Test redirect function
+        window.testRedirect = function () {
+            console.log('🧪 Testing redirect function...');
+
+            // Show loading overlay
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.classList.add('active');
+            }
+
+            try {
+                // Add a small delay to show loading effect
+                setTimeout(() => {
+                    window.location.href = 'game.html';
+                }, 500);
+            } catch (error) {
+                console.error('❌ Test redirect failed:', error);
+                alert('測試跳轉失敗：' + error.message);
+
+                // Hide loading overlay on error
+                if (loadingOverlay) {
+                    loadingOverlay.classList.remove('active');
+                }
+            }
+        };
+
+        // Enhanced input validation
+        function validateUserId(userId) {
+            const num = parseInt(userId);
+            return (num >= 101 && num <= 150) || (num >= 201 && num <= 250);
+        }
+
+        // Add input validation and login state management
+        document.addEventListener('DOMContentLoaded', function () {
+            const userIdInput = document.getElementById('user-id-input');
+            const signinBtn = document.getElementById('signin-btn');
+            const continueBtn = document.getElementById('continue-btn');
+            const loginRequiredMessage = document.getElementById('login-required-message');
+
+            // Debug: Check if elements exist
+            console.log('🔍 Checking DOM elements:');
+            console.log('userIdInput:', userIdInput);
+            console.log('signinBtn:', signinBtn);
+            console.log('continueBtn:', continueBtn);
+
+            // Fallback event listener for signin button if login.js doesn't work
+            if (signinBtn) {
+                console.log('✅ Signin button found, adding fallback event listener');
+
+                // Remove any existing event listeners to avoid duplicates
+                const newSigninBtn = signinBtn.cloneNode(true);
+                signinBtn.parentNode.replaceChild(newSigninBtn, signinBtn);
+
+                newSigninBtn.addEventListener('click', function () {
+                    console.log('🔄 Fallback signin button clicked');
+
+                    // Check if login system is available
+                    if (window.loginSystem && window.loginSystem.handleSignin) {
+                        console.log('✅ Using login system handleSignin');
+                        window.loginSystem.handleSignin();
+                    } else {
+                        console.log('❌ Login system not available, using manual signin');
+                        handleManualSignin();
+                    }
+                });
+            } else {
+                console.error('❌ Signin button not found!');
+            }
+
+            // Fallback event listener for signout button
+            const signoutBtn = document.getElementById('signout-btn');
+            if (signoutBtn) {
+                console.log('✅ Signout button found, adding fallback event listener');
+
+                // Remove any existing event listeners to avoid duplicates
+                const newSignoutBtn = signoutBtn.cloneNode(true);
+                signoutBtn.parentNode.replaceChild(newSignoutBtn, signoutBtn);
+
+                newSignoutBtn.addEventListener('click', function () {
+                    console.log('🔄 Fallback signout button clicked');
+
+                    // Check if login system is available
+                    if (window.loginSystem && window.loginSystem.handleSignout) {
+                        console.log('✅ Using login system handleSignout');
+                        window.loginSystem.handleSignout();
+                    } else {
+                        console.log('❌ Login system not available, using manual signout');
+                        handleManualSignout();
+                    }
+                });
+            } else {
+                console.log('ℹ️ Signout button not found (normal if not signed in)');
+            }
+
+            // Manual signin function as fallback
+            function handleManualSignin() {
+                const userId = userIdInput ? userIdInput.value.trim() : '';
+
+                if (!userId) {
+                    showResult('請輸入玩家編號！', 'error');
+                    return;
+                }
+
+                // Pad with zeros if needed
+                const paddedUserId = userId.padStart(3, '0');
+
+                // Validate user ID range
+                const userIdNum = parseInt(paddedUserId);
+                if ((userIdNum < 101 || userIdNum > 150) && (userIdNum < 201 || userIdNum > 250)) {
+                    showResult('玩家編號必須在 101-150 (Junior組) 或 201-250 (Senior組) 之間！', 'error');
+                    return;
+                }
+
+                // Get users from localStorage
+                const allUsers = JSON.parse(localStorage.getItem('scavengerHuntUsers') || '{}');
+
+                if (!allUsers[paddedUserId]) {
+                    showResult('玩家不存在！', 'error');
+                    return;
+                }
+
+                // Sign in the user
+                localStorage.setItem('currentUser', paddedUserId);
+                localStorage.setItem('isSignedIn', 'true');
+
+                // Update UI
+                updateUserDisplay();
+
+                // Clear input
+                if (userIdInput) {
+                    userIdInput.value = '';
+                }
+
+                // Get user group
+                const userGroup = allUsers[paddedUserId].group || 'Unknown';
+
+                // Show success message
+                showResult(`歡迎回來，玩家${paddedUserId} (${userGroup}組)！現在可以上傳照片了。`, 'success');
+
+                console.log('✅ Manual signin completed successfully');
+            }
+
+            // Manual updateUserDisplay function as fallback
+            function updateUserDisplay() {
+                const currentUser = localStorage.getItem('currentUser');
+                const currentUserDisplay = document.getElementById('current-user-display');
+                const displayUserId = document.getElementById('display-user-id');
+                const userSigninForm = document.querySelector('.user-signin-form');
+                const signoutBtn = document.getElementById('signout-btn');
+
+                if (currentUser && currentUserDisplay && displayUserId && signoutBtn) {
+                    // User is signed in
+                    displayUserId.textContent = currentUser;
+                    currentUserDisplay.style.display = 'block';
+                    if (userSigninForm) {
+                        userSigninForm.style.display = 'none';
+                    }
+                    signoutBtn.style.display = 'inline-block';
+                    console.log('✅ User display updated - signed in');
+                } else if (currentUserDisplay && userSigninForm && signoutBtn) {
+                    // User is signed out
+                    currentUserDisplay.style.display = 'none';
+                    userSigninForm.style.display = 'block';
+                    signoutBtn.style.display = 'none';
+                    console.log('✅ User display updated - signed out');
+                }
+            }
+
+            // Manual signout function as fallback
+            function handleManualSignout() {
+                console.log('🔄 Manual signout initiated');
+
+                // Clear login state
+                localStorage.removeItem('currentUser');
+                localStorage.removeItem('isSignedIn');
+
+                // Update UI
+                updateUserDisplay();
+
+                // Show success message
+                showResult('已成功登出！', 'success');
+
+                // Update continue button state
+                updateContinueButtonState();
+
+                console.log('✅ Manual signout completed successfully');
+            }
+
+            // Function to check login status and update button state
+            function updateContinueButtonState() {
+                const currentUser = localStorage.getItem('currentUser');
+                const allUsers = JSON.parse(localStorage.getItem('scavengerHuntUsers') || '{}');
+
+                if (currentUser && allUsers[currentUser]) {
+                    // User is logged in
+                    continueBtn.disabled = false;
+                    continueBtn.style.opacity = '1';
+                    continueBtn.style.cursor = 'pointer';
+                    loginRequiredMessage.style.display = 'none';
+                    console.log('✅ Continue button enabled - user logged in');
+                } else {
+                    // User is not logged in
+                    continueBtn.disabled = true;
+                    continueBtn.style.opacity = '0.6';
+                    continueBtn.style.cursor = 'not-allowed';
+                    loginRequiredMessage.style.display = 'block';
+                    console.log('❌ Continue button disabled - user not logged in');
+                }
+            }
+
+            // Check login state on page load
+            updateContinueButtonState();
+
+            // Listen for login state changes
+            window.addEventListener('storage', function (e) {
+                if (e.key === 'currentUser' || e.key === 'scavengerHuntUsers') {
+                    console.log('🔄 Login state changed, updating button...');
+                    updateContinueButtonState();
+                }
+            });
+
+            // Also check when login system updates
+            if (window.loginSystem) {
+                const originalUpdateUserDisplay = window.loginSystem.updateUserDisplay;
+                window.loginSystem.updateUserDisplay = function () {
+                    if (originalUpdateUserDisplay) {
+                        originalUpdateUserDisplay.call(this);
+                    }
+                    updateContinueButtonState();
+                };
+            }
+
+            if (userIdInput) {
+                userIdInput.addEventListener('input', function () {
+                    const value = this.value;
+                    if (value.length > 0) {
+                        if (validateUserId(value)) {
+                            this.classList.remove('invalid');
+                            this.classList.add('valid');
+                        } else {
+                            this.classList.remove('valid');
+                            this.classList.add('invalid');
+                        }
+                    } else {
+                        this.classList.remove('valid', 'invalid');
+                    }
+                });
+            }
+
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    window.location.href = '../game_select.html';
+                }
+                if (e.key === 'Enter' && document.activeElement === userIdInput) {
+                    const signinBtn = document.getElementById('signin-btn');
+                    if (signinBtn) {
+                        signinBtn.click();
+                    }
+                }
+            });
+
+            // Add touch feedback for mobile
+            if ('vibrate' in navigator) {
+                const buttons = document.querySelectorAll('.btn');
+                buttons.forEach(button => {
+                    button.addEventListener('touchstart', function () {
+                        navigator.vibrate(50);
+                    });
+                });
+            }
+
+            // Preload game.html for better performance
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = 'game.html';
+            document.head.appendChild(link);
+
+            // Listen for data reset events from admin.html
+            window.addEventListener('allDataReset', function (event) {
+                console.log('🔄 Received allDataReset event from admin:', event.detail);
+
+                // Update continue button state
+                updateContinueButtonState();
+
+                // Clear any current user display
+                updateUserDisplay();
+
+                // Show notification
+                showResult('所有數據已重置，請重新登入', 'info');
+
+                console.log('✅ Responded to allDataReset event in checkpiont.html');
+            });
+        });
+
+        // Auto redirect to game page after successful login
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM loaded, setting up auto-redirect...');
+
+            // Enhanced approach: listen for successful login messages and ensure state is saved
+            const originalShowResult = window.showResult;
+            window.showResult = function (message, type) {
+                // Call the original function
+                originalShowResult.call(this, message, type);
+
+                // Check if this is a successful login message
+                if (type === 'success' && message.includes('歡迎回來')) {
+                    console.log('✅ Detected successful login, preparing redirect...');
+
+                    // Ensure user data is saved before redirect
+                    if (window.loginSystem && window.loginSystem.saveCurrentUserData) {
+                        window.loginSystem.saveCurrentUserData();
+                        console.log('✅ User data saved to localStorage');
+                    }
+
+                    // Update continue button state
+                    const continueBtn = document.getElementById('continue-btn');
+                    const loginRequiredMessage = document.getElementById('login-required-message');
+                    if (continueBtn && loginRequiredMessage) {
+                        continueBtn.disabled = false;
+                        continueBtn.style.opacity = '1';
+                        continueBtn.style.cursor = 'pointer';
+                        loginRequiredMessage.style.display = 'none';
+                        console.log('✅ Continue button enabled after successful login');
+                    }
+
+                    // Add a flag to indicate successful login
+                    localStorage.setItem('loginRedirectFlag', 'true');
+                    localStorage.setItem('loginTimestamp', new Date().toISOString());
+
+                    setTimeout(() => {
+                        console.log('🚀 Redirecting to game.html...');
+                        try {
+                            window.location.href = 'game.html';
+                        } catch (error) {
+                            console.error('❌ Redirect error:', error);
+                            alert('跳轉失敗，請手動點擊測試按鈕或訪問 game.html');
+                        }
+                    }, 2000); // 2 second delay
+                }
+            };
+
+            console.log('✅ Auto-redirect setup complete (enhanced message-based)');
+        });
+
+        // Debug functions
+        window.testButtonFunctionality = function () {
+            const debugOutput = document.getElementById('debug-output');
+            const output = [];
+
+            output.push('=== 按鈕功能測試 ===');
+
+            // Test signin button
+            const signinBtn = document.getElementById('signin-btn');
+            output.push(`登入按鈕: ${signinBtn ? '找到' : '未找到'}`);
+            if (signinBtn) {
+                output.push(`- 按鈕文字: ${signinBtn.textContent}`);
+                output.push(`- 按鈕狀態: ${signinBtn.disabled ? '禁用' : '啟用'}`);
+                output.push(`- 點擊事件: ${signinBtn.onclick ? '有' : '無'}`);
+            }
+
+            // Test signout button
+            const signoutBtn = document.getElementById('signout-btn');
+            output.push(`登出按鈕: ${signoutBtn ? '找到' : '未找到'}`);
+            if (signoutBtn) {
+                output.push(`- 按鈕文字: ${signoutBtn.textContent}`);
+                output.push(`- 按鈕狀態: ${signoutBtn.disabled ? '禁用' : '啟用'}`);
+            }
+
+            // Test continue button
+            const continueBtn = document.getElementById('continue-btn');
+            output.push(`繼續按鈕: ${continueBtn ? '找到' : '未找到'}`);
+            if (continueBtn) {
+                output.push(`- 按鈕文字: ${continueBtn.textContent}`);
+                output.push(`- 按鈕狀態: ${continueBtn.disabled ? '禁用' : '啟用'}`);
+            }
+
+            // Test input field
+            const userIdInput = document.getElementById('user-id-input');
+            output.push(`用戶ID輸入框: ${userIdInput ? '找到' : '未找到'}`);
+            if (userIdInput) {
+                output.push(`- 當前值: "${userIdInput.value}"`);
+                output.push(`- 佔位符: "${userIdInput.placeholder}"`);
+            }
+
+            debugOutput.innerHTML = output.join('<br>');
+            console.log('🔧 Button functionality test completed');
+        };
+
+        window.checkLoginState = function () {
+            const debugOutput = document.getElementById('debug-output');
+            const output = [];
+
+            output.push('=== 登入狀態檢查 ===');
+
+            const currentUser = localStorage.getItem('currentUser');
+            const isSignedIn = localStorage.getItem('isSignedIn');
+            const allUsers = JSON.parse(localStorage.getItem('scavengerHuntUsers') || '{}');
+
+            output.push(`當前用戶: ${currentUser || '無'}`);
+            output.push(`登入狀態: ${isSignedIn || 'false'}`);
+            output.push(`用戶數據: ${Object.keys(allUsers).length} 個用戶`);
+
+            if (currentUser && allUsers[currentUser]) {
+                output.push(`用戶信息: ${JSON.stringify(allUsers[currentUser], null, 2)}`);
+            }
+
+            // Check login system
+            output.push(`登入系統: ${window.loginSystem ? '可用' : '不可用'}`);
+            if (window.loginSystem) {
+                output.push(`- 當前用戶: ${window.loginSystem.getCurrentUser() || '無'}`);
+                output.push(`- 登入狀態: ${window.loginSystem.isSignedIn() ? '是' : '否'}`);
+            }
+
+            debugOutput.innerHTML = output.join('<br>');
+            console.log('🔧 Login state check completed');
+        };
+
+        window.clearAllData = function () {
+            if (confirm('確定要清除所有數據嗎？這將重置所有用戶信息和登入狀態。')) {
+                localStorage.clear();
+                location.reload();
+            }
+        };
+    </script>
+</body>
+
+</html>

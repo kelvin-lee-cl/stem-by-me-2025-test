@@ -1,0 +1,2910 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM by Me 遊戲頁面 - 2024</title>
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ===== HEADER SECTION ===== */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+
+        .back-to-login {
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            z-index: 9999;
+            font-size: 1.1em;
+            border: 2px solid rgba(44, 62, 80, 0.1);
+        }
+
+        .back-to-login:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.2);
+            border-color: rgba(44, 62, 80, 0.3);
+        }
+
+        /* ===== CARD STYLES ===== */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card h2,
+        .card h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            font-size: 1.5em;
+        }
+
+        /* ===== GAME SECTION ===== */
+        .game-section {
+            text-align: center;
+        }
+
+        .password-section {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        #current-location {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border-left: 5px solid #3498db;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .password-input-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        #password-input {
+            padding: 15px 20px;
+            border: 2px solid #e1e8ed;
+            border-radius: 12px;
+            font-size: 18px;
+            width: 250px;
+            text-align: center;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        #password-input:focus {
+            outline: none;
+            border-color: #27ae60;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+            transform: none !important;
+        }
+
+        .btn.loading {
+            color: transparent;
+            pointer-events: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 18px;
+            height: 18px;
+            margin: -9px 0 0 -9px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 0.4s linear infinite;
+            opacity: 1;
+        }
+
+        .btn.loading::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 24px;
+            height: 24px;
+            margin: -12px 0 0 -12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: pulse 0.8s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.9);
+                opacity: 0.2;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.4;
+            }
+
+            100% {
+                transform: scale(1.3);
+                opacity: 0.2;
+            }
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #229954, #1e8449);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #138496, #117a8b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4);
+        }
+
+        /* ===== RESULT MESSAGES ===== */
+        .result-message {
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .result-message.success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-message.error {
+            background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .result-message.info {
+            background: linear-gradient(135deg, #d1ecf1, #bee5eb);
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        /* ===== PROGRESS SECTION ===== */
+        .progress-section {
+            position: relative;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            cursor: pointer;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .progress-header:hover {
+            background: linear-gradient(135deg, #e9ecef, #dee2e6);
+            transform: translateY(-2px);
+        }
+
+        .progress-header h3 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 1.4em;
+        }
+
+        .toggle-icon {
+            font-size: 28px;
+            font-weight: bold;
+            color: #3498db;
+            transition: transform 0.3s ease;
+        }
+
+        #progress-content {
+            max-height: 800px;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        #progress-content.collapsed {
+            max-height: 0;
+        }
+
+        #progress-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .progress-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e1e8ed;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .progress-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+
+        .progress-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .progress-item.completed {
+            border-color: #27ae60;
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+        }
+
+        .progress-item.completed::before {
+            background: linear-gradient(90deg, #27ae60, #229954);
+            transform: scaleX(1);
+        }
+
+        .progress-item .location-name {
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .progress-item .password {
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+
+        .progress-item .game-type {
+            font-size: 11px;
+            margin-top: 8px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .progress-item .score {
+            font-size: 14px;
+            font-weight: bold;
+            color: #1849a8;
+            margin-top: 8px;
+        }
+
+        /* ===== IMAGE UPLOAD SECTION ===== */
+        .image-upload-section {
+            text-align: center;
+            display: none;
+        }
+
+        .upload-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .upload-header h3 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .image-upload-section h3 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .upload-description {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            font-size: 1.1em;
+        }
+
+        .upload-area {
+            border: 3px dashed #bdc3c7;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        }
+
+        .upload-area.dragover {
+            border-color: #3498db;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            transform: scale(1.02);
+        }
+
+        .upload-label {
+            cursor: pointer;
+            display: block;
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            color: #bdc3c7;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .upload-area:hover .upload-icon {
+            color: #3498db;
+        }
+
+        .upload-text {
+            color: #7f8c8d;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        #image-input {
+            display: none;
+        }
+
+        #image-preview {
+            display: none;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        #preview-img {
+            max-width: 350px;
+            max-height: 350px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .upload-buttons .btn {
+            min-width: 120px;
+        }
+
+        #upload-progress {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            border-radius: 15px;
+            overflow: hidden;
+            height: 25px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+            border-radius: 15px;
+        }
+
+        /* ===== ADMIN PANEL ===== */
+        .admin-section {
+            position: relative;
+        }
+
+        .admin-toggle {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-toggle:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+        }
+
+        .admin-toggle.active {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        #admin-panel {
+            display: none;
+        }
+
+        /* Admin Stats */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .stat-card .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3498db;
+        }
+
+        /* Admin Controls */
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 35px;
+            justify-content: center;
+        }
+
+        .admin-controls .btn {
+            min-width: 140px;
+        }
+
+        /* User Management */
+        .user-management {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .user-management h4 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .user-search {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .user-search input {
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .user-search input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        #user-details {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .group-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 8px;
+        }
+
+        .group-badge.junior {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+
+        .group-badge.senior {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        /* Winners Section */
+        .winners-section {
+            margin-bottom: 35px;
+        }
+
+        .winners-section h4 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        #winners-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .winner-card {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            transition: all 0.3s ease;
+            border: 1px solid #e1e8ed;
+        }
+
+        .winner-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .rank-badge {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #e67e22, #d35400);
+        }
+
+        .rank-4 {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+        }
+
+        .rank-5 {
+            background: linear-gradient(135deg, #2c3e50, #1a252f);
+        }
+
+        .winner-photo {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        .winner-info h4 {
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 1.2em;
+        }
+
+        .winner-info p {
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .winner-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-top: 15px;
+        }
+
+        /* Photos Section */
+        .photos-section h4 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+        }
+
+        .photos-controls {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .photos-controls label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .photos-controls select {
+            padding: 8px 12px;
+            border: 2px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 14px;
+            background: white;
+        }
+
+        #all-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .photo-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .photo-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            z-index: 1;
+        }
+
+        .photo-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .photo-image-container {
+            height: 160px;
+            background: linear-gradient(135deg, #ecf0f1, #bdc3c7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .photo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-image-placeholder {
+            text-align: center;
+            color: #95a5a6;
+        }
+
+        .photo-icon {
+            font-size: 40px;
+            margin-bottom: 8px;
+        }
+
+        .photo-filename {
+            font-size: 12px;
+            word-break: break-all;
+            padding: 0 10px;
+        }
+
+        .photo-info {
+            padding: 15px;
+        }
+
+        .photo-filename-display {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #2c3e50;
+        }
+
+        .photo-user,
+        .photo-timestamp,
+        .photo-size {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 3px;
+        }
+
+        /* Loading and No Data States */
+        .loading,
+        .no-photos {
+            text-align: center;
+            padding: 50px;
+            color: #7f8c8d;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        /* Test Section */
+        .test-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        #test-photo-upload {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        #test-photo-upload:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(155, 89, 182, 0.4);
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2.2em;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .password-input-group {
+                flex-direction: column;
+            }
+
+            #password-input {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            #progress-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-controls {
+                flex-direction: column;
+            }
+
+            .admin-controls .btn {
+                width: 100%;
+            }
+
+            .user-search {
+                flex-direction: column;
+            }
+
+            .user-search input,
+            .user-search button {
+                width: 100%;
+            }
+
+            .admin-stats {
+                grid-template-columns: 1fr;
+            }
+
+            #winners-list {
+                grid-template-columns: 1fr;
+            }
+
+            #all-photos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+
+            .upload-area {
+                padding: 30px 20px;
+            }
+
+            .upload-buttons {
+                flex-direction: column;
+            }
+
+            .upload-buttons .btn {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .card {
+                padding: 15px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+
+            #progress-grid {
+                gap: 15px;
+            }
+
+            .progress-item {
+                padding: 15px;
+            }
+
+            .admin-stats {
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 20px;
+            }
+
+            .stat-card .stat-value {
+                font-size: 28px;
+            }
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== AUTO-SYNC STYLES ===== */
+        .sync-label {
+            color: #28a745;
+            font-size: 10px;
+            font-style: italic;
+            margin-left: 5px;
+        }
+
+        .score-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .score-label,
+        .progress-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .score-value,
+        .progress-value {
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .completion-indicator {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+
+
+        .card {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        /* ===== PHOTO UPLOAD RESTRICTION SECTION ===== */
+        .upload-restriction-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: none;
+        }
+
+        .upload-restriction-toggle {
+            background: linear-gradient(135deg, #17a2b8, #138496);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .upload-restriction-toggle:hover {
+            background: linear-gradient(135deg, #138496, #117a8b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(23, 162, 184, 0.4);
+        }
+
+        .restriction-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .restriction-section {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #e1e8ed;
+        }
+
+        .restriction-section h4 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .location-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .location-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .location-item.allowed {
+            border-left: 4px solid #27ae60;
+        }
+
+        .location-item.not-allowed {
+            border-left: 4px solid #e74c3c;
+        }
+
+        .code {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .status {
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 12px;
+        }
+
+        .status.allowed {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+
+        .status.not-allowed {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        /* ===== ENHANCED ANIMATIONS ===== */
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes bounce {
+
+            0%,
+            20%,
+            53%,
+            80%,
+            100% {
+                transform: translate3d(0, 0, 0);
+            }
+
+            40%,
+            43% {
+                transform: translate3d(0, -8px, 0);
+            }
+
+            70% {
+                transform: translate3d(0, -4px, 0);
+            }
+
+            90% {
+                transform: translate3d(0, -2px, 0);
+            }
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
+            }
+        }
+
+        /* ===== ENHANCED BUTTON EFFECTS ===== */
+        .btn:active {
+            transform: translateY(0) !important;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .btn:focus {
+            outline: 2px solid #3498db;
+            outline-offset: 2px;
+        }
+
+        /* ===== ENHANCED INPUT STYLES ===== */
+        #password-input:invalid {
+            border-color: #e74c3c;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        #password-input:valid {
+            border-color: #27ae60;
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .loading-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        /* ===== ENHANCED PROGRESS ITEMS ===== */
+        .progress-item {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .progress-item:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .progress-item:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        .progress-item.completed {
+            animation: bounce 0.6s ease-out;
+        }
+
+        /* ===== ENHANCED PHOTO CARDS ===== */
+        .photo-card {
+            animation: slideInFromRight 0.6s ease-out;
+        }
+
+        .photo-card:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .photo-card:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        /* ===== ENHANCED ADMIN PANEL ===== */
+        .admin-section {
+            animation: slideInFromLeft 0.8s ease-out;
+        }
+
+        .stat-card {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .stat-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .stat-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .stat-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .stat-card:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        /* ===== ENHANCED RESPONSIVE DESIGN ===== */
+        @media (max-width: 480px) {
+            .restriction-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .location-item {
+                padding: 8px 12px;
+            }
+
+            .code {
+                font-size: 14px;
+            }
+
+            .status {
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+        }
+
+        /* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* ===== DARK MODE SUPPORT ===== */
+        @media (prefers-color-scheme: dark) {
+
+            .header,
+            .card,
+            .upload-restriction-section {
+                background: rgba(44, 62, 80, 0.95);
+                color: white;
+            }
+
+            .header h1,
+            .header h2,
+            .card h2,
+            .card h3 {
+                color: white;
+            }
+
+            .header p {
+                color: #bdc3c7;
+            }
+
+            #password-input {
+                background: rgba(52, 73, 94, 0.9);
+                color: white;
+                border-color: #34495e;
+            }
+
+            #password-input::placeholder {
+                color: #95a5a6;
+            }
+
+            .back-to-login {
+                background: rgba(44, 62, 80, 0.9);
+                color: white;
+                border-color: #34495e;
+            }
+
+            .back-to-login:hover {
+                background: rgba(52, 73, 94, 0.95);
+                color: white;
+            }
+
+            .progress-item {
+                background: linear-gradient(135deg, rgba(52, 73, 94, 0.9), rgba(44, 62, 80, 0.9));
+                color: white;
+            }
+
+            .progress-item .location-name {
+                color: white;
+            }
+
+            .upload-area {
+                background: linear-gradient(135deg, rgba(52, 73, 94, 0.9), rgba(44, 62, 80, 0.9));
+                color: white;
+            }
+
+            .upload-text {
+                color: #bdc3c7;
+            }
+
+            .photo-card {
+                background: rgba(52, 73, 94, 0.9);
+                color: white;
+            }
+
+            .photo-filename-display {
+                color: white;
+            }
+
+            .photo-user,
+            .photo-timestamp,
+            .photo-size {
+                color: #bdc3c7;
+            }
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+
+            .back-to-login,
+            .btn,
+            .admin-toggle,
+            .upload-restriction-toggle {
+                display: none !important;
+            }
+
+            .header,
+            .card,
+            .upload-restriction-section {
+                box-shadow: none;
+                background: white;
+                color: black;
+            }
+
+            .progress-item,
+            .upload-area,
+            .photo-card {
+                background: white;
+                color: black;
+                border: 1px solid #ccc;
+            }
+        }
+
+        /* ===== ENHANCED SCROLLBAR ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+        }
+
+        /* ===== ENHANCED SELECTION ===== */
+        ::selection {
+            background: rgba(52, 152, 219, 0.3);
+            color: #2c3e50;
+        }
+
+        ::-moz-selection {
+            background: rgba(52, 152, 219, 0.3);
+            color: #2c3e50;
+        }
+
+        .restriction-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .restriction-section h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-item {
+            border: 1px solid #e1e8ed;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .location-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .location-item.allowed {
+            border-left: 4px solid #28a745;
+            background-color: #f8fff9;
+        }
+
+        .location-item.not-allowed {
+            border-left: 4px solid #dc3545;
+            background-color: #fff8f8;
+        }
+
+        .location-code {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .location-name {
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 8px 0 5px 0;
+        }
+
+        .location-details {
+            font-size: 0.9em;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .upload-status {
+            font-weight: bold;
+            margin-top: 10px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .upload-status.allowed {
+            color: #28a745;
+            background-color: #d4edda;
+        }
+
+        .upload-status.not-allowed {
+            color: #dc3545;
+            background-color: #f8d7da;
+        }
+
+        @media (max-width: 768px) {
+            .restriction-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== PHOTO MODAL ===== */
+        .photo-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .photo-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 90%;
+            max-height: 90%;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.3s ease;
+        }
+
+        .photo-modal img {
+            max-width: 100%;
+            max-height: 70vh;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-modal img:hover {
+            transform: scale(1.02);
+        }
+
+        .photo-modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .photo-modal-close:hover {
+            color: #e74c3c;
+            background: rgba(231, 76, 60, 0.1);
+        }
+
+        .photo-modal-info {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #495057;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .photo-modal-info h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .photo-modal-info p {
+            margin: 5px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .photo-modal-info .label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .photo-modal-info .value {
+            color: #6c757d;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        /* ===== SCROLLBAR STYLING ===== */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5f8b);
+        }
+
+        /* ===== ENHANCED PHOTO CARDS FOR REVIEW PHOTOS ===== */
+        .photo-card.review-photo {
+            border: 2px solid;
+            position: relative;
+        }
+
+        .photo-card.review-photo.pending {
+            border-color: #ffc107;
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .photo-card.review-photo.approved {
+            border-color: #28a745;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .photo-card.review-photo.rejected {
+            border-color: #dc3545;
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .photo-status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid;
+            z-index: 10;
+        }
+
+        .photo-status-badge.pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #856404;
+            border-color: #ffc107;
+        }
+
+        .photo-status-badge.approved {
+            background: rgba(40, 167, 69, 0.2);
+            color: #155724;
+            border-color: #28a745;
+        }
+
+        .photo-status-badge.rejected {
+            background: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+            border-color: #dc3545;
+        }
+
+        /* ===== PHOTO GRID ENHANCEMENTS ===== */
+        #all-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .photo-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .photo-image-container {
+            height: 200px;
+            background: rgba(102, 126, 234, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-card:hover .photo-image {
+            transform: scale(1.05);
+        }
+
+        .photo-info {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .photo-filename-display {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .photo-user,
+        .photo-timestamp,
+        .photo-size {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .photo-game-type {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 5px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .photo-location-details {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 3px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .photo-location-details div {
+            margin-bottom: 3px;
+            font-size: 11px;
+            color: #555;
+        }
+
+        .no-photos {
+            text-align: center;
+            padding: 50px;
+            color: #667eea;
+            font-style: italic;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner"></div>
+    </div>
+    <a href="../game_select.html" class="back-to-login">← 返回遊戲選擇</a>
+
+    <div class="container">
+        <!-- ===== HEADER SECTION ===== -->
+        <div class="header">
+            <h1>🎮 STEM by Me 尋寶遊戲</h1>
+            <p>探索灣仔海濱，完成挑戰，收集分數！</p>
+        </div>
+
+        <!-- ===== GAME SECTION ===== -->
+        <div class="card game-section">
+            <h2>🎯 遊戲挑戰</h2>
+            <div class="password-section">
+                <div class="progress-header">
+                    <h3>📊 位置列表</h3>
+                    <span class="toggle-icon" id="progress-toggle">+</span>
+                </div>
+                <div id="progress-content" class="collapsed">
+                    <div id="progress-grid"></div>
+                </div>
+                <div id="current-location">
+                    請先在上面選擇位置，然後輸入關卡代碼。
+                    圖片上載功能將會在選擇對應的位置後自動顯示
+                </div>
+                <div class="password-input-group" id="password-input-group" style="display: none;">
+                    <input type="text" id="password-input" placeholder="輸入4位關卡代碼" maxlength="4">
+                    <button class="btn btn-success" id="submit-btn">驗證代碼</button>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===== IMAGE UPLOAD SECTION ===== -->
+        <div class="card image-upload-section" id="image-upload-section">
+            <div class="upload-header">
+                <h3>📸 照片上傳</h3>
+                <button class="btn btn-info" onclick="toggleUploadSection()"
+                    style="font-size: 0.9em; padding: 8px 15px;display: none;">🔧 切換顯示</button>
+            </div>
+            <p class="upload-description">請上傳您在此位置的照片！</p>
+
+            <div class="upload-area">
+                <label class="upload-label">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">點擊或拖拽照片到此處</div>
+                    <input type="file" id="image-input" accept="image/*">
+                </label>
+            </div>
+
+            <div id="result-message" class="result-message"></div>
+
+            <div id="image-preview">
+                <img id="preview-img" alt="預覽圖片">
+            </div>
+
+            <div class="upload-buttons">
+                <button class="btn btn-success" id="upload-btn">上傳照片</button>
+                <button class="btn btn-danger" id="cancel-upload-btn">取消</button>
+            </div>
+
+            <div id="upload-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PHOTO UPLOAD RESTRICTION TOGGLE ===== -->
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button class="upload-restriction-toggle" onclick="toggleUploadRestriction()">
+                📸 顯示照片上傳限制說明
+            </button>
+        </div>
+
+        <!-- ===== PHOTO UPLOAD RESTRICTION INFO ===== -->
+        <div class="upload-restriction-section" id="upload-restriction-section">
+            <h2>📸 照片上傳限制說明</h2>
+            <p>只有特定的關卡代碼才支援照片上傳功能。請查看以下列表了解哪些位置可以上傳照片：</p>
+
+            <div class="restriction-grid">
+                <div class="restriction-section">
+                    <h3>✅ 支援照片上傳的位置</h3>
+                    <div class="location-item allowed">
+                        <span class="location-code">L8Q2</span>
+                        <div class="location-name">灣仔會展</div>
+                        <div class="location-details">遊戲類型：闖關點 | 分數：80分</div>
+                        <div class="location-details">地址：灣仔港灣道1號</div>
+                        <div class="upload-status allowed">✅ 支援照片上傳</div>
+                    </div>
+
+                    <div class="location-item allowed">
+                        <span class="location-code">P9M8</span>
+                        <div class="location-name">鴨仔船附近</div>
+                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
+                        <div class="location-details">地址：灣仔海濱</div>
+                        <div class="upload-status allowed">✅ 支援照片上傳</div>
+                    </div>
+
+                    <div class="location-item allowed">
+                        <span class="location-code">S2N6</span>
+                        <div class="location-name">海濱站</div>
+                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
+                        <div class="location-details">地址：灣仔海濱</div>
+                        <div class="upload-status allowed">✅ 支援照片上傳</div>
+                    </div>
+
+                    <div class="location-item allowed">
+                        <span class="location-code">H4G8</span>
+                        <div class="location-name">聖馬利亞堂</div>
+                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
+                        <div class="location-details">地址：灣仔聖馬利亞堂</div>
+                        <div class="upload-status allowed">✅ 支援照片上傳</div>
+                    </div>
+
+                    <div class="location-item allowed">
+                        <span class="location-code">C2L6</span>
+                        <div class="location-name">怡和街圓形天橋</div>
+                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
+                        <div class="location-details">地址：灣仔怡和街</div>
+                        <div class="upload-status allowed">✅ 支援照片上傳</div>
+                    </div>
+
+                    <div class="location-item allowed">
+                        <span class="location-code">V7X1</span>
+                        <div class="location-name">Time Square</div>
+                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
+                        <div class="location-details">地址：銅鑼灣時代廣場</div>
+                        <div class="upload-status allowed">✅ 支援照片上傳</div>
+                    </div>
+                </div>
+
+
+                <div
+                    style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">
+                    <h4 style="margin: 0 0 10px 0; color: #1976d2;">💡 使用說明</h4>
+                    <ul style="margin: 0; padding-left: 20px; color: #1565c0;">
+                        <li>只有選擇支援照片上傳的位置時，照片上傳區域才會顯示</li>
+                        <li>選擇不支援的位置時，照片上傳功能會被隱藏</li>
+                        <li>嘗試在不支援的位置上傳照片時會顯示警告訊息</li>
+                        <li>支援的位置可以正常上傳照片到 Firebase</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ===== ADMIN PANEL ===== -->
+            <div class="card admin-section" style="display: none;">
+                <button class="admin-toggle" id="admin-toggle" style="display: none;">🔧 管理員面板</button>
+
+                <div id="admin-panel">
+                    <!-- Admin Stats -->
+                    <div class="admin-stats">
+                        <div class="stat-card">
+                            <h4>總玩家數</h4>
+                            <div class="stat-value" id="total-users">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>活躍玩家</h4>
+                            <div class="stat-value" id="active-users">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>完成遊戲</h4>
+                            <div class="stat-value" id="completed-users">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <h4>總分數</h4>
+                            <div class="stat-value" id="total-score">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Group Stats -->
+                    <div id="junior-stats"></div>
+                    <div id="senior-stats"></div>
+
+                    <!-- Firebase Status -->
+                    <div class="firebase-status"
+                        style="margin-bottom: 20px; padding: 15px; border-radius: 10px; background: #f8f9fa; border-left: 4px solid #17a2b8;">
+                        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">🔥 Firebase 狀態</h4>
+                        <div id="firebase-status-display">
+                            <p>載入中...</p>
+                        </div>
+                    </div>
+
+                    <!-- Admin Controls -->
+                    <div class="admin-controls">
+                        <button class="btn btn-primary" id="refresh-photos">🔄 重新載入照片</button>
+                        <button class="btn btn-success" id="export-data">📊 匯出數據</button>
+                        <button class="btn btn-warning" id="export-users">👥 匯出玩家數據</button>
+                        <button class="btn btn-danger" id="reset-all-users">⚠️ 重置所有玩家</button>
+                        <button class="btn btn-danger" id="clear-all-photos">🗑️ 清除所有照片</button>
+                        <button class="btn btn-info" onclick="testPhotoUpload()">🔍 測試照片系統</button>
+                        <button class="btn btn-info" onclick="createTestPhoto()">📸 創建測試照片</button>
+                        <button class="btn btn-info" onclick="checkFirebaseStatus()">🔥 檢查 Firebase</button>
+                    </div>
+
+                    <!-- User Management -->
+                    <div class="user-management">
+                        <h4>👤 玩家管理</h4>
+                        <div class="user-search">
+                            <input type="text" id="user-search-input" placeholder="輸入玩家編號">
+                            <button class="btn btn-primary" id="search-user-btn">搜尋</button>
+                        </div>
+
+                        <div id="user-details">
+                            <h4 id="selected-user-name"></h4>
+                            <p>完成位置: <span id="user-completed-count">0</span>/21</p>
+                            <p>當前分數: <span id="user-current-score">0</span>分</p>
+                            <div style="margin-top: 15px;">
+                                <input type="number" id="user-points-input" placeholder="新分數"
+                                    style="width: 120px; margin-right: 15px; padding: 8px 12px; border: 2px solid #e1e8ed; border-radius: 8px;">
+                                <button class="btn btn-success" id="update-user-points-btn">更新分數</button>
+                            </div>
+                            <div id="user-photos-grid" style="margin-top: 20px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Winners Section -->
+                    <div class="winners-section">
+                        <h4>🏆 排行榜 (前5名)</h4>
+                        <div id="winners-list"></div>
+                    </div>
+
+                    <!-- Photos Section -->
+                    <div class="photos-section">
+                        <h4>📸 所有照片</h4>
+                        <div class="photos-controls">
+                            <label for="sort-order">排序方式: </label>
+                            <select id="sort-order">
+                                <option value="newest">最新上傳</option>
+                                <option value="oldest">最早上傳</option>
+                                <option value="high-to-low">檔案大小 (大→小)</option>
+                                <option value="low-to-high">檔案大小 (小→大)</option>
+                            </select>
+                            <button class="btn btn-primary" onclick="loadAllPhotos()" style="margin-left: 10px;">🔄
+                                重新載入照片</button>
+                        </div>
+                        <div id="all-photos-grid"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== TEST SECTION ===== -->
+            <div class="test-section" style="display: none;">
+                <button id="test-photo-upload" style="display: none;">🧪 測試照片上傳功能</button>
+            </div>
+        </div>
+
+        <!-- ===== PHOTO MODAL ===== -->
+        <div id="photo-modal" class="photo-modal">
+            <div class="photo-modal-content">
+                <span class="photo-modal-close" onclick="closePhotoModal()">&times;</span>
+                <img id="modal-photo" src="" alt="Photo Preview">
+                <div class="photo-modal-info">
+                    <h4 id="modal-photo-title">照片詳情</h4>
+                    <p><span class="label">檔案名稱:</span> <span class="value" id="modal-photo-name"></span></p>
+                    <p><span class="label">上傳者:</span> <span class="value" id="modal-photo-user"></span></p>
+                    <p><span class="label">上傳時間:</span> <span class="value" id="modal-photo-time"></span></p>
+                    <p><span class="label">檔案大小:</span> <span class="value" id="modal-photo-size"></span></p>
+                    <p><span class="label">位置:</span> <span class="value" id="modal-photo-location"></span></p>
+                    <p><span class="label">遊戲類型:</span> <span class="value" id="modal-photo-game"></span></p>
+                    <p><span class="label">分數:</span> <span class="value" id="modal-photo-score"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FIREBASE SDK ===== -->
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+        <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+
+        <!-- ===== FIREBASE CONFIG ===== -->
+        <script src="firebase-config1.js"></script>
+
+        <!-- ===== SCRIPTS ===== -->
+        <script src="login.js"></script>
+        <script src="script.js"></script>
+        <script>
+            // Initialize Firebase
+            try {
+                initializeFirebase();
+                console.log('✅ Firebase initialized from config file');
+            } catch (error) {
+                console.error('❌ Firebase initialization error:', error);
+            }
+
+            // Enhanced login check and state synchronization
+            document.addEventListener('DOMContentLoaded', function () {
+                console.log('Game page loaded, setting up login check...');
+
+                let loginCheckAttempted = false;
+
+                // Function to check login status
+                function checkLoginStatus() {
+                    if (loginCheckAttempted) return;
+                    loginCheckAttempted = true;
+
+                    console.log('Checking login status...');
+
+                    // Check for login redirect flag first
+                    const loginRedirectFlag = localStorage.getItem('loginRedirectFlag');
+                    const loginTimestamp = localStorage.getItem('loginTimestamp');
+
+                    if (loginRedirectFlag === 'true' && loginTimestamp) {
+                        console.log('✅ Found login redirect flag, user should be logged in');
+
+                        // Clear the flag
+                        localStorage.removeItem('loginRedirectFlag');
+                        localStorage.removeItem('loginTimestamp');
+                    }
+
+                    checkLoginStatusWithRetry();
+                }
+
+                // Function to check login status with retry logic
+                function checkLoginStatusWithRetry() {
+                    // First, check localStorage directly for stored login state
+                    const storedCurrentUser = localStorage.getItem('currentUser');
+                    const storedIsSignedIn = localStorage.getItem('isSignedIn');
+
+                    console.log('Direct localStorage check - User:', storedCurrentUser, 'IsSignedIn:', storedIsSignedIn);
+
+                    // If we have stored login state, try to restore it
+                    if (storedCurrentUser && storedIsSignedIn === 'true') {
+                        console.log('🔄 Found stored login state, attempting to restore...');
+
+                        // Wait for login system to be ready
+                        if (window.loginSystem && window.loginSystem.restoreLoginState) {
+                            const restored = window.loginSystem.restoreLoginState();
+
+                            if (restored) {
+                                console.log('✅ Login state restored successfully');
+
+                                // Display current user info in header
+                                const header = document.querySelector('.header p');
+                                if (header) {
+                                    header.innerHTML = `探索灣仔海濱，完成挑戰，收集分數！<br><strong>當前玩家: ${storedCurrentUser}</strong>`;
+                                }
+
+                                // Initialize game functionality
+                                initializeGame();
+                                return;
+                            }
+                        }
+                    }
+
+                    // Wait for login system to be ready
+                    if (window.loginSystem && window.loginSystem.isSignedIn) {
+                        const isLoggedIn = window.loginSystem.isSignedIn();
+                        const currentUser = window.loginSystem.getCurrentUser();
+
+                        console.log('Login system check - Status:', isLoggedIn, 'User:', currentUser);
+
+                        if (isLoggedIn && currentUser) {
+                            console.log('✅ User is logged in:', currentUser);
+
+                            // Display current user info in header
+                            const header = document.querySelector('.header p');
+                            if (header) {
+                                header.innerHTML = `探索灣仔海濱，完成挑戰，收集分數！<br><strong>當前玩家: ${currentUser}</strong>`;
+                            }
+
+                            // Initialize game functionality
+                            initializeGame();
+
+                        } else {
+                            console.log('❌ User is not logged in, redirecting to login page...');
+                            alert('請先登入！');
+                            window.location.href = 'checkpiont.html';
+                        }
+                    } else {
+                        console.log('⏳ Login system not ready, retrying in 500ms...');
+                        setTimeout(checkLoginStatusWithRetry, 500);
+                    }
+                }
+
+                // Initialize game functionality
+                function initializeGame() {
+                    console.log('Initializing game functionality...');
+
+                    // Load user data
+                    if (window.loginSystem && window.loginSystem.loadCurrentUserData) {
+                        window.loginSystem.loadCurrentUserData();
+                    }
+
+                    // Sync with login system
+                    if (window.syncWithLoginSystem) {
+                        window.syncWithLoginSystem();
+                    }
+
+                    // Start auto-sync for current player's Firebase data
+                    startAutoSyncCurrentPlayerData();
+
+                    console.log('✅ Game initialized successfully');
+                }
+
+                // Listen for login system ready event
+                window.addEventListener('loginSystemReady', function () {
+                    console.log('🎉 Login system ready event received!');
+                    checkLoginStatus();
+                });
+
+                // Also try to check immediately (in case login system is already ready)
+                setTimeout(checkLoginStatus, 100);
+            });
+
+            // Function to toggle upload restriction section
+            function toggleUploadRestriction() {
+                const section = document.getElementById('upload-restriction-section');
+                const button = document.querySelector('.upload-restriction-toggle');
+
+                if (section.style.display === 'none' || section.style.display === '') {
+                    section.style.display = 'block';
+                    button.textContent = '📸 隱藏照片上傳限制說明';
+                    button.style.background = 'linear-gradient(135deg, #e74c3c, #c0392b)';
+                } else {
+                    section.style.display = 'none';
+                    button.textContent = '📸 顯示照片上傳限制說明';
+                    button.style.background = 'linear-gradient(135deg, #17a2b8, #138496)';
+                }
+            }
+
+            // Enhanced input validation
+            function validatePassword(password) {
+                return password.length === 4 && /^[A-Z0-9]+$/.test(password);
+            }
+
+            // Add input validation
+            document.addEventListener('DOMContentLoaded', function () {
+                const passwordInput = document.getElementById('password-input');
+                if (passwordInput) {
+                    passwordInput.addEventListener('input', function () {
+                        const value = this.value.toUpperCase();
+                        this.value = value;
+
+                        if (value.length > 0) {
+                            if (validatePassword(value)) {
+                                this.classList.remove('invalid');
+                                this.classList.add('valid');
+                            } else {
+                                this.classList.remove('valid');
+                                this.classList.add('invalid');
+                            }
+                        } else {
+                            this.classList.remove('valid', 'invalid');
+                        }
+                    });
+                }
+
+                // Add keyboard shortcuts
+                document.addEventListener('keydown', function (e) {
+                    if (e.key === 'Escape') {
+                        window.location.href = '../game_select.html';
+                    }
+                    if (e.key === 'Enter' && document.activeElement === passwordInput) {
+                        document.getElementById('submit-btn').click();
+                    }
+                });
+
+                // Add touch feedback for mobile
+                if ('vibrate' in navigator) {
+                    const buttons = document.querySelectorAll('.btn');
+                    buttons.forEach(button => {
+                        button.addEventListener('touchstart', function () {
+                            navigator.vibrate(50);
+                        });
+                    });
+                }
+
+                // Show loading overlay for page transitions
+                const links = document.querySelectorAll('a[href]');
+                links.forEach(link => {
+                    link.addEventListener('click', function (e) {
+                        if (this.href && !this.href.includes('#')) {
+                            const loadingOverlay = document.getElementById('loading-overlay');
+                            if (loadingOverlay) {
+                                loadingOverlay.classList.add('active');
+                            }
+                        }
+                    });
+                });
+
+                // Enhanced progress item interactions
+                document.addEventListener('click', function (e) {
+                    if (e.target.closest('.progress-item')) {
+                        const progressItem = e.target.closest('.progress-item');
+                        progressItem.style.animation = 'bounce 0.6s ease-out';
+                        setTimeout(() => {
+                            progressItem.style.animation = '';
+                        }, 600);
+                    }
+                });
+
+                // Preload important resources
+                const preloadLinks = [
+                    '../game_select.html',
+                    'checkpiont.html'
+                ];
+
+                preloadLinks.forEach(url => {
+                    const link = document.createElement('link');
+                    link.rel = 'prefetch';
+                    link.href = url;
+                    document.head.appendChild(link);
+                });
+
+                console.log('✅ Enhanced JavaScript features loaded');
+            });
+
+            // Enhanced loading management
+            function showLoading() {
+                const loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.add('active');
+                }
+            }
+
+            function hideLoading() {
+                const loadingOverlay = document.getElementById('loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.classList.remove('active');
+                }
+            }
+
+            // Enhanced error handling
+            window.addEventListener('error', function (e) {
+                console.error('❌ JavaScript error:', e.error);
+                hideLoading();
+            });
+
+            // Enhanced performance monitoring
+            window.addEventListener('load', function () {
+                console.log('🎮 Game page fully loaded with enhanced features');
+
+                // Hide loading overlay after page load
+                setTimeout(hideLoading, 500);
+            });
+
+            // Auto-sync current player's Firebase data
+            let autoSyncInterval = null;
+            let currentPlayerData = null;
+
+            // Function to start auto-sync for current player's Firebase data
+            function startAutoSyncCurrentPlayerData() {
+                console.log('🔄 Starting auto-sync for current player Firebase data...');
+
+                // Clear any existing interval
+                if (autoSyncInterval) {
+                    clearInterval(autoSyncInterval);
+                }
+
+                // Get current user
+                const currentUser = window.loginSystem ? window.loginSystem.getCurrentUser() : null;
+                if (!currentUser) {
+                    console.log('❌ No current user found, cannot start auto-sync');
+                    return;
+                }
+
+                console.log(`✅ Starting auto-sync for user: ${currentUser}`);
+
+                // Initial sync
+                syncCurrentPlayerData();
+
+                // Set up periodic sync (every 30 seconds)
+                autoSyncInterval = setInterval(syncCurrentPlayerData, 30000);
+
+                // Also sync when user completes a location or uploads a photo
+                window.addEventListener('locationCompleted', syncCurrentPlayerData);
+                window.addEventListener('photoUploaded', syncCurrentPlayerData);
+            }
+
+            // Function to sync current player's Firebase data
+            async function syncCurrentPlayerData() {
+                try {
+                    const currentUser = window.loginSystem ? window.loginSystem.getCurrentUser() : null;
+                    if (!currentUser || !window.db) {
+                        console.log('⚠️ Cannot sync: No user or Firebase not available');
+                        return;
+                    }
+
+                    console.log(`🔄 Syncing Firebase data for user: ${currentUser}`);
+
+                    // Get user's scores from Firebase
+                    const scoresSnapshot = await window.db.collection('gameScores')
+                        .where('userID', '==', currentUser)
+                        .orderBy('timestamp', 'desc')
+                        .get();
+
+                    // Get user's photos from Firebase
+                    const photoDoc = await window.db.collection('photos').doc(currentUser).get();
+
+                    // Process scores data
+                    const scores = [];
+                    let totalScore = 0;
+                    const completedLocations = new Set();
+
+                    scoresSnapshot.forEach(doc => {
+                        const data = doc.data();
+                        scores.push({
+                            id: doc.id,
+                            ...data,
+                            timestamp: data.timestamp ? data.timestamp.toDate() : new Date()
+                        });
+                        totalScore += data.score || 0;
+                        if (data.locationCode) {
+                            completedLocations.add(data.locationCode);
+                        }
+                    });
+
+                    // Process photo data
+                    let photoData = null;
+                    if (photoDoc.exists) {
+                        const data = photoDoc.data();
+                        photoData = {
+                            ...data,
+                            uploadedAt: data.uploadedAt ? data.uploadedAt.toDate() : new Date()
+                        };
+                    }
+
+                    // Update current player data
+                    currentPlayerData = {
+                        userID: currentUser,
+                        playerName: `玩家${currentUser}`,
+                        scores: scores,
+                        totalScore: totalScore,
+                        completedLocations: Array.from(completedLocations),
+                        photo: photoData,
+                        lastSync: new Date()
+                    };
+
+                    // Update localStorage with synced data
+                    updateLocalStorageWithFirebaseData(currentPlayerData);
+
+                    // Update UI with synced data
+                    updateUIWithCurrentPlayerData(currentPlayerData);
+
+                    console.log(`✅ Firebase sync completed for user: ${currentUser}`);
+                    console.log(`📊 Total score: ${totalScore}, Completed locations: ${completedLocations.size}`);
+
+                } catch (error) {
+                    console.error('❌ Error syncing Firebase data:', error);
+                }
+            }
+
+            // Function to update localStorage with Firebase data
+            function updateLocalStorageWithFirebaseData(playerData) {
+                try {
+                    // Update user's data in localStorage
+                    const allUsers = JSON.parse(localStorage.getItem('scavengerHuntUsers') || '{}');
+
+                    if (!allUsers[playerData.userID]) {
+                        allUsers[playerData.userID] = {};
+                    }
+
+                    // Update user data
+                    allUsers[playerData.userID] = {
+                        ...allUsers[playerData.userID],
+                        totalScore: playerData.totalScore,
+                        completedLocations: playerData.completedLocations,
+                        lastPlayed: new Date().toISOString(),
+                        lastSync: playerData.lastSync.toISOString()
+                    };
+
+                    localStorage.setItem('scavengerHuntUsers', JSON.stringify(allUsers));
+                    console.log('✅ Updated localStorage with Firebase data');
+
+                } catch (error) {
+                    console.error('❌ Error updating localStorage:', error);
+                }
+            }
+
+            // Function to update UI with current player data
+            function updateUIWithCurrentPlayerData(playerData) {
+                try {
+                    // Update score display if it exists
+                    const scoreDisplay = document.getElementById('score-display');
+                    if (scoreDisplay) {
+                        scoreDisplay.innerHTML = `
+                            <div class="score-info">
+                                <span class="score-label">總分：</span>
+                                <span class="score-value">${playerData.totalScore}分</span>
+                                <span class="progress-label">進度：</span>
+                                <span class="progress-value">${playerData.completedLocations.length}/21</span>
+                                <span class="sync-label">(已同步)</span>
+                            </div>
+                        `;
+                    }
+
+                    // Update progress items
+                    updateProgressItemsWithFirebaseData(playerData.completedLocations);
+
+                    // Update header with current score
+                    const header = document.querySelector('.header p');
+                    if (header) {
+                        header.innerHTML = `探索灣仔海濱，完成挑戰，收集分數！<br><strong>當前玩家: ${playerData.playerName}</strong><br><small>總分: ${playerData.totalScore}分 | 完成: ${playerData.completedLocations.length}/21</small>`;
+                    }
+
+                    console.log('✅ Updated UI with current player data');
+
+                } catch (error) {
+                    console.error('❌ Error updating UI:', error);
+                }
+            }
+
+            // Function to update progress items with Firebase data
+            function updateProgressItemsWithFirebaseData(completedLocations) {
+                try {
+                    const progressItems = document.querySelectorAll('.progress-item');
+
+                    progressItems.forEach(item => {
+                        const locationCode = item.getAttribute('data-location');
+                        if (locationCode && completedLocations.includes(locationCode)) {
+                            item.classList.add('completed');
+                            item.style.background = 'linear-gradient(135deg, #28a745, #20c997)';
+                            item.style.color = 'white';
+
+                            // Add completion indicator
+                            const completionIndicator = item.querySelector('.completion-indicator') ||
+                                document.createElement('div');
+                            completionIndicator.className = 'completion-indicator';
+                            completionIndicator.innerHTML = '✅';
+                            completionIndicator.style.cssText = `
+                                position: absolute;
+                                top: 5px;
+                                right: 5px;
+                                font-size: 12px;
+                                color: white;
+                            `;
+
+                            if (!item.querySelector('.completion-indicator')) {
+                                item.appendChild(completionIndicator);
+                            }
+                        }
+                    });
+
+                } catch (error) {
+                    console.error('❌ Error updating progress items:', error);
+                }
+            }
+
+            // Function to clear all progress items (reset location list)
+            function clearAllProgressItems() {
+                try {
+                    console.log('🔄 Clearing all progress items...');
+
+                    const progressItems = document.querySelectorAll('.progress-item');
+
+                    progressItems.forEach(item => {
+                        // Remove completed class and styling
+                        item.classList.remove('completed');
+                        item.style.background = '';
+                        item.style.color = '';
+
+                        // Remove completion indicator
+                        const completionIndicator = item.querySelector('.completion-indicator');
+                        if (completionIndicator) {
+                            completionIndicator.remove();
+                        }
+                    });
+
+                    // Update score display to show 0 progress
+                    const scoreDisplay = document.getElementById('score-display');
+                    if (scoreDisplay) {
+                        scoreDisplay.innerHTML = `
+                            <div class="score-info">
+                                <span class="score-label">總分：</span>
+                                <span class="score-value">0分</span>
+                                <span class="progress-label">進度：</span>
+                                <span class="progress-value">0/21</span>
+                                <span class="sync-label">(已重置)</span>
+                            </div>
+                        `;
+                    }
+
+                    // Update header
+                    const header = document.querySelector('.header p');
+                    if (header) {
+                        const currentUser = localStorage.getItem('currentUser') || '未知';
+                        header.innerHTML = `探索灣仔海濱，完成挑戰，收集分數！<br><strong>當前玩家: 玩家${currentUser}</strong><br><small>總分: 0分 | 完成: 0/21</small>`;
+                    }
+
+                    console.log('✅ All progress items cleared');
+
+                } catch (error) {
+                    console.error('❌ Error clearing progress items:', error);
+                }
+            }
+
+            // Make the function globally available for admin.html to call
+            window.clearAllProgressItems = clearAllProgressItems;
+
+            // Function to stop auto-sync
+            function stopAutoSyncCurrentPlayerData() {
+                if (autoSyncInterval) {
+                    clearInterval(autoSyncInterval);
+                    autoSyncInterval = null;
+                    console.log('🛑 Stopped auto-sync for current player data');
+                }
+            }
+
+            // Clean up on page unload
+            window.addEventListener('beforeunload', function () {
+                stopAutoSyncCurrentPlayerData();
+            });
+
+            // Listen for data reset events from admin.html
+            window.addEventListener('allDataReset', function (event) {
+                console.log('🔄 Received allDataReset event from admin:', event.detail);
+
+                // Clear all progress items
+                clearAllProgressItems();
+
+                // Stop auto-sync temporarily
+                stopAutoSyncCurrentPlayerData();
+
+                // Restart auto-sync after a short delay
+                setTimeout(() => {
+                    startAutoSyncCurrentPlayerData();
+                }, 2000);
+
+                console.log('✅ Responded to allDataReset event');
+            });
+
+            // ===== PHOTO DISPLAY FUNCTIONS =====
+
+            // Function to load and display all photos (including review photos)
+            async function loadAllPhotos() {
+                try {
+                    console.log('📸 Loading all photos...');
+
+                    if (!window.db) {
+                        console.log('⚠️ Firebase not available, cannot load photos');
+                        return;
+                    }
+
+                    const allPhotos = [];
+
+                    // Load regular photos
+                    try {
+                        const photosSnapshot = await window.db.collection('photos').get();
+                        photosSnapshot.forEach(doc => {
+                            const data = doc.data();
+                            allPhotos.push({
+                                id: doc.id,
+                                ...data,
+                                type: 'regular',
+                                timestamp: data.uploadedAt ? data.uploadedAt.toDate() : new Date()
+                            });
+                        });
+                        console.log(`📸 Loaded ${photosSnapshot.size} regular photos`);
+                    } catch (error) {
+                        console.error('❌ Error loading regular photos:', error);
+                    }
+
+                    // Load review photos
+                    try {
+                        const reviewPhotosSnapshot = await window.db.collection('reviewPhotos').get();
+                        reviewPhotosSnapshot.forEach(doc => {
+                            const data = doc.data();
+                            allPhotos.push({
+                                id: doc.id,
+                                ...data,
+                                type: 'review',
+                                timestamp: data.uploadedAt ? data.uploadedAt.toDate() : new Date()
+                            });
+                        });
+                        console.log(`📸 Loaded ${reviewPhotosSnapshot.size} review photos`);
+                    } catch (error) {
+                        console.error('❌ Error loading review photos:', error);
+                    }
+
+                    // Sort photos by timestamp (newest first)
+                    allPhotos.sort((a, b) => b.timestamp - a.timestamp);
+
+                    displayAllPhotos(allPhotos);
+
+                } catch (error) {
+                    console.error('❌ Error loading all photos:', error);
+                }
+            }
+
+            // Function to display all photos
+            function displayAllPhotos(photos) {
+                const container = document.getElementById('all-photos-grid');
+                if (!container) {
+                    console.error('❌ Photos grid container not found');
+                    return;
+                }
+
+                if (photos.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-photos" style="text-align: center; padding: 50px; color: #667eea; font-style: italic;">
+                            <h3>📸 沒有找到照片</h3>
+                            <p>💡 提示: 請先上傳照片</p>
+                        </div>`;
+                    return;
+                }
+
+                let html = '';
+                photos.forEach(photo => {
+                    const statusClass = photo.status || 'pending';
+                    const statusText = {
+                        'pending': '待審核',
+                        'approved': '已通過',
+                        'rejected': '已拒絕'
+                    }[statusClass] || '';
+
+                    const isReviewPhoto = photo.type === 'review';
+                    const cardClass = isReviewPhoto ? `photo-card review-photo ${statusClass}` : 'photo-card';
+
+                    html += `
+                        <div class="${cardClass}" onclick="showPhotoDetails('${photo.id}', '${photo.type}')">
+                            <div class="photo-image-container">
+                                <img src="${photo.dataURL || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDAwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2N2VlYSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
+                                     alt="Photo" class="photo-image">
+                                ${isReviewPhoto ? `<div class="photo-status-badge ${statusClass}">${statusText}</div>` : ''}
+                            </div>
+                            <div class="photo-info">
+                                <div class="photo-filename-display">${photo.fileName || photo.originalName || '未命名'}</div>
+                                <div class="photo-user">玩家: ${photo.userID}</div>
+                                <div class="photo-timestamp">${photo.timestamp.toLocaleString('zh-TW')}</div>
+                                <div class="photo-size">${formatFileSize(photo.size || 0)}</div>
+                                <div class="photo-game-type">${photo.gameType || '未指定'}</div>
+                                <div class="photo-location-details">
+                                    <div><strong>位置:</strong> ${photo.locationName || '未指定'}</div>
+                                    <div><strong>代碼:</strong> ${photo.locationCode || '未指定'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            }
+
+            // Function to show photo details in modal
+            function showPhotoDetails(photoId, photoType) {
+                // This function can be implemented to show detailed photo information
+                console.log(`📸 Showing details for photo: ${photoId} (type: ${photoType})`);
+
+                // For now, just show a simple alert
+                alert(`照片詳情\nID: ${photoId}\n類型: ${photoType === 'review' ? '審核照片' : '一般照片'}`);
+            }
+
+            // Function to format file size
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            // Function to close photo modal
+            function closePhotoModal() {
+                const modal = document.getElementById('photo-modal');
+                if (modal) {
+                    modal.style.display = 'none';
+                }
+            }
+
+            // Auto-load photos when page loads
+            document.addEventListener('DOMContentLoaded', function () {
+                // Load photos after a short delay to ensure Firebase is initialized
+                setTimeout(() => {
+                    loadAllPhotos();
+                }, 2000);
+            });
+
+            // Make functions globally available
+            window.loadAllPhotos = loadAllPhotos;
+            window.showPhotoDetails = showPhotoDetails;
+            window.closePhotoModal = closePhotoModal;
+        </script>
+</body>
+
+</html>
