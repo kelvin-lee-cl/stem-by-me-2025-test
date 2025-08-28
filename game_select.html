@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>童非凡(2025) - 遊戲選擇</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="img/icon_stembyme/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/icon_stembyme/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="img/icon_stembyme/favicon-16x16.png">
+    <link rel="manifest" href="img/icon_stembyme/site.webmanifest">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="vendors/linericon/style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="vendors/owl-carousel/owl.carousel.min.css">
+    <link rel="stylesheet" href="css/magnific-popup.css">
+    <link rel="stylesheet" href="vendors/nice-select/css/nice-select.css">
+    <!-- main css -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu&display=swap" rel="stylesheet">
+    <style>
+        .gaegu-regular {
+            font-family: "Gaegu", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        h5.font_slogan {
+            color: #9d7de6;
+            font-size: 60px;
+        }
+
+        img.bear-img {
+            margin: 100px;
+            border-radius: 40px;
+        }
+
+        .icon {
+            margin-right: 10px;
+        }
+
+        /* 遊戲選擇區域樣式 */
+        .game-selection-area {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .game-selection-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 30px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .game-selection-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .game-selection-title h1 {
+            color: #2c3e50;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-selection-title p {
+            color: #7f8c8d;
+            font-size: 1.3em;
+            font-weight: 300;
+        }
+
+        .game-options {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .game-option {
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+            background: white;
+            border-radius: 25px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .game-option:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .game-option:hover::before {
+            transform: scaleX(1);
+        }
+
+        .game-option-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .game-option h3 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .game-option p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .game-option-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .game-option-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2c3e50;
+            text-decoration: none;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-2px);
+            color: #2c3e50;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .game-options {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .game-option {
+                min-width: 280px;
+            }
+
+            .game-selection-title h1 {
+                font-size: 2.5rem;
+            }
+
+            .game-selection-container {
+                padding: 40px 20px;
+                margin: 20px;
+            }
+        }
+
+        /* 動畫效果 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes glow {
+
+            0%,
+            100% {
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            }
+        }
+
+        .game-option {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .game-option:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .game-option:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .game-option-icon {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .game-option:hover .game-option-icon {
+            animation: glow 1.5s ease-in-out infinite;
+        }
+
+        /* 額外的響應式設計 */
+        @media (max-width: 480px) {
+            .game-selection-title h1 {
+                font-size: 2rem;
+            }
+
+            .game-selection-title p {
+                font-size: 1.1em;
+            }
+
+            .game-option {
+                min-width: 250px;
+                padding: 30px 20px;
+            }
+
+            .game-option h3 {
+                font-size: 1.5rem;
+            }
+
+            .game-option p {
+                font-size: 1rem;
+            }
+
+            .game-option-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .back-btn {
+                top: 20px;
+                left: 20px;
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* 載入動畫 */
+        .game-selection-container {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* 按鈕點擊效果 */
+        .game-option-btn:active {
+            transform: translateY(0);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        /* 無障礙設計 */
+        .game-option-btn:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        .back-btn:focus {
+            outline: 2px solid #2c3e50;
+            outline-offset: 2px;
+        }
+
+        /* 深色模式支援 */
+        @media (prefers-color-scheme: dark) {
+            .game-selection-container {
+                background: rgba(44, 62, 80, 0.95);
+                color: white;
+            }
+
+            .game-option {
+                background: rgba(52, 73, 94, 0.9);
+                color: white;
+            }
+
+            .game-option h3 {
+                color: white;
+            }
+
+            .game-option p {
+                color: #bdc3c7;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!--================ Start Header Area =================-->
+    <header class="header_area">
+        <div class="main_menu">
+            <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <a class="navbar-brand logo_h" href="index.html"><img src="img/stembyme_logo.png" width="80px"
+                            alt=""></a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                        <ul class="nav navbar-nav menu_nav justify-content-end">
+                            <li class="nav-item"><a class="nav-link" href="index.html#about">關於活動</a></li>
+                            <li class="nav-item"><a class="nav-link" href="map.html">城市定向地圖</a></li>
+                            <li class="nav-item"><a class="nav-link" href="stem-by-me-2024/checkpiont.html">遊戲挑戰</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="index.html#services">STEM-by-ME 編程大世界</a>
+                            </li>
+                            <li class="nav-item"><a class="nav-link" href="index.html#portfolio">活動花絮</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+    <!--================ End Header Area =================-->
+
+    <main class="main-content">
+        <!--================ Start Game Selection Area =================-->
+        <section class="game-selection-area">
+            <div class="container">
+                <a href="index.html" class="back-btn">
+                    <i class="fa fa-arrow-left"></i> 返回首頁
+                </a>
+
+                <div class="game-selection-container">
+                    <div class="game-selection-title">
+                        <h1>選擇你的遊戲</h1>
+                        <p>請選擇您想要體驗的遊戲類型</p>
+                        <div
+                            style="background: linear-gradient(135deg, #ff6b6b, #ee5a24); color: white; padding: 20px 25px; border-radius: 15px; font-weight: bold; font-size: 1.3em; text-align: center; box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4); border: 3px solid #ff4757; animation: pulse 2s ease-in-out infinite; margin: 25px 0;">
+                            <div style="font-size: 1em; margin-bottom: 10px;">⚠️ 注意事項 ⚠️</div>
+                            <div style="font-size: 1em; line-height: 1.4;">尋寶遊戲checkpoint與迷宮遊戲checkpoint並不在相同的位置</div>
+                        </div>
+                    </div>
+
+                    <div class="game-options">
+                        <div class="game-option">
+                            <div class="game-option-icon">
+                                <i class="fa fa-map-marker"></i>
+                            </div>
+                            <h3>STEM-by-ME 尋寶遊戲</h3>
+                            <p>在港島區完成不同挑戰，透過合作互相欣賞。體驗親子城市遊比賽的樂趣，探索城市中的STEM元素。</p>
+                            <a href="stem-by-me-2024/game.html" class="game-option-btn">
+                                開始尋寶遊戲
+                            </a>
+                        </div>
+
+                        <div class="game-option">
+                            <div class="game-option-icon">
+                                <i class="fa fa-gamepad"></i>
+                            </div>
+                            <h3>迷宮遊戲</h3>
+                            <p>挑戰你的邏輯思維和空間感知能力。在迷宮中尋找出口，體驗刺激的益智遊戲。</p>
+                            <a href="maze-game.html" class="game-option-btn">
+                                開始迷宮遊戲
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!--================ End Game Selection Area =================-->
+    </main>
+
+    <!--================ Start Footer Area =================-->
+    <footer class="footer_area">
+        <div class="container">
+            <div class="row footer_inner">
+                <div class="col-lg-5 col-sm-6">
+                    <aside class="f_widget ab_widget">
+                        <div class="ab_title">
+                            <h6>關於我們</h6>
+                        </div>
+                        <p>「童．非凡」系列為兒童會員提供專業的特殊學習支援及跟進服務，透過多元的小組訓練，為具特殊學習需要(SEN)之學童提供適切的支援。</p>
+                        <div class="ab_social">
+                            <a href="#"><i class="fa fa-facebook"></i></a>
+                            <a href="#"><i class="fa fa-twitter"></i></a>
+                            <a href="#"><i class="fa fa-instagram"></i></a>
+                        </div>
+                    </aside>
+                </div>
+                <div class="col-lg-5 col-sm-6">
+                    <aside class="f_widget news_widget">
+                        <div class="ab_title">
+                            <h6>聯絡我們</h6>
+                        </div>
+                        <div class="news_inner">
+                            <div class="media">
+                                <div class="media-body">
+                                    <p>浸信會愛羣社會服務處轄下灣仔綜合兒童及青少年服務中心</p>
+                                    <p>地址：灣仔愛群道</p>
+                                    <p>電話：(852) 2835 4393</p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+                <div class="col-lg-2">
+                    <aside class="f_widget social_widget">
+                        <div class="ab_title">
+                            <h6>快速連結</h6>
+                        </div>
+                        <div class="social_widget_inner">
+                            <a href="index.html"><i class="fa fa-home"></i> 首頁</a>
+                            <a href="map.html"><i class="fa fa-map"></i> 地圖</a>
+                            <a href="index.html#about"><i class="fa fa-info-circle"></i> 關於</a>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!--================ End Footer Area =================-->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/stellar.js"></script>
+    <script src="vendors/lightbox/simpleLightbox.min.js"></script>
+    <script src="vendors/nice-select/js/jquery.nice-select.min.js"></script>
+    <script src="vendors/isotope/imagesloaded.pkgd.min.js"></script>
+    <script src="vendors/isotope/isotope-min.js"></script>
+    <script src="vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="js/jquery.ajaxchimp.min.js"></script>
+    <script src="vendors/counter-up/jquery.waypoints.min.js"></script>
+    <script src="vendors/counter-up/jquery.counterup.js"></script>
+    <script src="js/mail-script.js"></script>
+    <script src="js/theme.js"></script>
+
+    <script>
+        // 頁面載入動畫
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('🎮 Game selection page loaded');
+
+            // 添加點擊音效和動畫效果
+            const gameButtons = document.querySelectorAll('.game-option-btn');
+            gameButtons.forEach(button => {
+                button.addEventListener('click', function (e) {
+                    console.log('🎯 Game selected:', this.href);
+
+                    // 添加點擊動畫效果
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = 'translateY(-2px)';
+                    }, 150);
+
+                    // 添加載入指示器
+                    const originalText = this.textContent;
+                    this.textContent = '載入中...';
+                    this.style.pointerEvents = 'none';
+
+                    // 延遲跳轉以顯示載入效果
+                    setTimeout(() => {
+                        window.location.href = this.href;
+                    }, 800);
+                });
+            });
+
+            // 添加滾動動畫
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, observerOptions);
+
+            // 觀察遊戲選項卡片
+            document.querySelectorAll('.game-option').forEach(card => {
+                observer.observe(card);
+            });
+
+            // 添加鍵盤導航支援
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    window.location.href = 'index.html';
+                }
+            });
+
+            // 添加觸摸設備的觸覺反饋
+            if ('vibrate' in navigator) {
+                gameButtons.forEach(button => {
+                    button.addEventListener('touchstart', function () {
+                        navigator.vibrate(50);
+                    });
+                });
+            }
+
+            // 性能優化：預載入遊戲頁面
+            const gameUrls = [
+                'stem-by-me-2024/checkpiont.html',
+                'maze-game.html'
+            ];
+
+            gameUrls.forEach(url => {
+                const link = document.createElement('link');
+                link.rel = 'prefetch';
+                link.href = url;
+                document.head.appendChild(link);
+            });
+
+            console.log('✅ Game selection page fully loaded with enhanced features');
+        });
+    </script>
+</body>
+
+</html>

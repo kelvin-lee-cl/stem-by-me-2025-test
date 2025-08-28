@@ -27,7 +27,10 @@
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
 
     <style>
         .game-container {
@@ -793,20 +796,8 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script>
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyD5x_L2yAP9ndQJRBeC31Z6nNrh4okt9uo",
-            authDomain: "stem-by-me-app.firebaseapp.com",
-            projectId: "stem-by-me-app",
-            storageBucket: "stem-by-me-app.firebasestorage.app",
-            messagingSenderId: "216736327145",
-            appId: "1:216736327145:web:e01721f8e0c6a960a19778",
-            measurementId: "G-WWSS5PJVP1"
-        };
-
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        initializeFirebase();
 
         // Score System Variables
         let currentScore = 0;
@@ -825,46 +816,41 @@
             console.error('Score system elements not found. Please check HTML structure.');
         }
 
-        // Get player name from localStorage or prompt user
-        function getPlayerName() {
-            const savedName = localStorage.getItem('playerName');
-            if (savedName) {
-                playerName = savedName;
-                return playerName;
-            }
+        // Get player name from firebase-config.js (unified system)
+        // Function is now provided by firebase-config.js
 
-            const name = prompt('請輸入您的名字（用於記錄分數）：', 'Anonymous');
-            if (name && name.trim()) {
-                playerName = name.trim();
-                localStorage.setItem('playerName', playerName);
-            }
-            return playerName;
-        }
-
-        // Send score to Firebase
+        // Send score to Firebase with unified format
         async function sendScoreToFirebase(score, status, gameTime = null) {
             try {
-                const playerName = getPlayerName();
-                const scoreData = {
-                    playerName: playerName,
-                    score: score,
-                    status: status,
-                    gameTime: gameTime,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                const gameInfo = {
                     gameId: 'game2',
+                    gameName: '遊戲 2',
+                    gameType: '開發者遊戲挑戰',
+                    gameDescription: '開發者挑戰遊戲第二關',
+                    locationCode: 'P9M8',
+                    locationName: '鴨仔船附近',
+                    locationDescription: '開發者遊戲挑戰第二關',
+                    locationAddress: '灣仔海濱',
+                    locationCategory: 'entertainment',
+                    coordinates: { lat: 22.2783, lng: 114.1747 },
+                    playerName: getPlayerName(),
+                    userID: getUserId(),
                     totalScore: totalScore
                 };
 
-                // Add to Firestore
-                const docRef = await db.collection('gameScores').add(scoreData);
-                console.log('Score sent to Firebase with ID:', docRef.id);
+                const success = await uploadScoreToFirebase(gameInfo, score, status, gameTime);
 
-                showNotification('📊 分數已成功保存到雲端！', 'success');
-                return docRef.id;
+                if (success) {
+                    showNotification('📊 分數已成功保存到雲端！', 'success');
+                    return true;
+                } else {
+                    showNotification('❌ 保存分數到雲端時發生錯誤', 'error');
+                    return false;
+                }
             } catch (error) {
                 console.error('Error sending score to Firebase:', error);
                 showNotification('❌ 保存分數到雲端時發生錯誤', 'error');
-                return null;
+                return false;
             }
         }
 

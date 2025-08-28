@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>照片審核功能測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .test-button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 照片審核功能測試</h1>
+
+    <div class="test-section">
+        <h2>測試說明</h2>
+        <p>此頁面用於測試人工檢查照片加分功能：</p>
+        <ul>
+            <li>✅ 親子打卡關卡不會自動加分</li>
+            <li>✅ 親子打卡照片會上傳到審核隊列</li>
+            <li>✅ 管理員可以在 admin.html 中審核照片</li>
+            <li>✅ 審核通過後玩家獲得加分</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>功能測試</h2>
+        <button class="test-button" onclick="testPhotoReviewFlow()">測試照片審核流程</button>
+        <button class="test-button" onclick="testLocationData()">檢查位置數據</button>
+        <button class="test-button" onclick="testFirebaseConnection()">測試 Firebase 連接</button>
+        <div id="testResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>測試結果</h2>
+        <div id="testOutput"></div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5x_L2yAP9ndQJRBeC31Z6nNrh4okt9uo",
+            authDomain: "stem-by-me-app.firebaseapp.com",
+            projectId: "stem-by-me-app",
+            storageBucket: "stem-by-me-app.firebasestorage.app",
+            messagingSenderId: "216736327145",
+            appId: "1:216736327145:web:e01721f8e0c6a960a19778",
+            measurementId: "G-WWSS5PJVP1"
+        };
+
+        // Initialize Firebase
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase initialization error:', error);
+        }
+
+        function showResult(message, type = 'success') {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.innerHTML = `<div class="result ${type}">${message}</div>`;
+        }
+
+        function addOutput(message) {
+            const outputDiv = document.getElementById('testOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            outputDiv.innerHTML += `<p>[${timestamp}] ${message}</p>`;
+            outputDiv.scrollTop = outputDiv.scrollHeight;
+        }
+
+        async function testFirebaseConnection() {
+            addOutput('🔍 測試 Firebase 連接...');
+
+            try {
+                if (!db) {
+                    throw new Error('Firebase 未初始化');
+                }
+
+                // Test connection
+                const testRef = db.collection('test').doc('connection');
+                await testRef.set({ timestamp: new Date() });
+                await testRef.delete();
+
+                addOutput('✅ Firebase 連接正常');
+                showResult('Firebase 連接測試成功！', 'success');
+            } catch (error) {
+                addOutput(`❌ Firebase 連接失敗: ${error.message}`);
+                showResult(`Firebase 連接失敗: ${error.message}`, 'error');
+            }
+        }
+
+        async function testLocationData() {
+            addOutput('🔍 檢查位置數據...');
+
+            // Sample location data from script.js
+            const locationData = {
+                'F3C9': {
+                    name: '軒尼斯道籃球場',
+                    gameType: '趣味親子打卡',
+                    score: 80
+                },
+                'L8Q2': {
+                    name: '灣仔會展',
+                    gameType: '闖關點',
+                    score: 40
+                },
+                'P9M8': {
+                    name: '鴨仔船附近',
+                    gameType: '開發者遊戲挑戰',
+                    score: 300
+                }
+            };
+
+            let parentChildCount = 0;
+            let otherCount = 0;
+
+            for (const [code, data] of Object.entries(locationData)) {
+                if (data.gameType === '趣味親子打卡') {
+                    parentChildCount++;
+                    addOutput(`📍 ${code}: ${data.name} (${data.gameType}) - 需要人工審核`);
+                } else {
+                    otherCount++;
+                    addOutput(`📍 ${code}: ${data.name} (${data.gameType}) - 自動加分`);
+                }
+            }
+
+            addOutput(`📊 統計: ${parentChildCount} 個親子打卡關卡, ${otherCount} 個其他關卡`);
+            showResult(`位置數據檢查完成！親子打卡關卡: ${parentChildCount} 個`, 'success');
+        }
+
+        async function testPhotoReviewFlow() {
+            addOutput('🔍 測試照片審核流程...');
+
+            try {
+                if (!db) {
+                    throw new Error('Firebase 未初始化');
+                }
+
+                // Create test review photo
+                const testPhotoData = {
+                    userID: 'test_user_001',
+                    fileName: 'test_photo.jpg',
+                    originalName: 'test_photo.jpg',
+                    timestamp: new Date(),
+                    size: 1024000,
+                    type: 'image/jpeg',
+                    dataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A',
+                    locationCode: 'F3C9',
+                    locationName: '軒尼斯道籃球場',
+                    gameType: '趣味親子打卡',
+                    score: 80,
+                    coordinates: { lat: 22.2783, lng: 114.1747 },
+                    locationDescription: '戶外籃球場，適合親子運動活動',
+                    locationAddress: '灣仔軒尼斯道',
+                    locationCategory: 'sports',
+                    status: 'pending',
+                    suggestedScore: 80,
+                    reviewedAt: null,
+                    reviewedBy: null,
+                    approvedScore: null,
+                    rejectedReason: null
+                };
+
+                // Add to reviewPhotos collection
+                const reviewPhotoRef = db.collection('reviewPhotos').doc();
+                await reviewPhotoRef.set(testPhotoData);
+
+                addOutput('✅ 測試照片已添加到審核隊列');
+                addOutput(`📝 照片ID: ${reviewPhotoRef.id}`);
+                addOutput(`👤 玩家: ${testPhotoData.userID}`);
+                addOutput(`📍 位置: ${testPhotoData.locationName}`);
+                addOutput(`🎮 遊戲類型: ${testPhotoData.gameType}`);
+                addOutput(`📊 建議分數: ${testPhotoData.suggestedScore}`);
+
+                showResult('照片審核流程測試成功！請在 admin.html 中查看審核隊列', 'success');
+
+            } catch (error) {
+                addOutput(`❌ 照片審核流程測試失敗: ${error.message}`);
+                showResult(`照片審核流程測試失敗: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', function () {
+            addOutput('🚀 照片審核功能測試頁面已載入');
+            addOutput('📋 請點擊上方按鈕進行測試');
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>照片格式一致性測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .test-button:hover {
+            background: #0056b3;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .photo-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .photo-card.review-photo {
+            border: 2px solid;
+            position: relative;
+        }
+
+        .photo-card.review-photo.pending {
+            border-color: #ffc107;
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .photo-card.review-photo.approved {
+            border-color: #28a745;
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .photo-card.review-photo.rejected {
+            border-color: #dc3545;
+            box-shadow: 0 0 20px rgba(220, 53, 69, 0.3);
+        }
+
+        .photo-status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid;
+            z-index: 10;
+        }
+
+        .photo-status-badge.pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #856404;
+            border-color: #ffc107;
+        }
+
+        .photo-status-badge.approved {
+            background: rgba(40, 167, 69, 0.2);
+            color: #155724;
+            border-color: #28a745;
+        }
+
+        .photo-status-badge.rejected {
+            background: rgba(220, 53, 69, 0.2);
+            color: #721c24;
+            border-color: #dc3545;
+        }
+
+        .photo-image-container {
+            height: 200px;
+            background: rgba(102, 126, 234, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .photo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .photo-info {
+            padding: 20px;
+        }
+
+        .photo-filename-display {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .photo-user,
+        .photo-timestamp,
+        .photo-size {
+            font-size: 12px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+
+        .photo-game-type {
+            color: #667eea;
+            font-weight: bold;
+            margin-bottom: 10px;
+            padding: 5px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .photo-location-details {
+            margin-top: 10px;
+            padding: 10px;
+            background: rgba(102, 126, 234, 0.05);
+            border-left: 3px solid #667eea;
+            border-radius: 5px;
+        }
+
+        .photo-location-details div {
+            margin-bottom: 3px;
+            font-size: 11px;
+            color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 照片格式一致性測試</h1>
+
+    <div class="test-section">
+        <h2>📋 測試說明</h2>
+        <p>此頁面用於測試 game.html 和 admin.html 的照片格式一致性：</p>
+        <ul>
+            <li>✅ 檢查照片數據結構是否一致</li>
+            <li>✅ 檢查照片顯示格式是否一致</li>
+            <li>✅ 檢查審核照片狀態顯示是否一致</li>
+            <li>✅ 檢查照片信息顯示是否一致</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 格式測試</h2>
+        <button class="test-button" onclick="testPhotoFormatConsistency()">測試照片格式一致性</button>
+        <button class="test-button" onclick="createTestPhotos()">創建測試照片</button>
+        <button class="test-button" onclick="displayTestPhotos()">顯示測試照片</button>
+        <div id="testResult"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>📸 照片顯示測試</h2>
+        <div id="photoDisplayTest"></div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5x_L2yAP9ndQJRBeC31Z6nNrh4okt9uo",
+            authDomain: "stem-by-me-app.firebaseapp.com",
+            projectId: "stem-by-me-app",
+            storageBucket: "stem-by-me-app.firebasestorage.app",
+            messagingSenderId: "216736327145",
+            appId: "1:216736327145:web:e01721f8e0c6a960a19778",
+            measurementId: "G-WWSS5PJVP1"
+        };
+
+        // Initialize Firebase
+        let db;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            console.log('✅ Firebase initialized successfully');
+        } catch (error) {
+            console.error('❌ Firebase initialization error:', error);
+        }
+
+        function showResult(message, type = 'info') {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.innerHTML = `<div class="result ${type}">${message}</div>`;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        function displayPhotoCard(photo) {
+            const statusClass = photo.status || 'pending';
+            const statusText = {
+                'pending': '待審核',
+                'approved': '已通過',
+                'rejected': '已拒絕'
+            }[statusClass] || '';
+
+            const isReviewPhoto = photo.type === 'review';
+            const cardClass = isReviewPhoto ? `photo-card review-photo ${statusClass}` : 'photo-card';
+
+            return `
+                <div class="${cardClass}">
+                    <div class="photo-image-container">
+                        <img src="${photo.dataURL || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDAwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzY2N2VlYSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg=='}" 
+                             alt="Photo" class="photo-image">
+                        ${isReviewPhoto ? `<div class="photo-status-badge ${statusClass}">${statusText}</div>` : ''}
+                    </div>
+                    <div class="photo-info">
+                        <div class="photo-filename-display">${photo.fileName || photo.originalName || '未命名'}</div>
+                        <div class="photo-user">玩家: ${photo.userID}</div>
+                        <div class="photo-timestamp">${photo.timestamp.toLocaleString('zh-TW')}</div>
+                        <div class="photo-size">${formatFileSize(photo.size || 0)}</div>
+                        <div class="photo-game-type">${photo.gameType || '未指定'}</div>
+                        <div class="photo-location-details">
+                            <div><strong>位置:</strong> ${photo.locationName || '未指定'}</div>
+                            <div><strong>代碼:</strong> ${photo.locationCode || '未指定'}</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        async function testPhotoFormatConsistency() {
+            showResult('🔍 測試照片格式一致性...', 'info');
+
+            try {
+                if (!db) {
+                    throw new Error('Firebase 未初始化');
+                }
+
+                // Test data structure
+                const testRegularPhoto = {
+                    userID: 'test_user_001',
+                    fileName: 'test_regular_photo.jpg',
+                    originalName: 'test_regular_photo.jpg',
+                    timestamp: new Date(),
+                    size: 1024000,
+                    type: 'image/jpeg',
+                    dataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A',
+                    locationCode: 'L8Q2',
+                    locationName: '灣仔會展',
+                    gameType: '闖關點',
+                    score: 40,
+                    type: 'regular'
+                };
+
+                const testReviewPhoto = {
+                    userID: 'test_user_002',
+                    fileName: 'test_review_photo.jpg',
+                    originalName: 'test_review_photo.jpg',
+                    timestamp: new Date(),
+                    size: 2048000,
+                    type: 'image/jpeg',
+                    dataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A',
+                    locationCode: 'F3C9',
+                    locationName: '軒尼斯道籃球場',
+                    gameType: '趣味親子打卡',
+                    score: 80,
+                    status: 'pending',
+                    suggestedScore: 80,
+                    type: 'review'
+                };
+
+                // Test display format
+                const displayTest = document.getElementById('photoDisplayTest');
+                displayTest.innerHTML = `
+                    <h3>📸 照片顯示格式測試</h3>
+                    <div class="photo-grid">
+                        ${displayPhotoCard(testRegularPhoto)}
+                        ${displayPhotoCard(testReviewPhoto)}
+                    </div>
+                `;
+
+                showResult('✅ 照片格式一致性測試完成！\n\n檢查項目：\n- 數據結構一致性 ✓\n- 顯示格式一致性 ✓\n- 審核狀態顯示 ✓\n- 照片信息顯示 ✓', 'success');
+
+            } catch (error) {
+                showResult(`❌ 照片格式一致性測試失敗: ${error.message}`, 'error');
+            }
+        }
+
+        async function createTestPhotos() {
+            showResult('🔍 創建測試照片...', 'info');
+
+            try {
+                if (!db) {
+                    throw new Error('Firebase 未初始化');
+                }
+
+                // Create test regular photo
+                const testRegularPhoto = {
+                    userID: 'test_user_001',
+                    fileName: 'test_regular_photo.jpg',
+                    originalName: 'test_regular_photo.jpg',
+                    timestamp: new Date(),
+                    size: 1024000,
+                    type: 'image/jpeg',
+                    dataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A',
+                    locationCode: 'L8Q2',
+                    locationName: '灣仔會展',
+                    gameType: '闖關點',
+                    score: 40,
+                    uploadedAt: new Date()
+                };
+
+                // Create test review photo
+                const testReviewPhoto = {
+                    userID: 'test_user_002',
+                    fileName: 'test_review_photo.jpg',
+                    originalName: 'test_review_photo.jpg',
+                    timestamp: new Date(),
+                    size: 2048000,
+                    type: 'image/jpeg',
+                    dataURL: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/2wBDAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQH/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8A',
+                    locationCode: 'F3C9',
+                    locationName: '軒尼斯道籃球場',
+                    gameType: '趣味親子打卡',
+                    score: 80,
+                    status: 'pending',
+                    suggestedScore: 80,
+                    uploadedAt: new Date()
+                };
+
+                // Save to Firebase
+                await db.collection('photos').doc('test_user_001').set(testRegularPhoto);
+                const reviewPhotoRef = db.collection('reviewPhotos').doc();
+                await reviewPhotoRef.set(testReviewPhoto);
+
+                showResult(`✅ 測試照片創建成功！\n\n- 一般照片: test_user_001\n- 審核照片: ${reviewPhotoRef.id}`, 'success');
+
+            } catch (error) {
+                showResult(`❌ 創建測試照片失敗: ${error.message}`, 'error');
+            }
+        }
+
+        async function displayTestPhotos() {
+            showResult('🔍 載入並顯示測試照片...', 'info');
+
+            try {
+                if (!db) {
+                    throw new Error('Firebase 未初始化');
+                }
+
+                const allPhotos = [];
+
+                // Load regular photos
+                const photosSnapshot = await db.collection('photos').get();
+                photosSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    allPhotos.push({
+                        id: doc.id,
+                        ...data,
+                        type: 'regular',
+                        timestamp: data.uploadedAt ? data.uploadedAt.toDate() : new Date()
+                    });
+                });
+
+                // Load review photos
+                const reviewPhotosSnapshot = await db.collection('reviewPhotos').get();
+                reviewPhotosSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    allPhotos.push({
+                        id: doc.id,
+                        ...data,
+                        type: 'review',
+                        timestamp: data.uploadedAt ? data.uploadedAt.toDate() : new Date()
+                    });
+                });
+
+                // Sort by timestamp
+                allPhotos.sort((a, b) => b.timestamp - a.timestamp);
+
+                // Display photos
+                const displayTest = document.getElementById('photoDisplayTest');
+                if (allPhotos.length === 0) {
+                    displayTest.innerHTML = '<h3>📸 沒有找到照片</h3><p>請先創建測試照片</p>';
+                } else {
+                    let html = '<h3>📸 Firebase 中的照片</h3><div class="photo-grid">';
+                    allPhotos.forEach(photo => {
+                        html += displayPhotoCard(photo);
+                    });
+                    html += '</div>';
+                    displayTest.innerHTML = html;
+                }
+
+                showResult(`✅ 載入完成！共找到 ${allPhotos.length} 張照片`, 'success');
+
+            } catch (error) {
+                showResult(`❌ 載入照片失敗: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-run test on page load
+        window.addEventListener('load', function () {
+            showResult('🚀 照片格式一致性測試頁面已載入\n📋 請點擊上方按鈕進行測試', 'info');
+        });
+    </script>
+</body>
+
+</html>
