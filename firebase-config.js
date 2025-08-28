@@ -87,27 +87,45 @@ async function uploadScoreToFirebase(gameInfo, score, status, gameTime = null) {
 
 // Get player name from checkpiont.html login system
 function getPlayerName() {
+    console.log('🔍 getPlayerName() called - ensuring unified player name format');
+
     // First try to get from checkpiont.html system
     const currentUser = localStorage.getItem('currentUser');
+    console.log('📋 currentUser from localStorage:', currentUser);
+
     if (currentUser) {
-        // Get user name from allUsers data
-        const allUsers = JSON.parse(localStorage.getItem('scavengerHuntUsers') || '{}');
-        if (allUsers[currentUser] && allUsers[currentUser].name) {
-            return allUsers[currentUser].name;
-        }
-        // If no name found, use user ID as name
-        return `玩家${currentUser}`;
-    }
-    
-    // Fallback to localStorage
-    const playerName = localStorage.getItem('playerName');
-    if (playerName) {
+        // Always return "玩家" format, regardless of what's stored in allUsers
+        const playerName = `玩家${currentUser}`;
+        console.log('✅ Using unified player name format:', playerName);
         return playerName;
     }
-    
-    // Last resort: generate a random player name
+
+    // Fallback to localStorage, but ensure it follows "玩家" format
+    const storedPlayerName = localStorage.getItem('playerName');
+    console.log('📋 storedPlayerName from localStorage:', storedPlayerName);
+
+    if (storedPlayerName) {
+        // If stored name contains "測試", convert it to "玩家" format
+        if (storedPlayerName.includes('測試')) {
+            // Extract user ID if possible, otherwise use fallback
+            const userIdMatch = storedPlayerName.match(/\d+/);
+            if (userIdMatch) {
+                const fixedName = `玩家${userIdMatch[0]}`;
+                console.log('🔧 Fixed test name to unified format:', fixedName);
+                localStorage.setItem('playerName', fixedName);
+                return fixedName;
+            }
+        }
+        // If already in correct format, return as is
+        if (storedPlayerName.startsWith('玩家')) {
+            return storedPlayerName;
+        }
+    }
+
+    // Last resort: generate a random player name in correct format
     const randomId = Math.floor(Math.random() * 1000) + 100;
     const defaultName = `玩家${randomId}`;
+    console.log('🎲 Generated random player name in unified format:', defaultName);
     localStorage.setItem('playerName', defaultName);
     return defaultName;
 }
@@ -119,13 +137,13 @@ function getUserId() {
     if (currentUser) {
         return currentUser;
     }
-    
+
     // Fallback to localStorage
     const userId = localStorage.getItem('userId');
     if (userId) {
         return userId;
     }
-    
+
     // Last resort: generate a random user ID
     const randomId = Math.floor(Math.random() * 1000) + 100;
     localStorage.setItem('userId', randomId.toString());

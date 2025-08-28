@@ -74,7 +74,7 @@ function initializeUsers() {
         // Load existing users
         allUsers = JSON.parse(existingUsers);
 
-        // Update existing users to include group information if not present
+        // Update existing users to include group information and fix names if not present
         let updated = false;
         Object.keys(allUsers).forEach(userId => {
             if (!allUsers[userId].group) {
@@ -88,6 +88,20 @@ function initializeUsers() {
                     allUsers[userId].group = 'Junior';
                 }
                 updated = true;
+            }
+            
+            // Fix any user names that contain "測試" to use "玩家" format
+            if (allUsers[userId].name && allUsers[userId].name.includes('測試')) {
+                allUsers[userId].name = `玩家${userId}`;
+                updated = true;
+                console.log(`🔧 Fixed user ${userId} name from test format to unified format`);
+            }
+            
+            // Ensure all users have the correct "玩家" format name
+            if (!allUsers[userId].name || !allUsers[userId].name.startsWith('玩家')) {
+                allUsers[userId].name = `玩家${userId}`;
+                updated = true;
+                console.log(`🔧 Updated user ${userId} name to unified format`);
             }
         });
 
