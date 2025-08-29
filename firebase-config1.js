@@ -33,6 +33,87 @@ function initializeFirebase() {
     }
 }
 
+// Unified uploadScoreToFirebase function
+async function uploadScoreToFirebase(userID, locationID, score, gameType = 'default') {
+    try {
+        if (!window.db) {
+            console.log('⚠️ Firebase not available, skipping score upload');
+            return false;
+        }
+        if (!userID) {
+            console.log('⚠️ No userID provided, skipping score upload');
+            return false;
+        }
+
+        console.log(`🔄 Uploading score to Firebase: User ${userID}, Location ${locationID}, Score ${score}`);
+
+        const scoreData = {
+            userID: userID,
+            locationID: locationID,
+            score: score,
+            gameType: gameType,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        try {
+            await window.db.collection('gameScores').add(scoreData);
+            console.log('✅ Score uploaded to Firebase successfully');
+
+            // Track score upload event
+            if (window.analytics) {
+                window.analytics.logEvent('score_uploaded', {
+                    user_id: userID,
+                    location_id: locationID,
+                    score: score,
+                    game_type: gameType
+                });
+            }
+
+            return true;
+        } catch (firebaseError) {
+            console.error('❌ Firebase upload error:', firebaseError);
+            // Handle index-related errors gracefully
+            if (firebaseError.code === 'failed-precondition' || firebaseError.message.includes('index')) {
+                console.log('⚠️ Firebase index error - score upload skipped, but game continues');
+                return false;
+            }
+            throw firebaseError;
+        }
+
+    } catch (error) {
+        console.error('❌ Error uploading score to Firebase:', error);
+        return false;
+    }
+}
+
+// Get user score from Firebase
+async function getUserScoreFromFirebase(userID) {
+    try {
+        if (!window.db) {
+            console.log('⚠️ Firebase not available, cannot get user score');
+            return 0;
+        }
+        if (!userID) {
+            console.log('⚠️ No userID provided, cannot get user score');
+            return 0;
+        }
+        console.log(`🔄 Getting Firebase score for user: ${userID}`);
+        const scoresSnapshot = await window.db.collection('gameScores')
+            .where('userID', '==', userID)
+            .get();
+        let totalScore = 0;
+        scoresSnapshot.forEach(doc => {
+            const data = doc.data();
+            totalScore += data.score || 0;
+        });
+        console.log(`✅ Firebase score for user ${userID}: ${totalScore}`);
+        return totalScore;
+    } catch (error) {
+        console.error('❌ Error getting user score from Firebase:', error);
+        return 0;
+    }
+}
+
 // Firebase utility functions
 const FirebaseUtils = {
     // Upload photo to Firestore (Base64 format)
@@ -118,9 +199,13 @@ const FirebaseUtils = {
     }
 };
 
+// Make functions available globally
+window.uploadScoreToFirebase = uploadScoreToFirebase;
+window.getUserScoreFromFirebase = getUserScoreFromFirebase;
+
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { firebaseConfig, initializeFirebase, FirebaseUtils };
+    module.exports = { firebaseConfig, initializeFirebase, FirebaseUtils, uploadScoreToFirebase, getUserScoreFromFirebase };
 } else {
     window.firebaseConfig = firebaseConfig;
     window.initializeFirebase = initializeFirebase;

@@ -89,14 +89,14 @@ function initializeUsers() {
                 }
                 updated = true;
             }
-            
+
             // Fix any user names that contain "測試" to use "玩家" format
             if (allUsers[userId].name && allUsers[userId].name.includes('測試')) {
                 allUsers[userId].name = `玩家${userId}`;
                 updated = true;
                 console.log(`🔧 Fixed user ${userId} name from test format to unified format`);
             }
-            
+
             // Ensure all users have the correct "玩家" format name
             if (!allUsers[userId].name || !allUsers[userId].name.startsWith('玩家')) {
                 allUsers[userId].name = `玩家${userId}`;
@@ -275,6 +275,15 @@ async function handleSignout() {
             currentLocationDisplay.textContent = '請輸入密碼以開始遊戲';
         }
 
+        // Hide quiz and image upload sections on signout
+        if (typeof hideQuiz === 'function') {
+            hideQuiz();
+        }
+        const imageUploadSection = document.getElementById('image-upload-section');
+        if (imageUploadSection) {
+            imageUploadSection.style.display = 'none';
+        }
+
         showResult('已登出！請重新登入以繼續遊戲。', 'info');
 
         console.log('User signed out');
@@ -335,12 +344,8 @@ function updateUserDisplay() {
             currentUserDisplay.style.display = 'flex';
             displayUserId.textContent = currentUser;
 
-            // Ensure photo upload section is visible when signed in
-            const imageUploadSection = document.getElementById('image-upload-section');
-            if (imageUploadSection) {
-                imageUploadSection.style.display = 'block';
-                console.log('✅ Photo upload section is now visible');
-            }
+            // Note: Photo upload section will be shown after code verification, not automatically on sign in
+            console.log('✅ User signed in, photo upload section will be shown after code verification');
         } else {
             // Show sign in form
             userSigninForm.style.display = 'flex';

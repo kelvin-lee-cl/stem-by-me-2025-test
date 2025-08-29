@@ -1,0 +1,168 @@
+{
+  "timestamp": 1756445152291,
+  "duration": 22,
+  "results": [
+    {
+      "name": "文件存在性: game.html",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152274
+    },
+    {
+      "name": "文件存在性: script.js",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152274
+    },
+    {
+      "name": "文件存在性: firebase-config.js",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152274
+    },
+    {
+      "name": "文件存在性: firebase-config1.js",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152274
+    },
+    {
+      "name": "文件存在性: login.js",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152275
+    },
+    {
+      "name": "文件存在性: index.html",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152275
+    },
+    {
+      "name": "文件大小: script.js",
+      "passed": true,
+      "details": "111.7KB (正常)",
+      "timestamp": 1756445152276
+    },
+    {
+      "name": "文件大小: game.html",
+      "passed": true,
+      "details": "100.5KB (正常)",
+      "timestamp": 1756445152276
+    },
+    {
+      "name": "文件大小: firebase-config.js",
+      "passed": true,
+      "details": "5.8KB (正常)",
+      "timestamp": 1756445152276
+    },
+    {
+      "name": "文件大小: login.js",
+      "passed": true,
+      "details": "16.1KB (正常)",
+      "timestamp": 1756445152276
+    },
+    {
+      "name": "目錄存在性: css",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152277
+    },
+    {
+      "name": "目錄存在性: js",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152277
+    },
+    {
+      "name": "目錄存在性: img",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152278
+    },
+    {
+      "name": "目錄存在性: games",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152278
+    },
+    {
+      "name": "目錄存在性: vendors",
+      "passed": true,
+      "details": "",
+      "timestamp": 1756445152279
+    },
+    {
+      "name": "JavaScript 語法: script.js",
+      "passed": false,
+      "details": "發現語法問題",
+      "timestamp": 1756445152280
+    },
+    {
+      "name": "JavaScript 語法: firebase-config.js",
+      "passed": false,
+      "details": "發現語法問題",
+      "timestamp": 1756445152281
+    },
+    {
+      "name": "JavaScript 語法: firebase-config1.js",
+      "passed": false,
+      "details": "發現語法問題",
+      "timestamp": 1756445152281
+    },
+    {
+      "name": "JavaScript 語法: login.js",
+      "passed": false,
+      "details": "發現語法問題",
+      "timestamp": 1756445152282
+    },
+    {
+      "name": "HTML 結構: game.html",
+      "passed": true,
+      "details": "結構完整",
+      "timestamp": 1756445152283
+    },
+    {
+      "name": "HTML 結構: index.html",
+      "passed": true,
+      "details": "結構完整",
+      "timestamp": 1756445152284
+    },
+    {
+      "name": "Firebase 配置: firebase-config.js",
+      "passed": true,
+      "details": "配置完整",
+      "timestamp": 1756445152285
+    },
+    {
+      "name": "Firebase 配置: firebase-config1.js",
+      "passed": true,
+      "details": "配置完整",
+      "timestamp": 1756445152285
+    },
+    {
+      "name": "遊戲數據結構",
+      "passed": true,
+      "details": "包含遊戲數據",
+      "timestamp": 1756445152287
+    },
+    {
+      "name": "外部依賴: game.html",
+      "passed": true,
+      "details": "Firebase: ✓, Bootstrap: ✗, jQuery: ✗",
+      "timestamp": 1756445152288
+    },
+    {
+      "name": "外部依賴: index.html",
+      "passed": true,
+      "details": "Firebase: ✗, Bootstrap: ✓, jQuery: ✓",
+      "timestamp": 1756445152289
+    }
+  ],
+  "summary": {
+    "totalTests": 26,
+    "passed": 22,
+    "failed": 4,
+    "successRate": 84.61538461538461
+  }
+}
