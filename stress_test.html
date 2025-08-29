@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STEM by Me 壓力測試工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .test-controls {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .test-controls h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(86, 171, 47, 0.3);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(240, 147, 251, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .progress-container {
+            background: #e9ecef;
+            border-radius: 10px;
+            height: 20px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .test-results {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .test-results h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .results-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .summary-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .summary-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .summary-card.success .value {
+            color: #28a745;
+        }
+
+        .summary-card.warning .value {
+            color: #ffc107;
+        }
+
+        .summary-card.danger .value {
+            color: #dc3545;
+        }
+
+        .console-output {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            margin-bottom: 20px;
+        }
+
+        .console-output::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .console-output::-webkit-scrollbar-track {
+            background: #2d2d2d;
+        }
+
+        .console-output::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+
+        .console-output::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+
+        .performance-metrics {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .performance-metrics h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .metric-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .metric-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .metric-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #555;
+        }
+
+        .metric-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-running {
+            background: #ffc107;
+            animation: pulse 1s infinite;
+        }
+
+        .status-success {
+            background: #28a745;
+        }
+
+        .status-error {
+            background: #dc3545;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .export-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .export-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .results-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .metric-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧪 STEM by Me 壓力測試工具</h1>
+            <p>全面測試項目功能、性能和穩定性</p>
+        </div>
+
+        <div class="content">
+            <!-- 測試控制面板 -->
+            <div class="test-controls">
+                <h2>🎮 測試控制面板</h2>
+                <div class="button-group">
+                    <button id="runAllTests" class="btn btn-primary">
+                        🚀 執行完整測試
+                    </button>
+                    <button id="runBasicTests" class="btn btn-success">
+                        🔍 基礎功能測試
+                    </button>
+                    <button id="runStressTests" class="btn btn-warning">
+                        ⚡ 壓力測試
+                    </button>
+                    <button id="runPerformanceTests" class="btn btn-danger">
+                        📊 性能測試
+                    </button>
+                    <button id="clearResults" class="btn btn-secondary">
+                        🗑️ 清除結果
+                    </button>
+                </div>
+                
+                <div class="progress-container">
+                    <div id="progressBar" class="progress-bar"></div>
+                </div>
+                
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>正在執行測試，請稍候...</p>
+                </div>
+            </div>
+
+            <!-- 測試結果摘要 -->
+            <div class="test-results">
+                <h2>📊 測試結果摘要</h2>
+                <div class="results-summary">
+                    <div class="summary-card success">
+                        <h3>總測試數</h3>
+                        <div class="value" id="totalTests">0</div>
+                    </div>
+                    <div class="summary-card success">
+                        <h3>通過測試</h3>
+                        <div class="value" id="passedTests">0</div>
+                    </div>
+                    <div class="summary-card warning">
+                        <h3>失敗測試</h3>
+                        <div class="value" id="failedTests">0</div>
+                    </div>
+                    <div class="summary-card danger">
+                        <h3>成功率</h3>
+                        <div class="value" id="successRate">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 控制台輸出 -->
+            <div class="test-results">
+                <h2>📝 測試日誌</h2>
+                <div id="consoleOutput" class="console-output"></div>
+            </div>
+
+            <!-- 性能指標 -->
+            <div class="performance-metrics">
+                <h2>📈 性能指標</h2>
+                <div id="performanceGrid" class="metric-grid">
+                    <div class="metric-card">
+                        <h3>等待測試結果...</h3>
+                        <p>請先執行測試以查看性能指標</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 導出結果 -->
+            <div class="export-section">
+                <h2>💾 導出測試結果</h2>
+                <div class="button-group">
+                    <button id="exportJSON" class="btn btn-primary">
+                        📄 導出 JSON
+                    </button>
+                    <button id="exportCSV" class="btn btn-success">
+                        📊 導出 CSV
+                    </button>
+                    <button id="printReport" class="btn btn-warning">
+                        🖨️ 打印報告
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入必要的腳本 -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics-compat.js"></script>
+    <script src="firebase-config1.js"></script>
+    <script src="login.js"></script>
+    <script src="script.js"></script>
+    <script src="stress_test.js"></script>
+
+    <script>
+        // 壓力測試頁面控制邏輯
+        class StressTestUI {
+            constructor() {
+                this.stressTest = null;
+                this.isRunning = false;
+                this.originalConsoleLog = console.log;
+                this.originalConsoleError = console.error;
+                this.originalConsoleWarn = console.warn;
+                
+                this.initializeUI();
+                this.setupEventListeners();
+                this.interceptConsole();
+            }
+
+            initializeUI() {
+                this.elements = {
+                    runAllTests: document.getElementById('runAllTests'),
+                    runBasicTests: document.getElementById('runBasicTests'),
+                    runStressTests: document.getElementById('runStressTests'),
+                    runPerformanceTests: document.getElementById('runPerformanceTests'),
+                    clearResults: document.getElementById('clearResults'),
+                    progressBar: document.getElementById('progressBar'),
+                    loading: document.getElementById('loading'),
+                    totalTests: document.getElementById('totalTests'),
+                    passedTests: document.getElementById('passedTests'),
+                    failedTests: document.getElementById('failedTests'),
+                    successRate: document.getElementById('successRate'),
+                    consoleOutput: document.getElementById('consoleOutput'),
+                    performanceGrid: document.getElementById('performanceGrid'),
+                    exportJSON: document.getElementById('exportJSON'),
+                    exportCSV: document.getElementById('exportCSV'),
+                    printReport: document.getElementById('printReport')
+                };
+            }
+
+            setupEventListeners() {
+                this.elements.runAllTests.addEventListener('click', () => this.runTests('all'));
+                this.elements.runBasicTests.addEventListener('click', () => this.runTests('basic'));
+                this.elements.runStressTests.addEventListener('click', () => this.runTests('stress'));
+                this.elements.runPerformanceTests.addEventListener('click', () => this.runTests('performance'));
+                this.elements.clearResults.addEventListener('click', () => this.clearResults());
+                this.elements.exportJSON.addEventListener('click', () => this.exportResults('json'));
+                this.elements.exportCSV.addEventListener('click', () => this.exportResults('csv'));
+                this.elements.printReport.addEventListener('click', () => this.printReport());
+            }
+
+            interceptConsole() {
+                const self = this;
+                console.log = function(...args) {
+                    self.originalConsoleLog.apply(console, args);
+                    self.logToUI('log', ...args);
+                };
+                
+                console.error = function(...args) {
+                    self.originalConsoleError.apply(console, args);
+                    self.logToUI('error', ...args);
+                };
+                
+                console.warn = function(...args) {
+                    self.originalConsoleWarn.apply(console, args);
+                    self.logToUI('warn', ...args);
+                };
+            }
+
+            logToUI(level, ...args) {
+                const message = args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                ).join(' ');
+                
+                const timestamp = new Date().toLocaleTimeString();
+                const levelIcon = {
+                    log: '📝',
+                    error: '❌',
+                    warn: '⚠️'
+                }[level] || '📝';
+                
+                const logEntry = `[${timestamp}] ${levelIcon} ${message}\n`;
+                this.elements.consoleOutput.textContent += logEntry;
+                this.elements.consoleOutput.scrollTop = this.elements.consoleOutput.scrollHeight;
+            }
+
+            async runTests(testType) {
+                if (this.isRunning) {
+                    alert('測試正在運行中，請稍候...');
+                    return;
+                }
+
+                this.isRunning = true;
+                this.updateUIState(true);
+                this.clearResults();
+
+                try {
+                    this.stressTest = new StressTest();
+                    
+                    // 根據測試類型執行不同的測試
+                    switch (testType) {
+                        case 'all':
+                            await this.stressTest.runAllTests();
+                            break;
+                        case 'basic':
+                            await this.runBasicTests();
+                            break;
+                        case 'stress':
+                            await this.runStressTests();
+                            break;
+                        case 'performance':
+                            await this.runPerformanceTests();
+                            break;
+                    }
+                    
+                    this.updateResults();
+                } catch (error) {
+                    console.error('測試執行失敗:', error);
+                    this.logToUI('error', '測試執行失敗:', error.message);
+                } finally {
+                    this.isRunning = false;
+                    this.updateUIState(false);
+                }
+            }
+
+            async runBasicTests() {
+                await this.stressTest.testFirebaseConnection();
+                await this.stressTest.testDOMElements();
+                await this.stressTest.testLocationData();
+                await this.stressTest.testQuizData();
+                await this.stressTest.testFunctionExistence();
+                await this.stressTest.testEventListeners();
+                await this.stressTest.testLocalStorage();
+            }
+
+            async runStressTests() {
+                await this.stressTest.testQuizSystemStress();
+                await this.stressTest.testFirebaseScoreUploadStress();
+                await this.stressTest.testMemoryUsage();
+                await this.stressTest.testResponseTime();
+                await this.stressTest.testConcurrentOperations();
+            }
+
+            async runPerformanceTests() {
+                await this.stressTest.performanceTest('問卷加載性能', async () => {
+                    if (typeof loadQuizContent === 'function') {
+                        const testLocation = Object.keys(quizData || {})[0];
+                        if (testLocation) loadQuizContent(testLocation);
+                    }
+                }, 50);
+                
+                await this.stressTest.performanceTest('分數更新性能', async () => {
+                    if (typeof updateScoreDisplay === 'function') {
+                        updateScoreDisplay();
+                    }
+                }, 100);
+            }
+
+            updateUIState(running) {
+                const buttons = [
+                    this.elements.runAllTests,
+                    this.elements.runBasicTests,
+                    this.elements.runStressTests,
+                    this.elements.runPerformanceTests
+                ];
+                
+                buttons.forEach(btn => {
+                    btn.disabled = running;
+                });
+                
+                this.elements.loading.classList.toggle('show', running);
+                this.elements.progressBar.style.width = running ? '100%' : '0%';
+            }
+
+            updateResults() {
+                if (!this.stressTest) return;
+                
+                const { testCount, passCount, failCount } = this.stressTest;
+                const successRate = testCount > 0 ? (passCount / testCount) * 100 : 0;
+                
+                this.elements.totalTests.textContent = testCount;
+                this.elements.passedTests.textContent = passCount;
+                this.elements.failedTests.textContent = failCount;
+                this.elements.successRate.textContent = `${successRate.toFixed(1)}%`;
+                
+                this.updatePerformanceMetrics();
+            }
+
+            updatePerformanceMetrics() {
+                if (!this.stressTest || !this.stressTest.performanceMetrics) return;
+                
+                const metrics = this.stressTest.performanceMetrics;
+                let html = '';
+                
+                Object.keys(metrics).forEach(testName => {
+                    const metric = metrics[testName];
+                    html += `
+                        <div class="metric-card">
+                            <h3>${testName}</h3>
+                            <div class="metric-item">
+                                <span class="metric-label">總時間:</span>
+                                <span class="metric-value">${metric.totalTime.toFixed(2)}ms</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">平均時間:</span>
+                                <span class="metric-value">${metric.avgTime.toFixed(2)}ms</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">最小時間:</span>
+                                <span class="metric-value">${metric.minTime.toFixed(2)}ms</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">最大時間:</span>
+                                <span class="metric-value">${metric.maxTime.toFixed(2)}ms</span>
+                            </div>
+                            <div class="metric-item">
+                                <span class="metric-label">成功率:</span>
+                                <span class="metric-value">${metric.successRate.toFixed(1)}%</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                if (html === '') {
+                    html = '<div class="metric-card"><h3>無性能數據</h3><p>請執行性能測試以查看結果</p></div>';
+                }
+                
+                this.elements.performanceGrid.innerHTML = html;
+            }
+
+            clearResults() {
+                this.elements.totalTests.textContent = '0';
+                this.elements.passedTests.textContent = '0';
+                this.elements.failedTests.textContent = '0';
+                this.elements.successRate.textContent = '0%';
+                this.elements.consoleOutput.textContent = '';
+                this.elements.performanceGrid.innerHTML = '<div class="metric-card"><h3>等待測試結果...</h3><p>請先執行測試以查看性能指標</p></div>';
+            }
+
+            exportResults(format) {
+                if (!this.stressTest) {
+                    alert('沒有可導出的測試結果');
+                    return;
+                }
+
+                const data = {
+                    timestamp: Date.now(),
+                    results: this.stressTest.testResults,
+                    performance: this.stressTest.performanceMetrics,
+                    summary: {
+                        totalTests: this.stressTest.testCount,
+                        passed: this.stressTest.passCount,
+                        failed: this.stressTest.failCount,
+                        successRate: (this.stressTest.passCount / this.stressTest.testCount) * 100
+                    }
+                };
+
+                if (format === 'json') {
+                    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `stress_test_results_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.json`;
+                    a.click();
+                    URL.revokeObjectURL(url);
+                } else if (format === 'csv') {
+                    this.exportToCSV(data);
+                }
+            }
+
+            exportToCSV(data) {
+                let csv = 'Test Name,Status,Duration (ms),Details,Timestamp\n';
+                
+                data.results.forEach(result => {
+                    csv += `"${result.name}","${result.passed ? 'PASS' : 'FAIL}",${result.duration},"${result.details.replace(/"/g, '""')}","${new Date(result.timestamp).toLocaleString()}"\n`;
+                });
+                
+                const blob = new Blob([csv], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `stress_test_results_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+
+            printReport() {
+                if (!this.stressTest) {
+                    alert('沒有可打印的測試結果');
+                    return;
+                }
+
+                const printWindow = window.open('', '_blank');
+                const { testCount, passCount, failCount } = this.stressTest;
+                const successRate = testCount > 0 ? (passCount / testCount) * 100 : 0;
+                
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>STEM by Me 壓力測試報告</title>
+                        <style>
+                            body { font-family: Arial, sans-serif; margin: 20px; }
+                            .header { text-align: center; margin-bottom: 30px; }
+                            .summary { margin-bottom: 30px; }
+                            .summary table { width: 100%; border-collapse: collapse; }
+                            .summary th, .summary td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+                            .summary th { background-color: #f2f2f2; }
+                            .results { margin-bottom: 30px; }
+                            .test-result { margin-bottom: 10px; padding: 5px; }
+                            .test-pass { background-color: #d4edda; }
+                            .test-fail { background-color: #f8d7da; }
+                            @media print { body { margin: 0; } }
+                        </style>
+                    </head>
+                    <body>
+                        <div class="header">
+                            <h1>STEM by Me 壓力測試報告</h1>
+                            <p>生成時間: ${new Date().toLocaleString()}</p>
+                        </div>
+                        
+                        <div class="summary">
+                            <h2>測試摘要</h2>
+                            <table>
+                                <tr><th>總測試數</th><td>${testCount}</td></tr>
+                                <tr><th>通過測試</th><td>${passCount}</td></tr>
+                                <tr><th>失敗測試</th><td>${failCount}</td></tr>
+                                <tr><th>成功率</th><td>${successRate.toFixed(1)}%</td></tr>
+                            </table>
+                        </div>
+                        
+                        <div class="results">
+                            <h2>詳細結果</h2>
+                            ${this.stressTest.testResults.map(result => `
+                                <div class="test-result ${result.passed ? 'test-pass' : 'test-fail'}">
+                                    <strong>${result.name}</strong> - ${result.passed ? '通過' : '失敗'} (${result.duration}ms)
+                                    ${result.details ? `<br>詳情: ${result.details}` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </body>
+                    </html>
+                `);
+                
+                printWindow.document.close();
+                printWindow.print();
+            }
+        }
+
+        // 初始化壓力測試 UI
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                new StressTestUI();
+                console.log('🎯 壓力測試工具已初始化完成');
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
