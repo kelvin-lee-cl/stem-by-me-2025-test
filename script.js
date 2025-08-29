@@ -6,8 +6,8 @@ const locationData = {
     'F3C9': {
         name: '軒尼斯道籃球場',
         coordinates: '22.278071431224433, 114.17812866522151',
-        gameType: '闖關點',
-        score: 40,
+        gameType: '難題解答挑戰',
+        score: 100,
         description: '戶外籃球場，適合親子運動活動',
         address: '灣仔軒尼斯道',
         category: 'sports'
@@ -52,8 +52,8 @@ const locationData = {
     'J7D1': {
         name: '火車車箱',
         coordinates: '22.28350632948947, 114.18013293854646',
-        gameType: '開發者遊戲挑戰',
-        score: 300,
+        gameType: '難題解答挑戰',
+        score: 100,
         description: '海濱火車站的車廂展示',
         address: '灣仔海濱火車站',
         category: 'transport'
@@ -71,8 +71,8 @@ const locationData = {
     'Z3T7': {
         name: '維園門口公仔',
         coordinates: '22.28098492243771, 114.18702508874155',
-        gameType: '開發者遊戲挑戰',
-        score: 300,
+        gameType: '闖關點',
+        score: 40,
         description: '維多利亞公園門口的裝飾公仔',
         address: '銅鑼灣維多利亞公園',
         category: 'landmark'
@@ -90,8 +90,8 @@ const locationData = {
     'N8P5': {
         name: '大坑',
         coordinates: '22.279038533587816, 114.19158575234175',
-        gameType: '闖關點',
-        score: 40,
+        gameType: '難題解答挑戰',
+        score: 100,
         description: '大坑地區的特色景點',
         address: '灣仔大坑',
         category: 'community'
@@ -99,8 +99,8 @@ const locationData = {
     'Y1F4': {
         name: '奧運五色天橋',
         coordinates: '22.279309272636187, 114.18716842350592',
-        gameType: '開發者遊戲挑戰',
-        score: 300,
+        gameType: '難題解答挑戰',
+        score: 100,
         description: '奧運主題的五色天橋',
         address: '灣仔奧運天橋',
         category: 'landmark'
@@ -117,8 +117,8 @@ const locationData = {
     'M9J3': {
         name: '渣甸坊',
         coordinates: '22.279594554604934, 114.1843079227669',
-        gameType: '難題解答挑戰',
-        score: 100,
+        gameType: '闖關點',
+        score: 40,
         description: '灣仔區的商業街道',
         address: '灣仔渣甸坊',
         category: 'commercial'
@@ -226,7 +226,7 @@ let currentLocation = '';
 let selectedFile = null;
 
 // Photo upload allowed location codes
-const ALLOWED_UPLOAD_CODES = ['F3C9', 'G6V3', 'N8P5', 'L8Q2', 'P9M8', 'S2N6', 'H4G8', 'C2L6', 'V7X1'];
+const ALLOWED_UPLOAD_CODES = ['L8Q2', 'P9M8', 'S2N6', 'H4G8', 'C2L6', 'V7X1'];
 
 // Admin data
 let allPhotos = [];
@@ -292,6 +292,13 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordInputGroup.style.display = 'none';
     }
 
+    // Hide quiz and image upload sections initially
+    hideQuiz();
+    const imageUploadSection = document.getElementById('image-upload-section');
+    if (imageUploadSection) {
+        imageUploadSection.style.display = 'none';
+    }
+
     // Sync with login system
     syncWithLoginSystem();
 
@@ -303,6 +310,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Test photo upload system
     setTimeout(testPhotoUpload, 1000);
+
+    // Test Firebase score retrieval
+    setTimeout(testFirebaseScoreRetrieval, 2000);
 });
 
 
@@ -1337,11 +1347,15 @@ async function checkPassword() { // This function now checks location codes
             return;
         }
 
+        // Create new completed locations array for all cases
+        const newCompletedLocations = [...completedLocations, currentLocation];
+        let newTotalScore = getTotalScore();
+
         // Check if this is a 親子打卡 (parent-child check-in) location that requires manual review
         if (locationInfo.gameType === '趣味親子打卡') {
             // For 親子打卡 locations, don't award points automatically
             // Instead, mark as completed but pending review
-            const newCompletedLocations = [...completedLocations, currentLocation];
+            // totalScore: newTotalScore, // Keep current score
 
             // Sync back to login system (without adding score)
             if (window.loginSystem) {
@@ -1372,12 +1386,19 @@ async function checkPassword() { // This function now checks location codes
                 status: 'pending_review'
             });
 
+            // Show image upload section for 親子打卡 locations after successful verification
+            const imageUploadSection = document.getElementById('image-upload-section');
+            if (imageUploadSection) {
+                imageUploadSection.style.display = 'block';
+                updateUploadSectionTitle(locationInfo.gameType);
+            }
+
             // Trigger location completed event for auto-sync
             window.dispatchEvent(new CustomEvent('locationCompleted', {
                 detail: {
                     locationCode: currentLocation,
                     locationInfo: locationInfo,
-                    totalScore: getTotalScore(), // Keep current score
+                    totalScore: newTotalScore, // Keep current score
                     completedLocations: newCompletedLocations,
                     requiresReview: true
                 }
@@ -1385,8 +1406,7 @@ async function checkPassword() { // This function now checks location codes
 
         } else {
             // For non-親子打卡 locations, award points automatically
-            const newCompletedLocations = [...completedLocations, currentLocation];
-            const newTotalScore = getTotalScore() + locationInfo.score;
+            newTotalScore = getTotalScore() + locationInfo.score;
 
             // Sync back to login system
             if (window.loginSystem) {
@@ -1426,6 +1446,20 @@ async function checkPassword() { // This function now checks location codes
 
             // Upload score to Firebase
             uploadScoreToFirebase(locationInfo, newTotalScore, 'win');
+
+            // Show quiz section for 難題解答挑戰 locations after successful verification
+            if (locationInfo.gameType === '難題解答挑戰') {
+                showQuizForLocation(enteredPassword);
+            }
+
+            // Show image upload section for 親子打卡 locations after successful verification
+            if (locationInfo.gameType === '趣味親子打卡') {
+                const imageUploadSection = document.getElementById('image-upload-section');
+                if (imageUploadSection) {
+                    imageUploadSection.style.display = 'block';
+                    updateUploadSectionTitle(locationInfo.gameType);
+                }
+            }
 
             // Trigger location completed event for auto-sync
             window.dispatchEvent(new CustomEvent('locationCompleted', {
@@ -1582,15 +1616,11 @@ function initializeProgressGrid() {
             passwordInput.focus();
             clearResultMessage();
 
-            // Show image upload section only for specific location codes
-            if (ALLOWED_UPLOAD_CODES.includes(password)) {
-                imageUploadSection.style.display = 'block';
-                updateUploadSectionTitle(locationInfo.gameType);
-            } else {
-                imageUploadSection.style.display = 'none';
-            }
+            // Hide both sections initially - they will be shown after code verification
+            imageUploadSection.style.display = 'none';
+            hideQuiz();
 
-            // Update upload section with location info
+            // Update upload section with location info (but keep hidden)
             const uploadTitle = document.querySelector('.image-upload-section h3');
             if (uploadTitle) {
                 uploadTitle.innerHTML = `📸 照片上傳 - ${locationInfo.name}`;
@@ -1681,12 +1711,33 @@ function updateScoreDisplay() {
             document.querySelector('.header').appendChild(scoreDisplay);
         }
 
-        const currentTotalScore = getTotalScore();
+        // Get current user
+        const currentUser = window.loginSystem ? window.loginSystem.getCurrentUser() : null;
+
+        // Initially show local score, then update with Firebase score in background
+        let displayScore = getTotalScore();
+
+        // Update with Firebase score in background if available
+        if (currentUser && typeof getUserScoreFromFirebase === 'function') {
+            getUserScoreFromFirebase(currentUser).then(firebaseScore => {
+                console.log(`✅ Retrieved Firebase score for user ${currentUser}: ${firebaseScore}`);
+
+                // Update the display with Firebase score
+                const scoreValueElement = scoreDisplay.querySelector('.score-value');
+                if (scoreValueElement) {
+                    scoreValueElement.textContent = `${firebaseScore}分`;
+                }
+            }).catch(error => {
+                console.error('❌ Error getting Firebase score:', error);
+                // Keep local score if Firebase fails
+            });
+        }
+
         const currentCompletedLocations = getCompletedLocations();
         scoreDisplay.innerHTML = `
             <div class="score-info">
                 <span class="score-label">總分：</span>
-                <span class="score-value">${currentTotalScore}分</span>
+                <span class="score-value">${displayScore}分</span>
                 <span class="progress-label">進度：</span>
                 <span class="progress-value">${currentCompletedLocations.length}/${Object.keys(locationData).length}</span>
             </div>
@@ -2162,6 +2213,13 @@ function resetProgress() {
             passwordInputGroup.style.display = 'none';
         }
 
+        // Hide quiz and image upload sections after reset
+        hideQuiz();
+        const imageUploadSection = document.getElementById('image-upload-section');
+        if (imageUploadSection) {
+            imageUploadSection.style.display = 'none';
+        }
+
         showResult(`玩家${window.loginSystem.getCurrentUser()}的進度已重置！`, 'info');
 
         // Track progress reset
@@ -2199,6 +2257,7 @@ document.addEventListener('keydown', function (e) {
         currentLocation = '';
         currentLocationDisplay.textContent = '請選擇位置並輸入關卡代碼';
         imageUploadSection.style.display = 'none';
+        hideQuiz();
 
         // Hide password input group
         const passwordInputGroup = document.getElementById('password-input-group');
@@ -2561,3 +2620,433 @@ function previewPhoto(photoIndex) {
     }
 }
 
+// ===== QUIZ SYSTEM =====
+
+// Quiz data for different locations
+const quizData = {
+    'F3C9': {
+        title: '軒尼斯道籃球場問卷調查',
+        description: '請回答以下關於軒尼斯道籃球場的問題',
+        questions: [
+            {
+                id: 1,
+                question: '軒尼斯道籃球場裝修後多了幾多分線顯示在籃球場上？',
+                options: [
+                    { id: 'a', text: '3分線', correct: false },
+                    { id: 'b', text: '4分線', correct: true },
+                    { id: 'c', text: '5分線', correct: false },
+                    { id: 'd', text: '1分線', correct: false }
+                ]
+            }
+        ]
+    },
+    'J7D1': {
+        title: '灣仔海濱火車車箱展問卷調查',
+        description: '請回答以下關於灣仔海濱火車車箱的問題',
+        questions: [
+            {
+                id: 1,
+                question: '灣仔海濱火車車箱展覽位置，月台上顯示的站名是？',
+                options: [
+                    { id: 'a', text: '灣仔站', correct: false },
+                    { id: 'b', text: '會展站', correct: false },
+                    { id: 'c', text: '銅鑼灣站', correct: false },
+                    { id: 'd', text: '海濱站', correct: true }
+                ]
+            }
+        ]
+    },
+    'N8P5': {
+        title: '大坑問卷調查',
+        description: '請回答以下關於大坑的問題',
+        questions: [
+            {
+                id: 1,
+                question: '每年中秋，大坑會舉行什麼傳統活動?',
+                options: [
+                    { id: 'a', text: '舞火龍', correct: true },
+                    { id: 'b', text: '舞水龍', correct: false },
+                    { id: 'c', text: '搶包山', correct: false },
+                    { id: 'd', text: '舞K-POP', correct: false },
+                ]
+            }
+        ]
+    },
+    'Y1F4': {
+        title: '奧運五色天橋問卷調查',
+        description: '請回答以下關於奧運五色天橋的問題',
+        questions: [
+            {
+                id: 1,
+                question: '奧運五色天橋梯級有以下顏色，除了？',
+                options: [
+                    { id: 'a', text: '黃色', correct: false },
+                    { id: 'b', text: '橙色', correct: true },
+                    { id: 'c', text: '藍色', correct: false },
+                    { id: 'd', text: '黑色', correct: false }
+                ]
+            }
+        ]
+    },
+}
+
+// Quiz system variables
+let currentQuiz = null;
+let quizAnswers = {};
+
+// Quiz DOM elements
+const quizSection = document.getElementById('quiz-section');
+const quizContent = document.getElementById('quiz-content');
+const submitQuizBtn = document.getElementById('submit-quiz-btn');
+const closeQuizBtn = document.getElementById('close-quiz-btn');
+const quizProgress = document.getElementById('quiz-progress');
+
+// Initialize quiz system
+function initializeQuizSystem() {
+    if (submitQuizBtn) {
+        submitQuizBtn.addEventListener('click', submitQuiz);
+    }
+    if (closeQuizBtn) {
+        closeQuizBtn.addEventListener('click', closeQuiz);
+    }
+}
+
+// Show quiz for specific location
+function showQuizForLocation(locationCode) {
+    console.log('🔍 Showing quiz for location:', locationCode);
+
+    if (!quizData[locationCode]) {
+        console.log('❌ No quiz data for location:', locationCode);
+        return;
+    }
+
+    currentQuiz = locationCode;
+    quizAnswers = {};
+
+    // Show quiz section
+    if (quizSection) {
+        quizSection.style.display = 'block';
+    }
+
+    // Load quiz content
+    loadQuizContent(locationCode);
+
+    // Track quiz display event
+    if (typeof trackEvent === 'function') {
+        trackEvent('quiz_displayed', {
+            location_code: locationCode,
+            location_name: locationData[locationCode]?.name || 'Unknown'
+        });
+    }
+}
+
+// Hide quiz section
+function hideQuiz() {
+    if (quizSection) {
+        quizSection.style.display = 'none';
+    }
+    currentQuiz = null;
+    quizAnswers = {};
+}
+
+// Load quiz content
+function loadQuizContent(locationCode) {
+    const quiz = quizData[locationCode];
+    if (!quiz) return;
+
+    // Update quiz header
+    const quizHeader = document.querySelector('.quiz-section h3');
+    if (quizHeader) {
+        quizHeader.textContent = `📝 ${quiz.title}`;
+    }
+
+    // Update quiz description
+    const quizDesc = document.querySelector('.quiz-description');
+    if (quizDesc) {
+        quizDesc.textContent = quiz.description;
+    }
+
+    // Show loading state
+    const quizArea = document.querySelector('.quiz-area');
+    if (quizArea) {
+        quizArea.classList.add('loading');
+        quizArea.classList.remove('ready');
+        const quizText = quizArea.querySelector('.quiz-text');
+        if (quizText) {
+            quizText.textContent = '載入問卷中...';
+        }
+    }
+
+    // Simulate loading delay
+    setTimeout(() => {
+        // Generate quiz HTML
+        const quizHTML = generateQuizHTML(quiz);
+
+        if (quizContent) {
+            quizContent.innerHTML = quizHTML;
+            quizContent.style.display = 'block';
+        }
+
+        // Update quiz area to ready state
+        if (quizArea) {
+            quizArea.classList.remove('loading');
+            quizArea.classList.add('ready');
+            const quizText = quizArea.querySelector('.quiz-text');
+            if (quizText) {
+                quizText.textContent = '問卷已準備就緒';
+            }
+        }
+
+        // Add event listeners to quiz options
+        addQuizOptionListeners();
+    }, 1000);
+}
+
+// Generate quiz HTML
+function generateQuizHTML(quiz) {
+    let html = '';
+
+    quiz.questions.forEach((question, index) => {
+        html += `
+            <div class="quiz-question" data-question-id="${question.id}">
+                <h4>問題 ${index + 1}: ${question.question}</h4>
+                <div class="quiz-options">
+        `;
+
+        question.options.forEach(option => {
+            html += `
+                <label class="quiz-option" data-option-id="${option.id}">
+                    <input type="radio" name="question_${question.id}" value="${option.id}">
+                    <span>${option.text}</span>
+                </label>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+    });
+
+    return html;
+}
+
+// Add event listeners to quiz options
+function addQuizOptionListeners() {
+    const quizOptions = document.querySelectorAll('.quiz-option');
+
+    quizOptions.forEach(option => {
+        option.addEventListener('click', function () {
+            const radio = this.querySelector('input[type="radio"]');
+            const questionId = this.closest('.quiz-question').dataset.questionId;
+            const optionId = this.dataset.optionId;
+
+            // Uncheck other options in the same question
+            const otherOptions = this.closest('.quiz-options').querySelectorAll('.quiz-option');
+            otherOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.querySelector('input[type="radio"]').checked = false;
+            });
+
+            // Check this option
+            radio.checked = true;
+            this.classList.add('selected');
+
+            // Store answer
+            quizAnswers[questionId] = optionId;
+
+            console.log('📝 Quiz answer selected:', questionId, optionId);
+        });
+    });
+}
+
+// Submit quiz
+function submitQuiz() {
+    if (!currentQuiz) {
+        console.log('❌ No active quiz');
+        return;
+    }
+
+    const quiz = quizData[currentQuiz];
+    const totalQuestions = quiz.questions.length;
+    const answeredQuestions = Object.keys(quizAnswers).length;
+
+    if (answeredQuestions < totalQuestions) {
+        alert(`請回答所有問題！您已回答 ${answeredQuestions}/${totalQuestions} 題。`);
+        return;
+    }
+
+    // Calculate score
+    let correctAnswers = 0;
+    quiz.questions.forEach(question => {
+        const userAnswer = quizAnswers[question.id];
+        const correctOption = question.options.find(opt => opt.correct);
+        if (userAnswer === correctOption.id) {
+            correctAnswers++;
+        }
+    });
+
+    const score = Math.round((correctAnswers / totalQuestions) * 100);
+    const isPassed = score >= 60;
+
+    // Show results
+    showQuizResults(score, correctAnswers, totalQuestions, isPassed);
+
+    // Track quiz submission
+    if (typeof trackEvent === 'function') {
+        trackEvent('quiz_submitted', {
+            location_code: currentQuiz,
+            location_name: locationData[currentQuiz]?.name || 'Unknown',
+            score: score,
+            correct_answers: correctAnswers,
+            total_questions: totalQuestions,
+            passed: isPassed
+        });
+    }
+}
+
+// Show quiz results
+function showQuizResults(score, correctAnswers, totalQuestions, isPassed) {
+    const resultHTML = `
+        <div class="quiz-results" style="text-align: center; padding: 20px; background: ${isPassed ? '#d4edda' : '#f8d7da'}; border-radius: 15px; margin: 20px 0;">
+            <h3 style="color: ${isPassed ? '#155724' : '#721c24'}; margin-bottom: 15px;">
+                ${isPassed ? '🎉 恭喜通過！' : '😔 未達標準'}
+            </h3>
+            <p style="font-size: 1.2em; margin-bottom: 10px;">
+                得分: <strong>${score}分</strong>
+            </p>
+            <p style="margin-bottom: 10px;">
+                正確答案: ${correctAnswers}/${totalQuestions}
+            </p>
+            <p style="font-size: 0.9em; color: #666;">
+                ${isPassed ? '您已成功完成問卷調查！' : '請重新嘗試'}
+            </p>
+            <div style="margin-top: 20px;">
+                ${!isPassed ? `
+                    <button id="retry-quiz-btn" class="btn btn-warning" style="margin-right: 10px;">
+                        🔄 重新答題
+                    </button>
+                ` : ''}
+                <button id="close-quiz-btn" class="btn ${isPassed ? 'btn-success' : 'btn-secondary'}">
+                    ${isPassed ? '✅ 完成問卷' : '❌ 關閉問卷'}
+                </button>
+            </div>
+        </div>
+    `;
+
+    if (quizContent) {
+        quizContent.innerHTML = resultHTML;
+    }
+
+    // Hide submit button after submission
+    if (submitQuizBtn) {
+        submitQuizBtn.style.display = 'none';
+    }
+
+    // Add event listeners for retry and close buttons
+    setTimeout(() => {
+        const retryBtn = document.getElementById('retry-quiz-btn');
+        const closeBtn = document.getElementById('close-quiz-btn');
+
+        if (retryBtn) {
+            retryBtn.addEventListener('click', retryQuiz);
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', closeQuiz);
+        }
+    }, 100);
+}
+
+// Cancel quiz
+function closeQuiz() {
+    if (confirm('確定要關閉問卷嗎？您將需要重新選擇位置來再次嘗試。')) {
+        hideQuiz();
+    }
+}
+
+// Retry quiz (for failed attempts)
+function retryQuiz() {
+    console.log('🔄 Retrying quiz for location:', currentQuiz);
+
+    // Reset quiz answers
+    quizAnswers = {};
+
+    // Reload quiz content
+    loadQuizContent(currentQuiz);
+
+    // Show submit button again
+    if (submitQuizBtn) {
+        submitQuizBtn.style.display = 'block';
+    }
+
+    // Track retry event
+    if (typeof trackEvent === 'function') {
+        trackEvent('quiz_retry', {
+            location_code: currentQuiz,
+            location_name: locationData[currentQuiz]?.name || 'Unknown'
+        });
+    }
+}
+
+// Close quiz (for failed attempts)
+function closeQuiz() {
+    console.log('❌ Closing quiz for location:', currentQuiz);
+
+    if (confirm('確定要關閉問卷嗎？您將需要重新選擇位置來再次嘗試。')) {
+        hideQuiz();
+
+        // Track close event
+        if (typeof trackEvent === 'function') {
+            trackEvent('quiz_closed', {
+                location_code: currentQuiz,
+                location_name: locationData[currentQuiz]?.name || 'Unknown'
+            });
+        }
+    }
+}
+
+// Toggle quiz section (for admin use)
+function toggleQuizSection() {
+    if (quizSection) {
+        const isVisible = quizSection.style.display !== 'none';
+        quizSection.style.display = isVisible ? 'none' : 'block';
+    }
+}
+
+// Initialize quiz system when DOM is loaded
+document.addEventListener('DOMContentLoaded', function () {
+    initializeQuizSystem();
+});
+
+// Test function to verify Firebase score retrieval
+async function testFirebaseScoreRetrieval() {
+    console.log('🧪 Testing Firebase score retrieval...');
+
+    const currentUser = window.loginSystem ? window.loginSystem.getCurrentUser() : null;
+
+    if (!currentUser) {
+        console.log('❌ No current user, cannot test Firebase score retrieval');
+        return;
+    }
+
+    if (typeof getUserScoreFromFirebase !== 'function') {
+        console.log('❌ getUserScoreFromFirebase function not available');
+        return;
+    }
+
+    try {
+        const firebaseScore = await getUserScoreFromFirebase(currentUser);
+        console.log(`✅ Firebase score test successful for user ${currentUser}: ${firebaseScore}分`);
+
+        // Compare with local score
+        const localScore = getTotalScore();
+        console.log(`📊 Local score: ${localScore}分, Firebase score: ${firebaseScore}分`);
+
+        if (firebaseScore !== localScore) {
+            console.log('⚠️ Score mismatch detected - Firebase score will be used for display');
+        }
+
+    } catch (error) {
+        console.error('❌ Firebase score retrieval test failed:', error);
+    }
+}

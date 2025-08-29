@@ -62,9 +62,20 @@ async function uploadScoreToFirebase(gameInfo, score, status, gameTime = null) {
             coordinates: gameInfo.coordinates || { lat: 22.2783, lng: 114.1747 }
         };
 
-        // Save score data to Firestore
-        await window.db.collection('gameScores').add(scoreData);
-        console.log('✅ Score saved to Firestore with unified format');
+        // Save score data to Firestore with error handling for index issues
+        try {
+            await window.db.collection('gameScores').add(scoreData);
+            console.log('✅ Score saved to Firestore with unified format');
+        } catch (firestoreError) {
+            // Handle index-related errors gracefully
+            if (firestoreError.message && firestoreError.message.includes('index')) {
+                console.warn('⚠️ Firebase index not ready, score upload skipped:', firestoreError.message);
+                console.log('💡 To fix this, create the required index in Firebase Console');
+                return false;
+            } else {
+                throw firestoreError; // Re-throw non-index errors
+            }
+        }
 
         // Track Firebase score upload
         if (window.analytics) {
@@ -87,48 +98,50 @@ async function uploadScoreToFirebase(gameInfo, score, status, gameTime = null) {
 
 // Get player name from checkpiont.html login system
 function getPlayerName() {
-    console.log('🔍 getPlayerName() called - ensuring unified player name format');
-
-    // First try to get from checkpiont.html system
-    const currentUser = localStorage.getItem('currentUser');
-    console.log('📋 currentUser from localStorage:', currentUser);
-
-    if (currentUser) {
-        // Always return "玩家" format, regardless of what's stored in allUsers
-        const playerName = `玩家${currentUser}`;
-        console.log('✅ Using unified player name format:', playerName);
-        return playerName;
+    if (window.loginSystem && window.loginSystem.getCurrentUser()) {
+        return `玩家${window.loginSystem.getCurrentUser()}`;
     }
-
-    // Fallback to localStorage, but ensure it follows "玩家" format
-    const storedPlayerName = localStorage.getItem('playerName');
-    console.log('📋 storedPlayerName from localStorage:', storedPlayerName);
-
-    if (storedPlayerName) {
-        // If stored name contains "測試", convert it to "玩家" format
-        if (storedPlayerName.includes('測試')) {
-            // Extract user ID if possible, otherwise use fallback
-            const userIdMatch = storedPlayerName.match(/\d+/);
-            if (userIdMatch) {
-                const fixedName = `玩家${userIdMatch[0]}`;
-                console.log('🔧 Fixed test name to unified format:', fixedName);
-                localStorage.setItem('playerName', fixedName);
-                return fixedName;
-            }
-        }
-        // If already in correct format, return as is
-        if (storedPlayerName.startsWith('玩家')) {
-            return storedPlayerName;
-        }
-    }
-
-    // Last resort: generate a random player name in correct format
-    const randomId = Math.floor(Math.random() * 1000) + 100;
-    const defaultName = `玩家${randomId}`;
-    console.log('🎲 Generated random player name in unified format:', defaultName);
-    localStorage.setItem('playerName', defaultName);
-    return defaultName;
+    return '匿名玩家';
 }
+
+// Get user score from Firebase
+async function getUserScoreFromFirebase(userID) {
+    try {
+        if (!window.db) {
+            console.log('⚠️ Firebase not available, cannot get user score');
+            return 0;
+        }
+
+        if (!userID) {
+            console.log('⚠️ No userID provided, cannot get user score');
+            return 0;
+        }
+
+        console.log(`🔄 Getting Firebase score for user: ${userID}`);
+
+        // Get user's scores from Firebase
+        const scoresSnapshot = await window.db.collection('gameScores')
+            .where('userID', '==', userID)
+            .get();
+
+        // Calculate total score
+        let totalScore = 0;
+        scoresSnapshot.forEach(doc => {
+            const data = doc.data();
+            totalScore += data.score || 0;
+        });
+
+        console.log(`✅ Firebase score for user ${userID}: ${totalScore}`);
+        return totalScore;
+
+    } catch (error) {
+        console.error('❌ Error getting user score from Firebase:', error);
+        return 0;
+    }
+}
+
+// Make getUserScoreFromFirebase available globally
+window.getUserScoreFromFirebase = getUserScoreFromFirebase;
 
 // Get user ID from checkpiont.html login system
 function getUserId() {
