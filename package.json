@@ -1,24 +1,24 @@
 {
-  "name": "stem-by-me-2025",
-  "version": "1.0.0",
-  "description": "STEM by Me 2025 - Interactive Scavenger Hunt Game",
-  "main": "index.html",
-  "scripts": {
-    "start": "python3 -m http.server 8000",
-    "dev": "python3 -m http.server 8000",
-    "build": "echo 'Static site - no build required'"
-  },
-  "keywords": [
-    "stem",
-    "education",
-    "game",
-    "scavenger-hunt",
-    "interactive"
-  ],
-  "author": "Kelvin Lee",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/kelvin-lee-cl/stem-by-me-2025.git"
-  }
+    "name": "stem-by-me-2025",
+    "version": "1.0.0",
+    "description": "STEM by Me 2025 - Interactive Scavenger Hunt Game",
+    "main": "index.html",
+    "scripts": {
+        "start": "python3 -m http.server 8000",
+        "dev": "python3 -m http.server 8000",
+        "build": "echo 'Static site - no build required'"
+    },
+    "keywords": [
+        "stem",
+        "education",
+        "game",
+        "scavenger-hunt",
+        "interactive"
+    ],
+    "author": "Kelvin Lee",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kelvin-lee-cl/stem-by-me-2025.git"
+    }
 }
