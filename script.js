@@ -292,11 +292,21 @@ document.addEventListener('DOMContentLoaded', function () {
         passwordInputGroup.style.display = 'none';
     }
 
-    // Hide quiz and image upload sections initially
+    // Hide quiz section initially
     hideQuiz();
+    
+    // Check if user has completed locations that support photo upload
     const imageUploadSection = document.getElementById('image-upload-section');
     if (imageUploadSection) {
-        imageUploadSection.style.display = 'none';
+        const completedLocations = getCompletedLocations();
+        const hasUploadableLocations = completedLocations.some(location => ALLOWED_UPLOAD_CODES.includes(location));
+        
+        if (hasUploadableLocations && window.loginSystem && window.loginSystem.isSignedIn()) {
+            imageUploadSection.style.display = 'block';
+            updateUploadSectionTitle();
+        } else {
+            imageUploadSection.style.display = 'none';
+        }
     }
 
     // Sync with login system
@@ -1452,8 +1462,8 @@ async function checkPassword() { // This function now checks location codes
                 showQuizForLocation(enteredPassword);
             }
 
-            // Show image upload section for 親子打卡 locations after successful verification
-            if (locationInfo.gameType === '趣味親子打卡') {
+            // Show image upload section for supported locations after successful verification
+            if (ALLOWED_UPLOAD_CODES.includes(currentLocation)) {
                 const imageUploadSection = document.getElementById('image-upload-section');
                 if (imageUploadSection) {
                     imageUploadSection.style.display = 'block';
@@ -1616,8 +1626,15 @@ function initializeProgressGrid() {
             passwordInput.focus();
             clearResultMessage();
 
-            // Hide both sections initially - they will be shown after code verification
-            imageUploadSection.style.display = 'none';
+            // Show photo upload section for supported locations immediately
+            if (ALLOWED_UPLOAD_CODES.includes(password)) {
+                imageUploadSection.style.display = 'block';
+                updateUploadSectionTitle(locationInfo.gameType);
+            } else {
+                imageUploadSection.style.display = 'none';
+            }
+
+            // Hide quiz section initially - it will be shown after code verification
             hideQuiz();
 
             // Update upload section with location info (but keep hidden)
