@@ -1461,7 +1461,7 @@
                     // Check if click is on the exit button area
                     if ((this.classList.contains('pseudo-fullscreen') || this.classList.contains('mobile-fullscreen')) &&
                         x > rect.width - exitButtonSize - exitButtonMargin && y < exitButtonSize + exitButtonMargin) {
-                        
+
                         // Exit fullscreen mode
                         this.classList.remove('pseudo-fullscreen', 'mobile-fullscreen');
                         document.body.classList.remove('pseudo-fullscreen-active', 'mobile-fullscreen-active');
@@ -1483,7 +1483,7 @@
 
                         if ((this.classList.contains('pseudo-fullscreen') || this.classList.contains('mobile-fullscreen')) &&
                             x > rect.width - exitButtonSize - exitButtonMargin && y < exitButtonSize + exitButtonMargin) {
-                            
+
                             this.classList.remove('pseudo-fullscreen', 'mobile-fullscreen');
                             document.body.classList.remove('pseudo-fullscreen-active', 'mobile-fullscreen-active');
                             showNotification('已退出全螢幕模式', 'info');

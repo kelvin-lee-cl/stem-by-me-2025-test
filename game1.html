@@ -1254,7 +1254,7 @@
             const isChrome = /Chrome/.test(userAgent) && !/Edge/.test(userAgent);
             const isFirefox = /Firefox/.test(userAgent);
             const isMobile = /Mobi|Android|iPhone|iPad/.test(userAgent);
-            
+
             return {
                 isIOS,
                 isAndroid,
@@ -1308,14 +1308,14 @@
                 // Use enhanced mobile fullscreen for all mobile devices
                 gameContainer.classList.add('mobile-fullscreen');
                 document.body.classList.add('mobile-fullscreen-active');
-                
+
                 // Hide address bar on mobile (if possible)
                 if (device.isIOS || device.isAndroid) {
                     setTimeout(() => {
                         window.scrollTo(0, 1);
                     }, 100);
                 }
-                
+
                 showNotification('已進入全螢幕模式 (行動裝置優化)', 'success');
                 return;
             }
@@ -1460,7 +1460,7 @@
                     // Check if click is on the exit button area
                     if ((this.classList.contains('pseudo-fullscreen') || this.classList.contains('mobile-fullscreen')) &&
                         x > rect.width - exitButtonSize - exitButtonMargin && y < exitButtonSize + exitButtonMargin) {
-                        
+
                         // Exit fullscreen mode
                         this.classList.remove('pseudo-fullscreen', 'mobile-fullscreen');
                         document.body.classList.remove('pseudo-fullscreen-active', 'mobile-fullscreen-active');
@@ -1482,7 +1482,7 @@
 
                         if ((this.classList.contains('pseudo-fullscreen') || this.classList.contains('mobile-fullscreen')) &&
                             x > rect.width - exitButtonSize - exitButtonMargin && y < exitButtonSize + exitButtonMargin) {
-                            
+
                             this.classList.remove('pseudo-fullscreen', 'mobile-fullscreen');
                             document.body.classList.remove('pseudo-fullscreen-active', 'mobile-fullscreen-active');
                             showNotification('已退出全螢幕模式', 'info');
@@ -1547,10 +1547,11 @@
             }
             
             .notification-close:hover {
-                opacity: 0.7          }
+                opacity: 0.7;
+            }
+        `;
 
-
-            document.head.appendChild(style);
+        document.head.appendChild(style);
     </script>
     <script src="js/jquery-3.2.1.min.js"></script>
     <script src="js/popper.js"></script>
