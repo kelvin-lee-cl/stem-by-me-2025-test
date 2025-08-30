@@ -765,6 +765,81 @@
         .pseudo-fullscreen::before:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+
+        /* Enhanced mobile fullscreen styles */
+        .mobile-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: #000 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .mobile-fullscreen .gdevelop-game-frame {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            border-radius: 0 !important;
+        }
+
+        .mobile-fullscreen-active {
+            overflow: hidden !important;
+            position: fixed !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .mobile-fullscreen-active .game-header,
+        .mobile-fullscreen-active .game-instructions,
+        .mobile-fullscreen-active .game-controls,
+        .mobile-fullscreen-active .score-system,
+        .mobile-fullscreen-active .back-button {
+            display: none !important;
+        }
+
+        /* Enhanced exit button for mobile */
+        .mobile-fullscreen::after {
+            content: '✕';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10001;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .mobile-fullscreen::after:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Android Chrome specific optimizations */
+        @media screen and (max-width: 768px) {
+            .mobile-fullscreen::after {
+                top: 10px;
+                right: 10px;
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
@@ -1171,46 +1246,96 @@
             }, 5000);
         }
 
+        // Enhanced device detection function
+        function detectDevice() {
+            const userAgent = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
+            const isAndroid = /Android/.test(userAgent);
+            const isSafari = /Safari/.test(userAgent) && !/Chrome/.test(userAgent);
+            const isChrome = /Chrome/.test(userAgent) && !/Edge/.test(userAgent);
+            const isFirefox = /Firefox/.test(userAgent);
+            const isMobile = /Mobi|Android|iPhone|iPad/.test(userAgent);
+
+            return {
+                isIOS,
+                isAndroid,
+                isSafari,
+                isChrome,
+                isFirefox,
+                isMobile,
+                isIOSSafari: isIOS && isSafari,
+                isAndroidChrome: isAndroid && isChrome,
+                isMobileBrowser: isMobile && (isSafari || isChrome || isFirefox)
+            };
+        }
+
         // Game control functions
         function fullscreenGame() {
             const gameFrame = document.querySelector('.gdevelop-game-frame');
             const gameContainer = document.querySelector('.gdevelop-game-container');
+            const device = detectDevice();
 
-            // Check if it's iOS Safari
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+            // Check if we're already in mobile fullscreen mode
+            if (gameContainer.classList.contains('mobile-fullscreen')) {
+                // Exit mobile fullscreen
+                gameContainer.classList.remove('mobile-fullscreen');
+                document.body.classList.remove('mobile-fullscreen-active');
+                showNotification('已退出全螢幕模式', 'info');
+                return;
+            }
 
-            if (isIOS && isSafari) {
-                // iOS Safari doesn't support fullscreen API for iframes
-                // Provide pseudo-fullscreen experience
-                if (gameContainer.classList.contains('pseudo-fullscreen')) {
-                    // Exit pseudo-fullscreen
-                    gameContainer.classList.remove('pseudo-fullscreen');
-                    document.body.classList.remove('pseudo-fullscreen-active');
-                    showNotification('已退出全螢幕模式', 'info');
-                } else {
-                    // Enter pseudo-fullscreen
-                    gameContainer.classList.add('pseudo-fullscreen');
-                    document.body.classList.add('pseudo-fullscreen-active');
-                    showNotification('已進入全螢幕模式 (iOS 優化)', 'success');
-                }
-            } else {
-                // Standard fullscreen API for other browsers
-                try {
-                    if (gameFrame.requestFullscreen) {
+            // Check if we're in iOS Safari pseudo-fullscreen mode
+            if (gameContainer.classList.contains('pseudo-fullscreen')) {
+                // Exit pseudo-fullscreen
+                gameContainer.classList.remove('pseudo-fullscreen');
+                document.body.classList.remove('pseudo-fullscreen-active');
+                showNotification('已退出全螢幕模式', 'info');
+                return;
+            }
+
+            // For mobile devices, use enhanced fullscreen approach
+            if (device.isMobileBrowser) {
+                // Try standard fullscreen first for Android Chrome
+                if (device.isAndroidChrome && gameFrame.requestFullscreen) {
+                    try {
                         gameFrame.requestFullscreen();
-                    } else if (gameFrame.webkitRequestFullscreen) {
-                        gameFrame.webkitRequestFullscreen();
-                    } else if (gameFrame.msRequestFullscreen) {
-                        gameFrame.msRequestFullscreen();
-                    } else {
-                        // Fallback for browsers that don't support fullscreen
-                        showNotification('您的瀏覽器不支援全螢幕模式', 'warning');
+                        showNotification('已進入全螢幕模式', 'success');
+                        return;
+                    } catch (error) {
+                        console.log('Standard fullscreen failed, falling back to mobile fullscreen');
                     }
-                } catch (error) {
-                    console.error('Fullscreen error:', error);
-                    showNotification('全螢幕模式啟動失敗', 'error');
                 }
+
+                // Use enhanced mobile fullscreen for all mobile devices
+                gameContainer.classList.add('mobile-fullscreen');
+                document.body.classList.add('mobile-fullscreen-active');
+
+                // Hide address bar on mobile (if possible)
+                if (device.isIOS || device.isAndroid) {
+                    setTimeout(() => {
+                        window.scrollTo(0, 1);
+                    }, 100);
+                }
+
+                showNotification('已進入全螢幕模式 (行動裝置優化)', 'success');
+                return;
+            }
+
+            // For desktop browsers, use standard fullscreen API
+            try {
+                if (gameFrame.requestFullscreen) {
+                    gameFrame.requestFullscreen();
+                } else if (gameFrame.webkitRequestFullscreen) {
+                    gameFrame.webkitRequestFullscreen();
+                } else if (gameFrame.msRequestFullscreen) {
+                    gameFrame.msRequestFullscreen();
+                } else {
+                    // Fallback for browsers that don't support fullscreen
+                    showNotification('您的瀏覽器不支援全螢幕模式', 'warning');
+                }
+            } catch (error) {
+                console.error('Fullscreen error:', error);
+                showNotification('全螢幕模式啟動失敗', 'error');
             }
         }
 
@@ -1320,24 +1445,51 @@
                 }
             }, 30000); // Check every 30 seconds
 
-            // Setup pseudo-fullscreen exit functionality for iOS
+            // Setup enhanced fullscreen exit functionality for mobile devices
             const gameContainer = document.querySelector('.gdevelop-game-container');
             if (gameContainer) {
                 gameContainer.addEventListener('click', function (e) {
-                    // Check if click is on the pseudo-fullscreen exit button (::before pseudo-element)
                     const rect = this.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
+                    const device = detectDevice();
 
-                    // Exit button is positioned at top-right (20px from top and right)
-                    if (this.classList.contains('pseudo-fullscreen') &&
-                        x > rect.width - 60 && y < 60) {
-                        // Exit pseudo-fullscreen
-                        this.classList.remove('pseudo-fullscreen');
-                        document.body.classList.remove('pseudo-fullscreen-active');
+                    // Exit button is positioned at top-right
+                    const exitButtonSize = device.isMobile ? 60 : 60;
+                    const exitButtonMargin = device.isMobile ? 10 : 20;
+
+                    // Check if click is on the exit button area
+                    if ((this.classList.contains('pseudo-fullscreen') || this.classList.contains('mobile-fullscreen')) &&
+                        x > rect.width - exitButtonSize - exitButtonMargin && y < exitButtonSize + exitButtonMargin) {
+                        
+                        // Exit fullscreen mode
+                        this.classList.remove('pseudo-fullscreen', 'mobile-fullscreen');
+                        document.body.classList.remove('pseudo-fullscreen-active', 'mobile-fullscreen-active');
                         showNotification('已退出全螢幕模式', 'info');
                     }
                 });
+
+                // Add touch event support for better mobile interaction
+                if ('ontouchstart' in window) {
+                    gameContainer.addEventListener('touchend', function (e) {
+                        const rect = this.getBoundingClientRect();
+                        const touch = e.changedTouches[0];
+                        const x = touch.clientX - rect.left;
+                        const y = touch.clientY - rect.top;
+                        const device = detectDevice();
+
+                        const exitButtonSize = device.isMobile ? 60 : 60;
+                        const exitButtonMargin = device.isMobile ? 10 : 20;
+
+                        if ((this.classList.contains('pseudo-fullscreen') || this.classList.contains('mobile-fullscreen')) &&
+                            x > rect.width - exitButtonSize - exitButtonMargin && y < exitButtonSize + exitButtonMargin) {
+                            
+                            this.classList.remove('pseudo-fullscreen', 'mobile-fullscreen');
+                            document.body.classList.remove('pseudo-fullscreen-active', 'mobile-fullscreen-active');
+                            showNotification('已退出全螢幕模式', 'info');
+                        }
+                    });
+                }
             }
 
             gameFrame.addEventListener('load', function () {
