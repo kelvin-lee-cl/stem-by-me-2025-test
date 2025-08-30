@@ -63,6 +63,22 @@
             opacity: 0.9;
         }
 
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px 25px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-info h4 {
+            color: white;
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
         .game-content {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
@@ -722,6 +738,9 @@
         <div class="game-header">
             <h1 class="game-title">遊戲 6</h1>
             <p class="game-subtitle">歡迎來到第六個挑戰遊戲</p>
+            <div class="user-info" id="user-info">
+                <h4>👤 當前玩家: 載入中...</h4>
+            </div>
         </div>
 
         <div class="game-content">
@@ -1168,6 +1187,17 @@
             }
         }
 
+        // Update user info display
+        function updateUserInfo() {
+            const userInfoElement = document.getElementById('user-info');
+            if (userInfoElement) {
+                const currentUser = getUserId();
+                const playerName = getPlayerName();
+                userInfoElement.innerHTML = `<h4>👤 當前玩家: ${playerName}</h4>`;
+                console.log('✅ User info updated:', playerName);
+            }
+        }
+
         // Test score system function
         async function testScoreSystem() {
             // Simulate a game win with random score
@@ -1183,6 +1213,9 @@
 
             // Load saved scores
             loadScores();
+
+            // Update user info display
+            updateUserInfo();
 
             // Listen for messages from game
             window.addEventListener('message', handleGameMessage);
@@ -1248,11 +1281,11 @@
             }
             
             .notification-close:hover {
-                opacity: 0.7;
+                opacity: 
             }
 
 
-        `;
+ `;
         document.head.appendChild(style);
     </script>
     <script src="js/jquery-3.2.1.min.js"></script>
