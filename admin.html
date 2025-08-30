@@ -2560,7 +2560,7 @@
             </div>
 
             <!-- Admin Controls -->
-            
+
 
             <!-- User Management -->
             <div class="user-management">
@@ -3009,7 +3009,7 @@
         }
 
         function updateStatistics() {
-            const totalPlayers = new Set(allScores.map(score => score.playerName || score.userID || '匿名玩家')).size;
+            const totalPlayers = new Set(allScores.map(score => score.playerName || score.userID || '玩家')).size;
             const totalGames = allScores.length;
             const totalWins = allScores.filter(score => score.status === 'win').length;
             const avgScore = totalGames > 0 ? Math.round(allScores.reduce((sum, score) => sum + (score.score || 0), 0) / totalGames) : 0;
@@ -3893,7 +3893,7 @@
             let filteredScores = allScores.filter(score => {
                 const matchGame = !gameFilter || score.gameId === gameFilter;
                 const matchStatus = !statusFilter || score.status === statusFilter;
-                const playerName = score.playerName || score.userID || '匿名玩家';
+                const playerName = score.playerName || score.userID || '玩家';
                 const matchPlayer = !playerFilter || playerName.toLowerCase().includes(playerFilter);
                 return matchGame && matchStatus && matchPlayer;
             });
@@ -3936,7 +3936,7 @@
                     timestamp = 'N/A';
                 }
 
-                const playerName = score.playerName || score.userID || '匿名玩家';
+                const playerName = score.playerName || score.userID || '玩家';
                 tableHTML += `
                     <tr>
                         <td>${playerName}</td>
@@ -4162,7 +4162,7 @@
                     return timeDiff < 30 * 60 * 1000; // Last 30 minutes
                 });
 
-                const activeUsers = new Set(recentScores.map(score => score.playerName || score.userID || '匿名玩家')).size;
+                const activeUsers = new Set(recentScores.map(score => score.playerName || score.userID || '玩家')).size;
                 const recentGames = recentScores.length;
 
                 if (activeUsers > 0) {
@@ -4564,7 +4564,7 @@
                 let filteredScores = allScores.filter(score => {
                     const matchGame = !gameFilter || score.gameId === gameFilter;
                     const matchStatus = !statusFilter || score.status === statusFilter;
-                    const playerName = score.playerName || score.userID || '匿名玩家';
+                    const playerName = score.playerName || score.userID || '玩家';
                     const matchPlayer = !playerFilter || playerName.toLowerCase().includes(playerFilter);
                     return matchGame && matchStatus && matchPlayer;
                 });
@@ -4585,7 +4585,7 @@
                         timestamp = 'N/A';
                     }
 
-                    const playerName = score.playerName || score.userID || '匿名玩家';
+                    const playerName = score.playerName || score.userID || '玩家';
                     return {
                         '玩家名稱': playerName,
                         '遊戲': score.gameId ? `遊戲 ${score.gameId.replace('game', '')}` : '未知遊戲',
@@ -4684,7 +4684,7 @@
         function loadAdminStats() {
             try {
                 // Update total users
-                const uniqueUsers = new Set(allScores.map(score => score.playerName || score.userID || '匿名玩家')).size;
+                const uniqueUsers = new Set(allScores.map(score => score.playerName || score.userID || '玩家')).size;
                 document.getElementById('total-users').textContent = uniqueUsers;
 
                 // Update active users (last 30 minutes)
@@ -4693,11 +4693,11 @@
                     const timeDiff = Date.now() - scoreTime;
                     return timeDiff < 30 * 60 * 1000;
                 });
-                const activeUsers = new Set(recentScores.map(score => score.playerName || score.userID || '匿名玩家')).size;
+                const activeUsers = new Set(recentScores.map(score => score.playerName || score.userID || '玩家')).size;
                 document.getElementById('active-users').textContent = activeUsers;
 
                 // Update completed users (users who have won at least one game)
-                const usersWithWins = new Set(allScores.filter(score => score.status === 'win').map(score => score.playerName || score.userID || '匿名玩家')).size;
+                const usersWithWins = new Set(allScores.filter(score => score.status === 'win').map(score => score.playerName || score.userID || '玩家')).size;
                 document.getElementById('completed-users').textContent = usersWithWins;
 
                 // Update total score
@@ -4723,7 +4723,7 @@
                 // Get top 5 players by score
                 const playerScores = {};
                 allScores.forEach(score => {
-                    const playerName = score.playerName || score.userID || '匿名玩家';
+                    const playerName = score.playerName || score.userID || '玩家';
                     if (!playerScores[playerName]) {
                         playerScores[playerName] = {
                             totalScore: 0,
@@ -4749,7 +4749,7 @@
 
                     // Get player's latest game info for display
                     const playerLatestGame = allScores
-                        .filter(score => (score.playerName || score.userID || '匿名玩家') === playerName)
+                        .filter(score => (score.playerName || score.userID || '玩家') === playerName)
                         .sort((a, b) => b.timestamp - a.timestamp)[0];
 
                     const latestGameType = playerLatestGame ? (playerLatestGame.gameType || '未知遊戲類型') : '未知遊戲類型';
@@ -4961,9 +4961,9 @@
         // Export Users to Excel
         function exportUsersToExcel() {
             try {
-                const uniqueUsers = new Set(allScores.map(score => score.playerName || score.userID || '匿名玩家'));
+                const uniqueUsers = new Set(allScores.map(score => score.playerName || score.userID || '玩家'));
                 const userData = Array.from(uniqueUsers).map(userName => {
-                    const userScores = allScores.filter(score => (score.playerName || score.userID || '匿名玩家') === userName);
+                    const userScores = allScores.filter(score => (score.playerName || score.userID || '玩家') === userName);
                     const totalScore = userScores.reduce((sum, score) => sum + (score.score || 0), 0);
                     const winCount = userScores.filter(score => score.status === 'win').length;
                     const totalGames = userScores.length;
@@ -5196,7 +5196,7 @@
                     return;
                 }
 
-                const userScores = allScores.filter(score => (score.playerName || score.userID || '匿名玩家') === userId);
+                const userScores = allScores.filter(score => (score.playerName || score.userID || '玩家') === userId);
 
                 if (userScores.length === 0) {
                     alert('找不到該玩家');

@@ -45,7 +45,7 @@ async function uploadScoreToFirebase(gameInfo, score, status, gameTime = null) {
 
         // Create score data object with unified format
         const scoreData = {
-            playerName: gameInfo.playerName || '匿名玩家',
+            playerName: gameInfo.playerName || '玩家',
             userID: gameInfo.userID || 'unknown',
             gameId: gameInfo.gameId,
             score: score,
@@ -101,7 +101,7 @@ function getPlayerName() {
     if (window.loginSystem && window.loginSystem.getCurrentUser()) {
         return `玩家${window.loginSystem.getCurrentUser()}`;
     }
-    return '匿名玩家';
+    return '玩家';
 }
 
 // Get user score from Firebase
