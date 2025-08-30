@@ -294,13 +294,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Hide quiz section initially
     hideQuiz();
-    
+
     // Check if user has completed locations that support photo upload
     const imageUploadSection = document.getElementById('image-upload-section');
     if (imageUploadSection) {
         const completedLocations = getCompletedLocations();
         const hasUploadableLocations = completedLocations.some(location => ALLOWED_UPLOAD_CODES.includes(location));
-        
+
         if (hasUploadableLocations && window.loginSystem && window.loginSystem.isSignedIn()) {
             imageUploadSection.style.display = 'block';
             updateUploadSectionTitle();
@@ -1403,6 +1403,21 @@ async function checkPassword() { // This function now checks location codes
                 updateUploadSectionTitle(locationInfo.gameType);
             }
 
+            // Auto-close location list after successful verification (with delay for better UX)
+            setTimeout(() => {
+                if (progressContent && !progressContent.classList.contains('collapsed')) {
+                    progressContent.classList.add('collapsed');
+                    toggleIcon.textContent = '+';
+                    progressContent.style.maxHeight = '0';
+
+                    // Track progress section auto-collapsed
+                    trackEvent('progress_section_auto_collapsed', {
+                        action: 'successful_verification',
+                        location_code: currentLocation
+                    });
+                }
+            }, 2000); // 2 second delay to let user see the success message
+
             // Trigger location completed event for auto-sync
             window.dispatchEvent(new CustomEvent('locationCompleted', {
                 detail: {
@@ -1470,6 +1485,21 @@ async function checkPassword() { // This function now checks location codes
                     updateUploadSectionTitle(locationInfo.gameType);
                 }
             }
+
+            // Auto-close location list after successful verification (with delay for better UX)
+            setTimeout(() => {
+                if (progressContent && !progressContent.classList.contains('collapsed')) {
+                    progressContent.classList.add('collapsed');
+                    toggleIcon.textContent = '+';
+                    progressContent.style.maxHeight = '0';
+
+                    // Track progress section auto-collapsed
+                    trackEvent('progress_section_auto_collapsed', {
+                        action: 'successful_verification',
+                        location_code: currentLocation
+                    });
+                }
+            }, 2000); // 2 second delay to let user see the success message
 
             // Trigger location completed event for auto-sync
             window.dispatchEvent(new CustomEvent('locationCompleted', {
