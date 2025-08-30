@@ -1114,12 +1114,43 @@
         // Game control functions
         function fullscreenGame() {
             const gameFrame = document.querySelector('.gdevelop-game-frame');
-            if (gameFrame.requestFullscreen) {
-                gameFrame.requestFullscreen();
-            } else if (gameFrame.webkitRequestFullscreen) {
-                gameFrame.webkitRequestFullscreen();
-            } else if (gameFrame.msRequestFullscreen) {
-                gameFrame.msRequestFullscreen();
+            const gameContainer = document.querySelector('.gdevelop-game-container');
+            
+            // Check if it's iOS Safari
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+            
+            if (isIOS && isSafari) {
+                // iOS Safari doesn't support fullscreen API for iframes
+                // Provide pseudo-fullscreen experience
+                if (gameContainer.classList.contains('pseudo-fullscreen')) {
+                    // Exit pseudo-fullscreen
+                    gameContainer.classList.remove('pseudo-fullscreen');
+                    document.body.classList.remove('pseudo-fullscreen-active');
+                    showNotification('已退出全螢幕模式', 'info');
+                } else {
+                    // Enter pseudo-fullscreen
+                    gameContainer.classList.add('pseudo-fullscreen');
+                    document.body.classList.add('pseudo-fullscreen-active');
+                    showNotification('已進入全螢幕模式 (iOS 優化)', 'success');
+                }
+            } else {
+                // Standard fullscreen API for other browsers
+                try {
+                    if (gameFrame.requestFullscreen) {
+                        gameFrame.requestFullscreen();
+                    } else if (gameFrame.webkitRequestFullscreen) {
+                        gameFrame.webkitRequestFullscreen();
+                    } else if (gameFrame.msRequestFullscreen) {
+                        gameFrame.msRequestFullscreen();
+                    } else {
+                        // Fallback for browsers that don't support fullscreen
+                        showNotification('您的瀏覽器不支援全螢幕模式', 'warning');
+                    }
+                } catch (error) {
+                    console.error('Fullscreen error:', error);
+                    showNotification('全螢幕模式啟動失敗', 'error');
+                }
             }
         }
 

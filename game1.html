@@ -705,6 +705,65 @@
                 font-size: 0.7rem;
             }
         }
+
+        /* iOS Safari Pseudo-Fullscreen Styles */
+        .pseudo-fullscreen {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 9999 !important;
+            background: #000 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .pseudo-fullscreen .gdevelop-game-frame {
+            width: 100% !important;
+            height: 100% !important;
+            border: none !important;
+            border-radius: 0 !important;
+        }
+
+        .pseudo-fullscreen-active {
+            overflow: hidden !important;
+        }
+
+        .pseudo-fullscreen-active .game-header,
+        .pseudo-fullscreen-active .game-instructions,
+        .pseudo-fullscreen-active .game-controls,
+        .pseudo-fullscreen-active .score-system,
+        .pseudo-fullscreen-active .back-button {
+            display: none !important;
+        }
+
+        /* Exit pseudo-fullscreen button */
+        .pseudo-fullscreen::before {
+            content: '✕';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            z-index: 10000;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .pseudo-fullscreen::before:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 
@@ -1114,12 +1173,43 @@
         // Game control functions
         function fullscreenGame() {
             const gameFrame = document.querySelector('.gdevelop-game-frame');
-            if (gameFrame.requestFullscreen) {
-                gameFrame.requestFullscreen();
-            } else if (gameFrame.webkitRequestFullscreen) {
-                gameFrame.webkitRequestFullscreen();
-            } else if (gameFrame.msRequestFullscreen) {
-                gameFrame.msRequestFullscreen();
+            const gameContainer = document.querySelector('.gdevelop-game-container');
+            
+            // Check if it's iOS Safari
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+            const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+            
+            if (isIOS && isSafari) {
+                // iOS Safari doesn't support fullscreen API for iframes
+                // Provide pseudo-fullscreen experience
+                if (gameContainer.classList.contains('pseudo-fullscreen')) {
+                    // Exit pseudo-fullscreen
+                    gameContainer.classList.remove('pseudo-fullscreen');
+                    document.body.classList.remove('pseudo-fullscreen-active');
+                    showNotification('已退出全螢幕模式', 'info');
+                } else {
+                    // Enter pseudo-fullscreen
+                    gameContainer.classList.add('pseudo-fullscreen');
+                    document.body.classList.add('pseudo-fullscreen-active');
+                    showNotification('已進入全螢幕模式 (iOS 優化)', 'success');
+                }
+            } else {
+                // Standard fullscreen API for other browsers
+                try {
+                    if (gameFrame.requestFullscreen) {
+                        gameFrame.requestFullscreen();
+                    } else if (gameFrame.webkitRequestFullscreen) {
+                        gameFrame.webkitRequestFullscreen();
+                    } else if (gameFrame.msRequestFullscreen) {
+                        gameFrame.msRequestFullscreen();
+                    } else {
+                        // Fallback for browsers that don't support fullscreen
+                        showNotification('您的瀏覽器不支援全螢幕模式', 'warning');
+                    }
+                } catch (error) {
+                    console.error('Fullscreen error:', error);
+                    showNotification('全螢幕模式啟動失敗', 'error');
+                }
             }
         }
 
@@ -1222,7 +1312,25 @@
             // Setup fullscreen listeners
             setupFullscreenListeners();
 
-
+            // Setup pseudo-fullscreen exit functionality for iOS
+            const gameContainer = document.querySelector('.gdevelop-game-container');
+            if (gameContainer) {
+                gameContainer.addEventListener('click', function(e) {
+                    // Check if click is on the pseudo-fullscreen exit button (::before pseudo-element)
+                    const rect = this.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    // Exit button is positioned at top-right (20px from top and right)
+                    if (this.classList.contains('pseudo-fullscreen') && 
+                        x > rect.width - 60 && y < 60) {
+                        // Exit pseudo-fullscreen
+                        this.classList.remove('pseudo-fullscreen');
+                        document.body.classList.remove('pseudo-fullscreen-active');
+                        showNotification('已退出全螢幕模式', 'info');
+                    }
+                });
+            }
 
             gameFrame.addEventListener('load', function () {
                 console.log('GDevelop game loaded successfully');
