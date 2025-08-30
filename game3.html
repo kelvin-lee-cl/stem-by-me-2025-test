@@ -1115,11 +1115,11 @@
         function fullscreenGame() {
             const gameFrame = document.querySelector('.gdevelop-game-frame');
             const gameContainer = document.querySelector('.gdevelop-game-container');
-            
+
             // Check if it's iOS Safari
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-            
+
             if (isIOS && isSafari) {
                 // iOS Safari doesn't support fullscreen API for iframes
                 // Provide pseudo-fullscreen experience
@@ -1252,6 +1252,13 @@
 
             // Setup fullscreen listeners
             setupFullscreenListeners();
+
+            // Set up periodic user persistence check (especially important for mobile devices)
+            setInterval(() => {
+                if (window.loginSystem && window.loginSystem.isSignedIn() && window.loginSystem.ensureUserPersistence) {
+                    window.loginSystem.ensureUserPersistence();
+                }
+            }, 30000); // Check every 30 seconds
 
 
 

@@ -1313,6 +1313,13 @@
             // Setup fullscreen listeners
             setupFullscreenListeners();
 
+            // Set up periodic user persistence check (especially important for mobile devices)
+            setInterval(() => {
+                if (window.loginSystem && window.loginSystem.isSignedIn() && window.loginSystem.ensureUserPersistence) {
+                    window.loginSystem.ensureUserPersistence();
+                }
+            }, 30000); // Check every 30 seconds
+
             // Setup pseudo-fullscreen exit functionality for iOS
             const gameContainer = document.querySelector('.gdevelop-game-container');
             if (gameContainer) {

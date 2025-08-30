@@ -98,9 +98,29 @@ async function uploadScoreToFirebase(gameInfo, score, status, gameTime = null) {
 
 // Get player name from checkpiont.html login system
 function getPlayerName() {
-    if (window.loginSystem && window.loginSystem.getCurrentUser()) {
-        return `玩家${window.loginSystem.getCurrentUser()}`;
+    // First try to get from login system (most reliable)
+    if (window.loginSystem && window.loginSystem.isSignedIn() && window.loginSystem.getCurrentUser()) {
+        const loginSystemUserId = window.loginSystem.getCurrentUser();
+        console.log(`✅ Using player name from login system: 玩家${loginSystemUserId}`);
+        return `玩家${loginSystemUserId}`;
     }
+
+    // Second try to get from checkpiont.html system localStorage
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+        console.log(`✅ Using player name from localStorage currentUser: 玩家${currentUser}`);
+        return `玩家${currentUser}`;
+    }
+
+    // Third try to get from legacy localStorage
+    const playerName = localStorage.getItem('playerName');
+    if (playerName) {
+        console.log(`⚠️ Using legacy player name from localStorage: ${playerName}`);
+        return playerName;
+    }
+
+    // Last resort: generate a default player name (should rarely happen)
+    console.warn(`⚠️ No player name found, using default: 玩家`);
     return '玩家';
 }
 
@@ -145,20 +165,31 @@ window.getUserScoreFromFirebase = getUserScoreFromFirebase;
 
 // Get user ID from checkpiont.html login system
 function getUserId() {
-    // First try to get from checkpiont.html system
+    // First try to get from login system (most reliable)
+    if (window.loginSystem && window.loginSystem.isSignedIn() && window.loginSystem.getCurrentUser()) {
+        const loginSystemUserId = window.loginSystem.getCurrentUser();
+        console.log(`✅ Using user ID from login system: ${loginSystemUserId}`);
+        return loginSystemUserId;
+    }
+
+    // Second try to get from checkpiont.html system localStorage
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
+        console.log(`✅ Using user ID from localStorage currentUser: ${currentUser}`);
         return currentUser;
     }
 
-    // Fallback to localStorage
+    // Third try to get from legacy localStorage
     const userId = localStorage.getItem('userId');
     if (userId) {
+        console.log(`⚠️ Using legacy user ID from localStorage: ${userId}`);
         return userId;
     }
 
-    // Last resort: generate a random user ID
+    // Last resort: generate a random user ID (should rarely happen)
     const randomId = Math.floor(Math.random() * 1000) + 100;
-    localStorage.setItem('userId', randomId.toString());
-    return randomId.toString();
+    const generatedUserId = randomId.toString();
+    console.warn(`⚠️ No user ID found, generating random ID: ${generatedUserId}`);
+    localStorage.setItem('userId', generatedUserId);
+    return generatedUserId;
 }

@@ -387,6 +387,7 @@ window.loginSystem = {
     updateUserDisplay,
     restoreLoginState,
     clearLoginState,
+    ensureUserPersistence,
     getCurrentUser: () => currentUser,
     isSignedIn: () => isSignedIn,
     getAllUsers: () => allUsers,
@@ -446,6 +447,23 @@ function restoreLoginState() {
     } catch (error) {
         console.error('Error restoring login state:', error);
         clearLoginState();
+        return false;
+    }
+}
+
+// Function to ensure user ID persistence (especially for mobile devices)
+function ensureUserPersistence() {
+    try {
+        if (currentUser && isSignedIn) {
+            // Double-check that the login state is properly stored
+            localStorage.setItem('currentUser', currentUser);
+            localStorage.setItem('isSignedIn', 'true');
+            console.log(`✅ Ensured user persistence for: ${currentUser}`);
+            return true;
+        }
+        return false;
+    } catch (error) {
+        console.error('Error ensuring user persistence:', error);
         return false;
     }
 }

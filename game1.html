@@ -1174,11 +1174,11 @@
         function fullscreenGame() {
             const gameFrame = document.querySelector('.gdevelop-game-frame');
             const gameContainer = document.querySelector('.gdevelop-game-container');
-            
+
             // Check if it's iOS Safari
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
             const isSafari = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
-            
+
             if (isIOS && isSafari) {
                 // iOS Safari doesn't support fullscreen API for iframes
                 // Provide pseudo-fullscreen experience
@@ -1312,17 +1312,24 @@
             // Setup fullscreen listeners
             setupFullscreenListeners();
 
+            // Set up periodic user persistence check (especially important for mobile devices)
+            setInterval(() => {
+                if (window.loginSystem && window.loginSystem.isSignedIn() && window.loginSystem.ensureUserPersistence) {
+                    window.loginSystem.ensureUserPersistence();
+                }
+            }, 30000); // Check every 30 seconds
+
             // Setup pseudo-fullscreen exit functionality for iOS
             const gameContainer = document.querySelector('.gdevelop-game-container');
             if (gameContainer) {
-                gameContainer.addEventListener('click', function(e) {
+                gameContainer.addEventListener('click', function (e) {
                     // Check if click is on the pseudo-fullscreen exit button (::before pseudo-element)
                     const rect = this.getBoundingClientRect();
                     const x = e.clientX - rect.left;
                     const y = e.clientY - rect.top;
-                    
+
                     // Exit button is positioned at top-right (20px from top and right)
-                    if (this.classList.contains('pseudo-fullscreen') && 
+                    if (this.classList.contains('pseudo-fullscreen') &&
                         x > rect.width - 60 && y < 60) {
                         // Exit pseudo-fullscreen
                         this.classList.remove('pseudo-fullscreen');

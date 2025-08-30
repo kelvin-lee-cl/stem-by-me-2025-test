@@ -323,6 +323,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Test Firebase score retrieval
     setTimeout(testFirebaseScoreRetrieval, 2000);
+
+    // Set up periodic user persistence check (especially important for mobile devices)
+    setInterval(() => {
+        if (window.loginSystem && window.loginSystem.isSignedIn() && window.loginSystem.ensureUserPersistence) {
+            window.loginSystem.ensureUserPersistence();
+        }
+    }, 30000); // Check every 30 seconds
 });
 
 
@@ -2239,7 +2246,9 @@ function resetProgress() {
         return;
     }
 
-    if (confirm(`您確定要重置玩家${window.loginSystem.getCurrentUser()}的所有進度嗎？此操作無法撤銷。`)) {
+    const currentUserId = window.loginSystem.getCurrentUser();
+
+    if (confirm(`您確定要重置玩家${currentUserId}的所有進度嗎？此操作無法撤銷。`)) {
         const emptyLocations = [];
         const zeroScore = 0;
 
@@ -2248,6 +2257,19 @@ function resetProgress() {
             window.loginSystem.setCompletedLocations(emptyLocations);
             window.loginSystem.setTotalScore(zeroScore);
             window.loginSystem.saveCurrentUserData();
+        }
+
+        // Ensure login state is maintained after reset
+        // This is especially important for mobile devices
+        if (currentUserId) {
+            localStorage.setItem('currentUser', currentUserId);
+            localStorage.setItem('isSignedIn', 'true');
+            console.log(`✅ Maintained login state for user ${currentUserId} after reset`);
+
+            // Also call the login system's persistence function
+            if (window.loginSystem && window.loginSystem.ensureUserPersistence) {
+                window.loginSystem.ensureUserPersistence();
+            }
         }
 
         updateProgressDisplay();
@@ -2267,11 +2289,11 @@ function resetProgress() {
             imageUploadSection.style.display = 'none';
         }
 
-        showResult(`玩家${window.loginSystem.getCurrentUser()}的進度已重置！`, 'info');
+        showResult(`玩家${currentUserId}的進度已重置！`, 'info');
 
         // Track progress reset
         trackEvent('progress_reset', {
-            user_id: window.loginSystem.getCurrentUser()
+            user_id: currentUserId
         });
     }
 }
