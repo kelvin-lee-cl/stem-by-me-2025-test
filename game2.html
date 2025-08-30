@@ -849,7 +849,7 @@
                 height: -webkit-fill-available !important;
                 min-height: -webkit-fill-available !important;
             }
-            
+
             .mobile-fullscreen .gdevelop-game-frame {
                 /* Ensure iframe fills Safari viewport properly */
                 width: 100% !important;
@@ -857,7 +857,7 @@
                 height: -webkit-fill-available !important;
                 min-height: -webkit-fill-available !important;
             }
-            
+
             .mobile-fullscreen-active {
                 /* Prevent Safari from showing address bar */
                 overflow: hidden !important;
@@ -910,8 +910,8 @@
     <!-- 固定分數面板 -->
     <div class="game-container">
         <div class="game-header">
-            <h1 class="game-title">遊戲 1</h1>
-            <p class="game-subtitle">歡迎來到第一個挑戰遊戲</p>
+            <h1 class="game-title">遊戲 2</h1>
+            <p class="game-subtitle">歡迎來到第二個挑戰遊戲</p>
             <div class="user-info" id="user-info">
                 <h4>👤 當前玩家: 載入中...</h4>
             </div>
@@ -1343,7 +1343,7 @@
                     // iOS Safari doesn't support iframe fullscreen, use enhanced mobile fullscreen
                     gameContainer.classList.add('mobile-fullscreen');
                     document.body.classList.add('mobile-fullscreen-active');
-                    
+
                     // Try to hide address bar and status bar
                     setTimeout(() => {
                         window.scrollTo(0, 1);
@@ -1356,11 +1356,11 @@
                             }
                         }
                     }, 100);
-                    
+
                     showNotification('已進入全螢幕模式 (Safari 優化)', 'success');
                     return;
                 }
-                
+
                 // Try standard fullscreen first for Android Chrome
                 if (device.isAndroidChrome && gameFrame.requestFullscreen) {
                     try {

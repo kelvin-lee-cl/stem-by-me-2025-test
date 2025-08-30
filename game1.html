@@ -849,7 +849,7 @@
                 height: -webkit-fill-available !important;
                 min-height: -webkit-fill-available !important;
             }
-            
+
             .mobile-fullscreen .gdevelop-game-frame {
                 /* Ensure iframe fills Safari viewport properly */
                 width: 100% !important;
@@ -857,7 +857,7 @@
                 height: -webkit-fill-available !important;
                 min-height: -webkit-fill-available !important;
             }
-            
+
             .mobile-fullscreen-active {
                 /* Prevent Safari from showing address bar */
                 overflow: hidden !important;
@@ -1343,7 +1343,7 @@
                     // iOS Safari doesn't support iframe fullscreen, use enhanced mobile fullscreen
                     gameContainer.classList.add('mobile-fullscreen');
                     document.body.classList.add('mobile-fullscreen-active');
-                    
+
                     // Try to hide address bar and status bar
                     setTimeout(() => {
                         window.scrollTo(0, 1);
@@ -1356,11 +1356,11 @@
                             }
                         }
                     }, 100);
-                    
+
                     showNotification('已進入全螢幕模式 (Safari 優化)', 'success');
                     return;
                 }
-                
+
                 // Try standard fullscreen first for Android Chrome
                 if (device.isAndroidChrome && gameFrame.requestFullscreen) {
                     try {
