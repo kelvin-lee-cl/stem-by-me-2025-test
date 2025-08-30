@@ -839,6 +839,47 @@
                 font-size: 20px;
             }
         }
+
+        /* Safari-specific optimizations */
+        @supports (-webkit-touch-callout: none) {
+            .mobile-fullscreen {
+                /* Safari-specific viewport handling */
+                width: 100vw !important;
+                height: 100vh !important;
+                height: -webkit-fill-available !important;
+                min-height: -webkit-fill-available !important;
+            }
+            
+            .mobile-fullscreen .gdevelop-game-frame {
+                /* Ensure iframe fills Safari viewport properly */
+                width: 100% !important;
+                height: 100% !important;
+                height: -webkit-fill-available !important;
+                min-height: -webkit-fill-available !important;
+            }
+            
+            .mobile-fullscreen-active {
+                /* Prevent Safari from showing address bar */
+                overflow: hidden !important;
+                position: fixed !important;
+                width: 100% !important;
+                height: 100% !important;
+                height: -webkit-fill-available !important;
+                min-height: -webkit-fill-available !important;
+            }
+        }
+
+        /* iOS Safari specific optimizations */
+        @media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+            .mobile-fullscreen::after {
+                /* Larger touch target for iOS */
+                top: 15px;
+                right: 15px;
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 
@@ -1254,6 +1295,7 @@
             const isChrome = /Chrome/.test(userAgent) && !/Edge/.test(userAgent);
             const isFirefox = /Firefox/.test(userAgent);
             const isMobile = /Mobi|Android|iPhone|iPad/.test(userAgent);
+            const isStandalone = window.navigator.standalone === true;
 
             return {
                 isIOS,
@@ -1264,7 +1306,9 @@
                 isMobile,
                 isIOSSafari: isIOS && isSafari,
                 isAndroidChrome: isAndroid && isChrome,
-                isMobileBrowser: isMobile && (isSafari || isChrome || isFirefox)
+                isMobileBrowser: isMobile && (isSafari || isChrome || isFirefox),
+                isStandalone,
+                isMobileSafari: isIOS && isSafari && isMobile
             };
         }
 
@@ -1294,6 +1338,29 @@
 
             // For mobile devices, use enhanced fullscreen approach
             if (device.isMobileBrowser) {
+                // Special handling for mobile Safari
+                if (device.isMobileSafari) {
+                    // iOS Safari doesn't support iframe fullscreen, use enhanced mobile fullscreen
+                    gameContainer.classList.add('mobile-fullscreen');
+                    document.body.classList.add('mobile-fullscreen-active');
+                    
+                    // Try to hide address bar and status bar
+                    setTimeout(() => {
+                        window.scrollTo(0, 1);
+                        // Additional Safari-specific optimizations
+                        if (document.documentElement.requestFullscreen) {
+                            try {
+                                document.documentElement.requestFullscreen();
+                            } catch (e) {
+                                console.log('Safari fullscreen request failed, using mobile fullscreen');
+                            }
+                        }
+                    }, 100);
+                    
+                    showNotification('已進入全螢幕模式 (Safari 優化)', 'success');
+                    return;
+                }
+                
                 // Try standard fullscreen first for Android Chrome
                 if (device.isAndroidChrome && gameFrame.requestFullscreen) {
                     try {
@@ -1305,7 +1372,7 @@
                     }
                 }
 
-                // Use enhanced mobile fullscreen for all mobile devices
+                // Use enhanced mobile fullscreen for all other mobile devices
                 gameContainer.classList.add('mobile-fullscreen');
                 document.body.classList.add('mobile-fullscreen-active');
 

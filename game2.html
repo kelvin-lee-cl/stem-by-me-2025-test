@@ -839,6 +839,47 @@
                 font-size: 20px;
             }
         }
+
+        /* Safari-specific optimizations */
+        @supports (-webkit-touch-callout: none) {
+            .mobile-fullscreen {
+                /* Safari-specific viewport handling */
+                width: 100vw !important;
+                height: 100vh !important;
+                height: -webkit-fill-available !important;
+                min-height: -webkit-fill-available !important;
+            }
+            
+            .mobile-fullscreen .gdevelop-game-frame {
+                /* Ensure iframe fills Safari viewport properly */
+                width: 100% !important;
+                height: 100% !important;
+                height: -webkit-fill-available !important;
+                min-height: -webkit-fill-available !important;
+            }
+            
+            .mobile-fullscreen-active {
+                /* Prevent Safari from showing address bar */
+                overflow: hidden !important;
+                position: fixed !important;
+                width: 100% !important;
+                height: 100% !important;
+                height: -webkit-fill-available !important;
+                min-height: -webkit-fill-available !important;
+            }
+        }
+
+        /* iOS Safari specific optimizations */
+        @media screen and (max-width: 768px) and (-webkit-min-device-pixel-ratio: 2) {
+            .mobile-fullscreen::after {
+                /* Larger touch target for iOS */
+                top: 15px;
+                right: 15px;
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+            }
+        }
     </style>
 </head>
 
@@ -869,8 +910,8 @@
     <!-- 固定分數面板 -->
     <div class="game-container">
         <div class="game-header">
-            <h1 class="game-title">遊戲 2</h1>
-            <p class="game-subtitle">歡迎來到第二個挑戰遊戲</p>
+            <h1 class="game-title">遊戲 1</h1>
+            <p class="game-subtitle">歡迎來到第一個挑戰遊戲</p>
             <div class="user-info" id="user-info">
                 <h4>👤 當前玩家: 載入中...</h4>
             </div>
@@ -897,7 +938,7 @@
             <div class="gdevelop-game-wrapper">
                 <div class="gdevelop-game-container">
                     <!-- Option 1: Embed GDevelop HTML5 Export -->
-                    <iframe class="gdevelop-game-frame" src="games/game2/index.html" title="GDevelop Game 1"
+                    <iframe class="gdevelop-game-frame" src="games/game2/index.html" title="GDevelop Game 2"
                         allowfullscreen>
                     </iframe>
 
@@ -976,14 +1017,14 @@
         async function sendScoreToFirebase(score, status, gameTime = null) {
             try {
                 const gameInfo = {
-                    gameId: 'game2',
-                    gameName: '遊戲 2',
+                    gameId: 'game1',
+                    gameName: '遊戲 1',
                     gameType: '開發者遊戲挑戰',
-                    gameDescription: '開發者挑戰遊戲第二關',
-                    locationCode: 'P9M8',
-                    locationName: '鴨仔船附近',
-                    locationDescription: '開發者遊戲挑戰第二關',
-                    locationAddress: '灣仔海濱',
+                    gameDescription: '開發者挑戰遊戲第一關',
+                    locationCode: 'T7B4',
+                    locationName: '浸信會愛羣社會服務處3樓',
+                    locationDescription: '開發者遊戲挑戰第一關',
+                    locationAddress: '灣仔軒尼斯道15號',
                     locationCategory: 'entertainment',
                     coordinates: { lat: 22.2783, lng: 114.1747 },
                     playerName: getPlayerName(),
@@ -1011,8 +1052,8 @@
 
         // Load scores from localStorage
         function loadScores() {
-            const savedTotalScore = localStorage.getItem('game2_totalScore');
-            const savedScoreHistory = localStorage.getItem('game2_scoreHistory');
+            const savedTotalScore = localStorage.getItem('game1_totalScore');
+            const savedScoreHistory = localStorage.getItem('game1_scoreHistory');
 
             if (savedTotalScore && totalScoreElement) {
                 totalScore = parseInt(savedTotalScore);
@@ -1027,8 +1068,8 @@
 
         // Save scores to localStorage
         function saveScores() {
-            localStorage.setItem('game2_totalScore', totalScore.toString());
-            localStorage.setItem('game2_scoreHistory', JSON.stringify(scoreHistory));
+            localStorage.setItem('game1_totalScore', totalScore.toString());
+            localStorage.setItem('game1_scoreHistory', JSON.stringify(scoreHistory));
         }
 
         // Update score display with animation
@@ -1254,6 +1295,7 @@
             const isChrome = /Chrome/.test(userAgent) && !/Edge/.test(userAgent);
             const isFirefox = /Firefox/.test(userAgent);
             const isMobile = /Mobi|Android|iPhone|iPad/.test(userAgent);
+            const isStandalone = window.navigator.standalone === true;
 
             return {
                 isIOS,
@@ -1264,7 +1306,9 @@
                 isMobile,
                 isIOSSafari: isIOS && isSafari,
                 isAndroidChrome: isAndroid && isChrome,
-                isMobileBrowser: isMobile && (isSafari || isChrome || isFirefox)
+                isMobileBrowser: isMobile && (isSafari || isChrome || isFirefox),
+                isStandalone,
+                isMobileSafari: isIOS && isSafari && isMobile
             };
         }
 
@@ -1294,6 +1338,29 @@
 
             // For mobile devices, use enhanced fullscreen approach
             if (device.isMobileBrowser) {
+                // Special handling for mobile Safari
+                if (device.isMobileSafari) {
+                    // iOS Safari doesn't support iframe fullscreen, use enhanced mobile fullscreen
+                    gameContainer.classList.add('mobile-fullscreen');
+                    document.body.classList.add('mobile-fullscreen-active');
+                    
+                    // Try to hide address bar and status bar
+                    setTimeout(() => {
+                        window.scrollTo(0, 1);
+                        // Additional Safari-specific optimizations
+                        if (document.documentElement.requestFullscreen) {
+                            try {
+                                document.documentElement.requestFullscreen();
+                            } catch (e) {
+                                console.log('Safari fullscreen request failed, using mobile fullscreen');
+                            }
+                        }
+                    }, 100);
+                    
+                    showNotification('已進入全螢幕模式 (Safari 優化)', 'success');
+                    return;
+                }
+                
                 // Try standard fullscreen first for Android Chrome
                 if (device.isAndroidChrome && gameFrame.requestFullscreen) {
                     try {
@@ -1305,7 +1372,7 @@
                     }
                 }
 
-                // Use enhanced mobile fullscreen for all mobile devices
+                // Use enhanced mobile fullscreen for all other mobile devices
                 gameContainer.classList.add('mobile-fullscreen');
                 document.body.classList.add('mobile-fullscreen-active');
 
@@ -1547,11 +1614,10 @@
             }
             
             .notification-close:hover {
-                opacity: 
+                opacity: 0.7;
             }
+        `;
 
-
- `;
         document.head.appendChild(style);
     </script>
     <script src="js/jquery-3.2.1.min.js"></script>
