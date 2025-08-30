@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>STEM by Me 遊戲頁面 - 2024</title>
     <style>
         /* ===== RESET & BASE STYLES ===== */
@@ -14,11 +14,13 @@
         }
 
         body {
-            font-family: 'Microsoft JhengHei', 'PingFang TC', 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f8f9fa;
             min-height: 100vh;
             color: #333;
             line-height: 1.6;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
@@ -30,26 +32,25 @@
         /* ===== HEADER SECTION ===== */
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            margin-bottom: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
         }
 
         .header h1 {
-            color: #2c3e50;
-            font-size: 2.8em;
-            margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-            font-weight: 700;
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .header p {
-            color: #7f8c8d;
-            font-size: 1.2em;
-            font-weight: 300;
+            color: #666;
+            font-size: 1rem;
+            font-weight: 400;
         }
 
         .back-to-login {
@@ -77,13 +78,12 @@
 
         /* ===== CARD STYLES ===== */
         .card {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
         }
 
         .card h2,
@@ -124,36 +124,39 @@
         }
 
         #password-input {
-            padding: 15px 20px;
-            border: 2px solid #e1e8ed;
-            border-radius: 12px;
-            font-size: 18px;
-            width: 250px;
+            padding: 12px 16px;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 200px;
             text-align: center;
             text-transform: uppercase;
-            transition: all 0.3s ease;
-            background: #f8f9fa;
+            transition: all 0.2s ease;
+            background: white;
+            -webkit-appearance: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #password-input:focus {
             outline: none;
-            border-color: #27ae60;
+            border-color: #007aff;
             background: white;
-            box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.1);
+            box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 12px 20px;
             border: none;
-            border-radius: 12px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            transition: all 0.2s ease;
             text-decoration: none;
             display: inline-block;
             position: relative;
-            overflow: hidden;
+            -webkit-appearance: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .btn:disabled {
@@ -225,25 +228,25 @@
         }
 
         .btn-success {
-            background: linear-gradient(135deg, #27ae60, #229954);
+            background: #34c759;
             color: white;
         }
 
         .btn-success:hover {
-            background: linear-gradient(135deg, #229954, #1e8449);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            background: #30d158;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(52, 199, 89, 0.3);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, #3498db, #2980b9);
+            background: #007aff;
             color: white;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, #2980b9, #1f5f8b);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+            background: #0056cc;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
         }
 
         .btn-danger {
@@ -1082,11 +1085,11 @@
             }
 
             .header h1 {
-                font-size: 2.2em;
+                font-size: 1.6rem;
             }
 
             .card {
-                padding: 20px;
+                padding: 15px;
             }
 
             .password-input-group {
@@ -1095,7 +1098,7 @@
 
             #password-input {
                 width: 100%;
-                max-width: 300px;
+                max-width: 280px;
             }
 
             #progress-grid {
@@ -1132,7 +1135,7 @@
             }
 
             .upload-area {
-                padding: 30px 20px;
+                padding: 20px 15px;
             }
 
             .upload-buttons {
@@ -1141,6 +1144,31 @@
 
             .upload-buttons .btn {
                 width: 100%;
+            }
+        }
+
+        /* iPhone 優化 */
+        @supports (-webkit-touch-callout: none) {
+            .btn {
+                -webkit-tap-highlight-color: transparent;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                user-select: none;
+            }
+
+            #password-input {
+                -webkit-tap-highlight-color: transparent;
+                -webkit-appearance: none;
+            }
+        }
+
+        /* 安全區域支援 */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-left: max(15px, env(safe-area-inset-left));
+                padding-right: max(15px, env(safe-area-inset-right));
+                padding-top: max(15px, env(safe-area-inset-top));
+                padding-bottom: max(15px, env(safe-area-inset-bottom));
             }
         }
 
@@ -2169,184 +2197,6 @@
             </div>
         </div>
 
-        <!-- ===== PHOTO UPLOAD RESTRICTION TOGGLE ===== -->
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button class="upload-restriction-toggle" onclick="toggleUploadRestriction()">
-                📸 顯示照片上傳限制說明
-            </button>
-        </div>
-
-        <!-- ===== PHOTO UPLOAD RESTRICTION INFO ===== -->
-        <div class="upload-restriction-section" id="upload-restriction-section">
-            <h2>📸 照片上傳限制說明</h2>
-            <p>只有特定的關卡代碼才支援照片上傳功能。請查看以下列表了解哪些位置可以上傳照片：</p>
-
-            <div class="restriction-grid">
-                <div class="restriction-section">
-                    <h3>✅ 支援照片上傳的位置</h3>
-                    <div class="location-item allowed">
-                        <span class="location-code">L8Q2</span>
-                        <div class="location-name">灣仔會展</div>
-                        <div class="location-details">遊戲類型：闖關點 | 分數：80分</div>
-                        <div class="location-details">地址：灣仔港灣道1號</div>
-                        <div class="upload-status allowed">✅ 支援照片上傳</div>
-                    </div>
-
-                    <div class="location-item allowed">
-                        <span class="location-code">P9M8</span>
-                        <div class="location-name">鴨仔船附近</div>
-                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
-                        <div class="location-details">地址：灣仔海濱</div>
-                        <div class="upload-status allowed">✅ 支援照片上傳</div>
-                    </div>
-
-                    <div class="location-item allowed">
-                        <span class="location-code">S2N6</span>
-                        <div class="location-name">海濱站</div>
-                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
-                        <div class="location-details">地址：灣仔海濱</div>
-                        <div class="upload-status allowed">✅ 支援照片上傳</div>
-                    </div>
-
-                    <div class="location-item allowed">
-                        <span class="location-code">H4G8</span>
-                        <div class="location-name">聖馬利亞堂</div>
-                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
-                        <div class="location-details">地址：灣仔聖馬利亞堂</div>
-                        <div class="upload-status allowed">✅ 支援照片上傳</div>
-                    </div>
-
-                    <div class="location-item allowed">
-                        <span class="location-code">C2L6</span>
-                        <div class="location-name">怡和街圓形天橋</div>
-                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
-                        <div class="location-details">地址：灣仔怡和街</div>
-                        <div class="upload-status allowed">✅ 支援照片上傳</div>
-                    </div>
-
-                    <div class="location-item allowed">
-                        <span class="location-code">V7X1</span>
-                        <div class="location-name">Time Square</div>
-                        <div class="location-details">遊戲類型：趣味親子打卡 | 分數：80分</div>
-                        <div class="location-details">地址：銅鑼灣時代廣場</div>
-                        <div class="upload-status allowed">✅ 支援照片上傳</div>
-                    </div>
-                </div>
-
-
-                <div
-                    style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">
-                    <h4 style="margin: 0 0 10px 0; color: #1976d2;">💡 使用說明</h4>
-                    <ul style="margin: 0; padding-left: 20px; color: #1565c0;">
-                        <li>只有選擇支援照片上傳的位置時，照片上傳區域才會顯示</li>
-                        <li>選擇不支援的位置時，照片上傳功能會被隱藏</li>
-                        <li>嘗試在不支援的位置上傳照片時會顯示警告訊息</li>
-                        <li>支援的位置可以正常上傳照片到 Firebase</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- ===== ADMIN PANEL ===== -->
-            <div class="card admin-section" style="display: none;">
-                <button class="admin-toggle" id="admin-toggle" style="display: none;">🔧 管理員面板</button>
-
-                <div id="admin-panel">
-                    <!-- Admin Stats -->
-                    <div class="admin-stats">
-                        <div class="stat-card">
-                            <h4>總玩家數</h4>
-                            <div class="stat-value" id="total-users">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <h4>活躍玩家</h4>
-                            <div class="stat-value" id="active-users">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <h4>完成遊戲</h4>
-                            <div class="stat-value" id="completed-users">0</div>
-                        </div>
-                        <div class="stat-card">
-                            <h4>總分數</h4>
-                            <div class="stat-value" id="total-score">0</div>
-                        </div>
-                    </div>
-
-                    <!-- Group Stats -->
-                    <div id="junior-stats"></div>
-                    <div id="senior-stats"></div>
-
-                    <!-- Firebase Status -->
-                    <div class="firebase-status"
-                        style="margin-bottom: 20px; padding: 15px; border-radius: 10px; background: #f8f9fa; border-left: 4px solid #17a2b8;">
-                        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">🔥 Firebase 狀態</h4>
-                        <div id="firebase-status-display">
-                            <p>載入中...</p>
-                        </div>
-                    </div>
-
-                    <!-- Admin Controls -->
-                    <div class="admin-controls">
-                        <button class="btn btn-primary" id="refresh-photos">🔄 重新載入照片</button>
-                        <button class="btn btn-success" id="export-data">📊 匯出數據</button>
-                        <button class="btn btn-warning" id="export-users">👥 匯出玩家數據</button>
-                        <button class="btn btn-danger" id="reset-all-users">⚠️ 重置所有玩家</button>
-                        <button class="btn btn-danger" id="clear-all-photos">🗑️ 清除所有照片</button>
-                        <button class="btn btn-info" onclick="testPhotoUpload()">🔍 測試照片系統</button>
-                        <button class="btn btn-info" onclick="createTestPhoto()">📸 創建測試照片</button>
-                        <button class="btn btn-info" onclick="checkFirebaseStatus()">🔥 檢查 Firebase</button>
-                    </div>
-
-                    <!-- User Management -->
-                    <div class="user-management">
-                        <h4>👤 玩家管理</h4>
-                        <div class="user-search">
-                            <input type="text" id="user-search-input" placeholder="輸入玩家編號">
-                            <button class="btn btn-primary" id="search-user-btn">搜尋</button>
-                        </div>
-
-                        <div id="user-details">
-                            <h4 id="selected-user-name"></h4>
-                            <p>完成位置: <span id="user-completed-count">0</span>/21</p>
-                            <p>當前分數: <span id="user-current-score">0</span>分</p>
-                            <div style="margin-top: 15px;">
-                                <input type="number" id="user-points-input" placeholder="新分數"
-                                    style="width: 120px; margin-right: 15px; padding: 8px 12px; border: 2px solid #e1e8ed; border-radius: 8px;">
-                                <button class="btn btn-success" id="update-user-points-btn">更新分數</button>
-                            </div>
-                            <div id="user-photos-grid" style="margin-top: 20px;"></div>
-                        </div>
-                    </div>
-
-                    <!-- Winners Section -->
-                    <div class="winners-section">
-                        <h4>🏆 排行榜 (前5名)</h4>
-                        <div id="winners-list"></div>
-                    </div>
-
-                    <!-- Photos Section -->
-                    <div class="photos-section">
-                        <h4>📸 所有照片</h4>
-                        <div class="photos-controls">
-                            <label for="sort-order">排序方式: </label>
-                            <select id="sort-order">
-                                <option value="newest">最新上傳</option>
-                                <option value="oldest">最早上傳</option>
-                                <option value="high-to-low">檔案大小 (大→小)</option>
-                                <option value="low-to-high">檔案大小 (小→大)</option>
-                            </select>
-                            <button class="btn btn-primary" onclick="loadAllPhotos()" style="margin-left: 10px;">🔄
-                                重新載入照片</button>
-                        </div>
-                        <div id="all-photos-grid"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ===== TEST SECTION ===== -->
-            <div class="test-section" style="display: none;">
-                <button id="test-photo-upload" style="display: none;">🧪 測試照片上傳功能</button>
-            </div>
-        </div>
 
         <!-- ===== PHOTO MODAL ===== -->
         <div id="photo-modal" class="photo-modal">
